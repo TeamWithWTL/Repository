@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+
+<head>
+<title></title>
+<meta charset="UTF-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+<link rel="stylesheet"
+	href="${ctxPath}/assets/app/css/mui.picker.min.css" />
+<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+
+<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+<link rel="stylesheet" type="text/css" 
+		href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css" />
+</head>
+
+<body>
+
+	<header class="mui-bar mui-bar-nav" id="backId">
+		<!-- <a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a> -->
+		<a class="icon ion-android-arrow-back mui-pull-left"></a>
+		<h1 class="mui-title">投诉事件</h1>
+	</header>
+	<nav class="mui-bar mui-bar-tab mui-bar-cogs">
+		<a class="mui-tab-item mui-active"  id="saveBtn">
+			<span class="icon ion-filing"></span>
+			<span class="mui-tab-label">提交</span>
+		</a>
+	</nav>
+	<div class="mui-content mui-scroll-wrapper">
+		<div class="mui-scroll">
+			<form  id="addForm" action="" method="post">
+				<div class="mui-input-group">
+					<div class="mui-input-row">
+						<label>标题</label> <input type="text" name="title" id="title"
+							class="mui-input-clear" placeholder="投诉举报标题">
+					</div>
+				</div>
+				<div class="mui-input-row">
+					<textarea name="content" id="content" rows="8" cols=""
+						placeholder="请输入正文的内容"></textarea>
+				</div>
+				<div class="delimiter"></div>
+				<div class="mui-input-group">
+					
+					<div class="mui-input-row">
+						<label>投诉类型</label> <select class="mui-input-picker" id="sjlx" name="sjlx"
+							onchange="showData(this)">
+							<option value="">投诉类型</option> 
+						@if(isNotEmpty(paramList)){
+							@for(com in paramList){
+							<option value="${com.code}">${com.name}</option> 
+							@} 
+						@}
+						</select>
+					</div>
+					<div class="mui-input-row">
+						<label>投诉子类</label> <select class="mui-input-picker"
+							name="jb_type" id="type">
+							<option value="">投诉子类</option>
+						</select>
+					</div>
+					<div class="mui-input-row">
+						<label>是否匿名</label>
+
+						<div onclick="isNm()" id="isNm" class="mui-switch mui-switch-mini mui-active">
+							<!--mui-active开关默认为打开状态,移除为关闭-->
+							<span>匿名</span>
+							<div class="mui-switch-handle boxwrap"  id="nim"  >
+								<input type="hidden"	name="is_nm" id="is_nm" value="1" />
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				<div class="delimiter"></div>
+				<div class="mui-input-group">
+					<div class="mui-input-row array-list">
+						<label>附件上传</label>
+						<div class="col-sm-6"></div>
+							<ul id="fjItems">
+								<!-- <li class="add-array-list" id="add-array" onclick="openCamera()">拍照</li>
+								<li class="add-array-list" id="add-array" onclick="openFile()">上传附件</li> -->
+								<li class="array-funciton array-photograph" onclick="openCamera()"><span class="icon ion-camera"></span><p>拍摄照片</p>
+								</li>
+								<li class="array-funciton array-upfile" onclick="openFile()"><span class="icon ion-filing"></span><p>上传文件</p>
+								</li>
+							</ul>
+					</div>
+				</div>
+				<div class="delimiter"></div>
+				<!-- <div class="content-block block-border">map</div> -->
+			</form>
+		</div>
+
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+	<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	
+	<script src="${ctxPath}/assets/scripts/app/pub/param.js"></script>
+	<script src="${ctxPath}/assets/scripts/app/home/app_module.js"></script>
+	<script src="${ctxPath}/assets/scripts/app/home/home.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+	<script src="${ctxPath}/assets/scripts/dflz/tsjb/app/add.js"></script>
+	<script type="text/javascript">
+			mui.init();
+		
+			mui('.mui-scroll-wrapper').scroll({
+				indicators: false, //是否显示滚动条
+				startX: 0, //初始化时滚动至x
+				deceleration: 0.0006, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+				bounce: true //是否启用回弹
+			});
+			
+			document.getElementById('saveBtn').addEventListener('tap',function(){
+				var title=$("#title").val();
+				if(null == title || title == ""){
+					var msgIndex = top.layer.msg('标题不可为空', {
+						icon : 5,
+						shade : [ 0.5, '#999999' ],
+						time : 2000
+					});
+					return;
+				};
+				var content=$("#content").val();
+				if(null == content || content == ""){
+					var msgIndex = top.layer.msg('内容不可为空', {
+						icon : 5,
+						shade : [ 0.5, '#999999' ],
+						time : 2000
+					});
+					return;
+				};
+				var type=$("#type").val();
+				if(null == type || type == ""){
+					var msgIndex = top.layer.msg('请选择投诉类型', {
+						icon : 5,
+						shade : [ 0.5, '#999999' ],
+						time : 2000
+					});
+					return;
+				};
+				
+				msgIndex1 = top.layer.msg('数据保存中...', {icon : 16, shade : [ 0.5, '#999999' ]});
+				
+				$.ajax({
+					type : "POST",
+					url : basePath+"/app/dflz/appComp/save.do",
+					data : {
+							'title':$("#title").val(),
+							'content':$("#content").val(),
+							'jb_type':$("#type").val(),
+							'is_nm':$("#is_nm").val(),
+							'sjlx':$("#sjlx").val()
+							},
+					error : function(request) {
+						top.layer.close(msgIndex1);
+						top.layer.msg('数据保存失败，请联系管理员', {shade : [ 0.5, '#999999' ]});
+					},
+					success : function(data) {
+						var data = $.parseJSON(data);
+						if(data.result == "success") {
+							var str = '{"pid":"' + data.pid + '","table":"CompAcceEntity"}';
+							jsUpDataFJ(str);
+							top.layer.close(msgIndex1);
+							top.layer.msg('保存成功',{icon : 6,time : 2000,shade : [0.5,'#999999' ]},function(){
+								top.layer.close(top.layer.getFrameIndex(window.name));
+								mui.back();
+								});
+						}else{
+							top.layer.msg('数据保存失败，请联系管理员', {shade : [ 0.5, '#999999' ]});
+						}
+						
+					}
+				});
+			});
+			/* document.getElementById('backId').addEventListener('tap',function(){
+				  mui.openWindow({
+					    url: basePath + "/app/dflz/appComp/toComp.do", 
+					    id:'myXF.do'
+					  });
+				}); */
+			mui("#backId").on('tap','a',function(){
+				  window.location.href = basePath + "/app/dflz/appComp/toComp.do";
+			});
+				
+			//手机按键返回
+			function anGoBack(){
+				window.location.href = $("#basePath").val() + "/app/dflz/appComp/toComp.do";
+				return;
+			}
+		</script>
+</body>
+
+</html>

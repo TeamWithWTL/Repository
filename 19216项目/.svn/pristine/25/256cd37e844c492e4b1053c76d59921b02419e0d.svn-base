@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+
+	<head>
+		<title></title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.picker.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+		<!-- <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css" /> -->
+		<!-- <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" /> -->
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class=" icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">事件详情</h1>
+		</header>
+		<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<div class="article-content">
+					<div class="article-header">
+						<h4 class="article-header-title">${event.title}</h4>
+					</div>
+					<div class="article-body">
+						<p>${event.content}</p>
+					</div>
+					<div class="article-form">
+						<div class="mui-input-group">
+							<div class="mui-input-row">
+							<label>上报位置：</label>
+							<input readonly="readonly" type="text" class="mui-input" value="${event.applyAddr}">
+							</div>
+							<div class="mui-input-row">
+								<label>发布时间：</label>
+								<input readonly="readonly" type="text" class="mui-input" value="${event.applyTimeFrm}">
+							</div>
+							<div class="mui-input-row">
+								<label>事件类型：</label>
+								<input readonly="readonly" type="text" class="mui-input" value="${eventTypeMap[event.type]}">
+							</div>
+							<div class="mui-input-row">
+								<label>事件状态：</label>
+								<input readonly="readonly" type="text" class="mui-input" value="${event.isOver=='1'?'已结束':'进行中'}">
+							</div>
+						</div>
+					</div>
+				</div>
+				@if(isNotEmpty(event.eventAttrs)){
+					<div class="article-content">
+						<div class="block-title">附件下载</div>
+						<div class="article-array" id="article-container">
+							@for(attr in event.eventAttrs ! []){
+							<div>
+								@if(attr.fileType == 'img'){
+								<li>
+									<a href="javascript:;" name="${path}${attr.newFilename}"><dt><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/jpg.svg"/></dt>${attr.oldFilename}</a>
+									<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.newFilename}"></a>
+								</li>
+								@}else if(attr.fileType == 'word'){
+									<li>
+										<a href="javascript:;" name="${path}${attr.newFilename}">
+											<dt>
+												<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> 
+											</dt>${attr.oldFilename}
+										 </a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.newFilename}"></a></li>
+									@}else if(attr.fileType == 'txt'){
+									<li>
+										<a href="javascript:;" name="${path}${attr.newFilename}">
+											<dt>
+												 <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>
+											</dt>${attr.oldFilename}
+										</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.newFilename}"></a></li>
+									@}else if(attr.fileType == 'exl'){
+									<li>
+										<a href="javascript:;" name="${path}${attr.newFilename}">
+											<dt>
+												<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>
+											</dt>${attr.oldFilename}
+										</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.newFilename}"></a></li>
+									@}else if(attr.fileType == 'video'){
+									<li>
+										<a href="javascript:;" name="${path}${attr.newFilename}">
+											<dt>
+												<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>
+											</dt>${attr.oldFilename}
+										</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.newFilename}"></a></li>
+									@}else{
+								<li>
+									<a href="javascript:;" name="${path}${attr.newFilename}"><dt><img src="${ctxPath}/assets/images/default-file.png"/></dt>${attr.oldFilename}</a>
+									<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.newFilename}"></a>
+								</li>
+								@}
+							</div>	
+							@}
+						</div>
+					</div>
+					@}
+				<div class="article-comment">
+				<ul class="mui-table-view">
+					@for(deal in event.eventDeals ! []){
+						@if(isNotEmpty(deal.content)){
+						    <li class="mui-table-view-cell mui-media">
+							        <a href="javascript:void(0)">
+							            <div class="mui-media-body">
+							                <span>${deal.clrName}</span>
+							                <p>${deal.content}</p>
+							                <small><i class="icon ion-clock"></i>${deal.dealDateFrm}</small>
+							            </div>
+							        </a>
+							    </li>
+						@}
+							@}elsefor{
+						
+						@}
+					</ul>
+				</div>
+				<div class="content-block block-border">
+				<div id="map" style="width: 100%;height: 290px;background: #ddd;">
+						<iframe id="mapFrame" name="mapFrame" src="${ctxPath}/assets/template/areadrawsite4.html" style="width:100%; height:100%" frameBorder=0 scrolling=no></iframe>
+						</div>
+				</div>
+				
+				<!-- <div id="allmap" style="width: 100%;height: 290px;background: #ddd;">
+					<div id="map" style="height:100%;-webkit-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;"></div>
+				</div> -->
+			</div>
+		</div>
+		<input type="hidden" id="type" value="sj"/>
+	 	<input type="hidden" id="lon" value="${event.applyLon}"/>
+ 	 	<input type="hidden" id="lat" value="${event.applyLat}"/>
+		<input type="hidden" id="tagFlag" value="${tagFlag}"/>
+ 		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/sjgl/app/app_sjgl_addreport.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<!-- 百度地图 -->
+	    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PEDYmms2gstug9jGEBphIGFPVxGHyhpB"></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/library/AreaRestriction/1.2/src/AreaRestriction_min.js"></script>
+		
+		<script type="text/javascript">
+			mui.init();
+			mui('.mui-scroll-wrapper').scroll({
+				indicators: false, //是否显示滚动条
+				startX: 0, //初始化时滚动至x
+				deceleration: 0.0004, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+				bounce: true //是否启用回弹
+			});
+			//返回界面
+			mui("#header").on('tap','a',function(){
+				var tagflag  = $("#tagFlag").val();
+				if(tagflag == '1'){
+					window.location.href = $("#basePath").val() + "/app/sjgl/myEvent.do";
+				}
+				if(tagflag == '2'){
+					window.location.href = $("#basePath").val() + "/app/sjgl/myRecord.do";
+				}
+				if(tagflag == '3'){
+					window.location.href = $("#basePath").val() + "/app/sjgl/allEvent.do";
+				}
+			});
+			//手机键返回
+			function anGoBack(){
+				var tagflag  = $("#tagFlag").val();
+				if(tagflag == '1'){
+					window.location.href = $("#basePath").val() + "/app/sjgl/myEvent.do";
+				}
+				if(tagflag == '2'){
+					window.location.href = $("#basePath").val() + "/app/sjgl/myRecord.do";
+				}
+				if(tagflag == '3'){
+					window.location.href = $("#basePath").val() + "/app/sjgl/allEvent.do";
+				}
+				return;
+			}
+			
+			function getLon(){
+				var obj = new Object();
+			//	var name = $("#name").val();
+				var lon =$("#lon").val();
+				var lat = $("#lat").val();
+			//	obj.ID = ID;
+			//	obj.Name = name;
+				//if(lon != "0"){//
+					obj.Lon = lon;
+			//	}
+			//	if(lat != "0"){
+					obj.Lat = lat;
+			//	}
+				return obj;
+			}
+// 			var aa1 = $('#lon').val();
+// 		    var aa2 = $("#lat").val();
+		 
+// 			//百度地图
+// 			map = new BMap.Map("allmap");
+// 			var point = new BMap.Point(aa1,aa2);
+// 			map.centerAndZoom(point, 16);
+// 			var marker = new BMap.Marker(point);  // 创建标注
+// 			map.addOverlay(marker);               // 将标注添加到地图中
+// 			map.disableDragging();     //禁止拖拽
+			//下载
+			mui("#article-container").on('tap','a',function(){
+				var path = this.getAttribute("name");
+				downloadFile(path);
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>摄像头管理-添加、编辑</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+</head>
+
+<body>
+	<div class="container-fluid">
+		<form id="addForm" class="form-horizontal">
+			<br>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">摄像头名称</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" id="name" name="name" placeholder="摄像头名称" value="${camera.name ! ''}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">所属区域</label>
+				<div class="col-sm-3">
+					<select id="commId" name="commId" class="form-control" onchange="showSs(this,'ssId','1')">
+						<option value="">-- 所属社区--</option>
+						@if(isNotEmpty(comList)){
+							@for(com in comList){
+								<option value="${com.id}" ${camera != null && com.id == commId ? 'selected' : ''}>${com.name}</option>
+							@}
+						@}
+				</select>
+				</div>
+				<div class="col-sm-3">
+					<select class="form-control" name="ssId" id="ssId" onchange="showData(this,'gridId')">
+						<option value="">-- 所属服务站--</option>
+						@if(isNotEmpty(ssList)){
+							@for(ss in ssList){
+								<option value="${ss.id}" ${camera != null && ss.id == camera.grid.serviceStation.id ? 'selected' : ''}>${ss.name}</option>
+							@}
+						@}
+					</select>
+				</div>
+				<div class="col-sm-3">
+					<select class="form-control" name="gridId" id="gridId">
+						<option value="">-- 所属网格--</option>
+						@if(isNotEmpty(gridList)){
+							@for(grid in gridList){
+								<option value="${grid.id}" ${camera != null && grid.id == camera.grid.id ? 'selected' : ''}>${grid.name}</option>
+							@}
+						@}
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">数据链接</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" id="url" name="url" placeholder="数据链接" value="${camera.url ! ''}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">经度</label>
+				<div class="col-sm-2">
+					<input type="text" class="form-control" id="lon" name="lon" placeholder="经度" value="${camera.lon ! '0'}"/>
+				</div>
+				<label class="col-sm-1 control-label">纬度</label>
+				<div class="col-sm-2">
+					<input type="text" class="form-control" id="lat" name="lat" placeholder="纬度" value="${camera.lat ! '0'}"/>
+				</div>
+				<div class="col-sm-4">
+					<button type="button" class="btn btn-info" onclick="choseLyArea('/shgl/sxtgl/choseArea.do')">绘 制</button>
+					<button type="button" class="btn btn-warning" onclick="clearInput()">清 除</button>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="button" class="btn btn-default" id="saveBtn">保 存</button>
+					<button type="button" class="btn btn-default" id="cancleBtn">取 消</button>
+				</div>
+			</div>
+			<input type="hidden" id="id" name="id" value="${camera.id ! ''}" />
+		</form>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/sxtgl/addEdit.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	<script>
+		function clearInput(){
+			$("#lon").val("");
+			$("#lat").val("");
+		}
+	</script>
+</body>
+</html>

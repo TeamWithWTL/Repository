@@ -1,0 +1,129 @@
+<!doctype html>
+<html  lang="en">
+
+<head>
+<title>党政要闻-添加、编辑</title>
+<meta charset="UTF-8">
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.css">
+	<link href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/webuploader/webuploader.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<style type="text/css">
+		#attrlist,li{margin:0;padding:0;}
+		
+		</style>
+</head>
+
+<body>
+	<form action=""  id="addForm" >
+			
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">标题</label>
+				<!--input文本类使用col-sm-6-->
+				<div class="col-sm-6">
+					<input type="text" class="form-control" id="title" name="title" placeholder="标题"  value="${dzywEntity.title ! ''}">
+					<input type="hidden" class="form-control"  id="id" placeholder="编号"  value="${dzywEntity.id ! ''}">
+				</div>
+			</div>
+			
+			<div class="form-group row">
+					<label for="" class="col-sm-3 col-form-label">内容</label>
+					<div class="col-sm-7">
+						<script type="text/plain" id="content" name="content" style="height: 200px;">${dzywEntity.content ! ''}</script>
+					</div>
+			</div>
+			
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">附件</label>
+				<div id="picker"  class="col-sm-6"></div>
+				<!-- <div class="col-sm-6">
+					<button class="btn btn-outline-secondary" type="file" name="file"><i class="fa fa-upload"></i> 上传附件</button>
+				</div> -->
+			</div>
+			
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label"></label>
+				<div class="col-sm-8">
+					<!-- <div id="picker"></div> -->
+					<div class="form-arraylist">
+					<ul id="attrlist">
+						@for(attr in dzywEntity.acceList  ! []){
+								@if(attr.file_type == 'img'){
+								<li class="col-9">
+									<a href="javascript:void(0)"><img src="${ctxPath}/showPic?fileName=${attr.new_fileName !}"/> ${attr.old_fileName !}</a>
+									<span onclick="delFj('${attr.id !}', this)" class="colsed"></span>
+								</li>
+								@}else if(attr.file_type  == 'pdf'){
+								<li class="col-9">
+									<a href="javascript:void(0)"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_fileName !}</a>
+								    <span onclick="delFj('${attr.id !}', this)" class="colsed"></span>
+								</li>
+								@}else if(attr.file_type == 'word'){
+								<li class="col-9">
+									<a href="javascript:void(0)" title="${attr.old_fileName}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.old_fileName}</a>
+									<span onclick="delFj('${attr.id !}', this)" class="colsed"></span>
+								</li>
+								@}else if(attr.file_type == 'txt'){
+								<li  class="col-9">
+									<a href="javascript:void(0)" title="${attr.old_fileName}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.old_fileName}</a>
+									<span onclick="delFj('${attr.id !}', this)" class="colsed"></span>
+								</li>
+								@}else if(attr.file_type == 'exl'){
+								<li  class="col-9">
+									<a href="javascript:void(0)" title="${attr.old_fileName}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.old_fileName}</a>
+									<span onclick="delFj('${attr.id !}', this)" class="colsed"></span>
+								</li>
+								@}else if(attr.file_type == 'video'){
+								<li  class="col-9">
+									<a href="javascript:void(0)" title="${attr.old_fileName}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.old_fileName}</a>
+									<span onclick="delFj('${attr.id !}', this)" class="colsed"></span>
+								</li>
+								@}else{
+								<li class="col-9">
+									<a href="javascript:void(0)"><img src="${ctxPath}/assets/images/default-file.png"/>${attr.old_fileName !}</a>
+									<span onclick="delFj('${attr.id !}', this)" class="colsed"></span>
+								</li>
+								@}
+					        @}
+					        </ul>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-3"></div>
+				<div class="col-sm-7">
+				<div class="page-operation text-right">
+					<button type="button" id="saveBtn" class="btn btn-primary" onclick="subMyForm()"><i class="fa fa-save"></i> 保存</button>
+					<button type="button" id="cancleBtn" class="btn btn-outline-primary"><i class="fa fa-reply"></i> 取消</button>
+				</div>
+					<input type="hidden" id="fName" name="fName" />
+				</div>
+			</div>
+		</form>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js" ></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<!-- 附件 -->
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/webuploader/webuploader.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/subFromWithAttrs.js"></script>
+	<!-- <script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.js"></script> -->
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	<!-- UEditor编辑器 -->
+	<script type="text/javascript" charset="utf-8" src="${ctxPath}/assets/vendor/ueditor1.4.3/ueditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="${ctxPath}/assets/vendor/ueditor1.4.3/ueditor.all.js"></script>
+	<script type="text/javascript" charset="utf-8" src="${ctxPath}/assets/vendor/ueditor1.4.3/lang/zh-cn/zh-cn.js"></script>
+	<script src="${ctxPath}/assets/scripts/dflz/dzyw/addEdit.js"></script>
+</body>
+</html>

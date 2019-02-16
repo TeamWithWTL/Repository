@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>${@com.jcwx.utils.ProjectUtils.getSysCfg("projectName")}</title>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/index.css"/>
+		
+		<link rel="icon" href="${ctxPath}/assets/img/head_logo.png" type="image/x-icon"/>
+	  	<style type="text/css">
+		    .accCode{
+		      width: 120px; 
+		      white-space: nowrap;  
+		      text-overflow: ellipsis; 
+		      overflow: hidden; 
+		    }
+	    </style>
+	</head>
+
+	<body>
+		<div class="header">
+					<div class="logo">
+						<img src="${ctxPath}/assets/images/login-logo.png" alt=""/>
+					</div>
+					<div class="menubar">
+						<ul>
+							<li id="homeMenu" class="active" onclick="goHome('${ctxPath}/home/index.do');"><img src="${ctxPath}/assets/img/nav3.png" /><p>首页</p></li>
+							@for(fms in session.firstMenus){
+								<li id="${fms.menuCode}" onclick="goFrame('${ctxPath}/${fms.url}', '${fms.menuCode}', this);"><img src="${ctxPath}/${fms.icoUrl}"/><p>${fms.menuName}</p></li>
+							@}
+						</ul>
+					</div>
+					<div class="userinfo">
+					<span>
+					@if(isEmpty(session.sysAccCount.pic_path)){
+						<a href="javascript:goUpdatePwd()" class="user-center">
+						<img src="${ctxPath}/assets/images/default-user.png"/>
+						${session.sysAccCount.subName}
+						</a>
+					@}else{
+						<a href="javascript:goUpdatePwd()" class="user-center"><img style="border-radius:70px" data-src="${ctxPath}/showPic?fileName=${session.sysAccCount.pic_path}"/>${session.sysAccCount.subName}</a>
+					@}
+					</span>
+					<span>
+						<a href="javascript:goHome('${ctxPath}/home/index.do');"><i class="fa fa-home"></i></a>
+						<!-- <a href="javascript:logout();" title="我的信息"><i class="fa fa-envelope"></i></a> -->
+						<a href="javascript:logout();" title="退出登录"><i class="fa fa-sign-out"></i></a>
+					</span>
+					</div>
+					<div class="userinfo-1366">
+						<dt class="userinfo-1366-tumb">
+							@if(isEmpty(session.sysAccCount.pic_path)){
+								<a href="javascript:goUpdatePwd()" class="user-center"><img style="border-radius:70px" src="${ctxPath}/assets/images/default-user.png"/></a>
+							@}else{
+								<a href="javascript:goUpdatePwd()" class="user-center"><img style="border-radius:70px" src="${ctxPath}/showPic?fileName=${session.sysAccCount.pic_path}"/></a>
+							@}
+							<ul>
+								<span>${session.sysAccCount.subName}</span>
+								<a href="javascript:goHome('${ctxPath}/home/index.do');"><i class="fa fa-home"></i></a>
+								<!-- <a href="#" title="我的信息"><i class="fa fa-envelope"></i></a> -->
+								<a href="javascript:logout();"><i class="fa fa-sign-out"></i></a>
+							</ul>
+						</dt>
+					</div>
+		</div>
+		<div class="main">
+			<iframe id="mainFrame" name="mainFrame" src="${ctxPath}/home/index.do" style="width:100%;height:100%" frameBorder=0 scrolling=no></iframe>
+		</div>
+		
+		<div id="schedule" class="hometips" style="display:none;">
+			<div class="tips-header">
+				<h4 class="tips-title">消息提醒</h4>
+				<span id="closed-tips" class="closed-tips fa fa-close"></span>
+			</div>
+			<div class="tips-body">
+				<div class="tips-inner">
+					<p  id="eventTag" class="text-center"  style="display:none;">
+						<a  href="javascript:void(0)">您有 <strong id="eventCount"></strong> 条待办事件需要处理！</a>
+					</p>
+					<p id="taskTag"  class="text-center" style="display:none;">
+						<a  href="javascript:void(0)">您有 <strong id="taskCount"></strong> 条待办任务需要处理！</a>
+					</p>
+				</div>
+				<div class="tips-function">
+				<!-- 	<a href="#" id="NomoreTips">不再提醒</a> -->
+				</div>
+			</div>
+		</div>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+		<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/main.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$(".menubar li").click(function() {
+					$(this).parent().find("li").removeClass("active");
+					$(this).addClass("active");
+
+// 					var url = $(this).attr("name");
+// 					document.iframe.location = url;
+				});
+			});
+			$("#closed-tips").click(function() {
+				$(".hometips").slideUp(200)
+			});
+		</script>
+	</body>
+</html>

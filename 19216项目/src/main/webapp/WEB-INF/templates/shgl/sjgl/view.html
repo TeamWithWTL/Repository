@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>事件管理-查看</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+	<style>
+		.control-label{
+			font-weight:normal;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<form id="addForm" class="form-horizontal">
+			<br>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">事件名称：</label>
+				<div class="col-sm-6">
+					<label class="control-label">${event.title}</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">事件类型：</label>
+				<div class="col-sm-6">
+					<label class="control-label">
+						@if(isNotEmpty(sysStations)){
+								@for(da in sysStations){
+									${da.value1 == event.type ? da.itemName : ''}
+								@}
+							@}
+					</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">上报人：</label>
+				<div class="col-sm-6">
+					<label class="control-label">${event.apply_name}</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">上报时间：</label>
+				<div class="col-sm-6">
+					<label class="control-label">${event.applyTimeFrm}</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">事件区域：</label>
+				<div class="col-sm-6">
+					<label class="control-label">${event.grid.serviceStation.community.name}${event.grid.serviceStation.name}${event.grid.name}</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">上报位置：</label>
+				<div class="col-sm-6">
+					<label class="control-label">${event.apply_addr}</label>
+				</div>
+				<div class="col-sm-4">
+					<input type="hidden" id="lon" value="${event.apply_lon}"/>
+					<input type="hidden" id="lat" value="${event.apply_lat}"/>
+					<input type="hidden" id="name" value="${event.apply_addr}"/>
+					<button type="button" class="btn btn-default" onclick="choseSjArea('/shgl/sjgl/choseArea.do','${event.id}')"><img style="width:16px;height:16px;" src="${ctxPath}/assets/template/img/station_3.png"/> 位置</button>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">附件列表：</label>
+				<div class="col-sm-10" style="padding-top:10px">
+					<div class="file-list">
+						<div class="file-list">
+						<ul>
+							@if(isNotEmpty(event.eventattrs)){ 
+									@for(attr in event.eventattrs){
+										@if(attr.file_type=='img'){
+										<li>
+											<a href="javascript:void(0)" style="width: 70%; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;"><span class="ftp-preview"><img src="${ctxPath}/showPic?fileName=${attr.new_filename}" onclick="window.top.showBigPic('${ctxPath}/showPic?fileName=${attr.new_filename}')"/></span> ${attr.old_filename}</a>
+											<div title="下载" onclick="download('${attr.new_filename}', '${attr.old_filename}')" class="ftpdownload"></div>
+										</li>
+										@}else{
+										<li>
+											<a href="javascript:void(0)" style="width: 70%; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;"><span class="ftp-${attr.file_type}"></span> ${attr.old_filename}</a>
+											<div title="下载" onclick="download('${attr.new_filename}', '${attr.old_filename}')" class="ftpdownload"></div>
+										</li>
+										@}
+									@}
+								 @}
+							</ul>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" id="id" name="id" value="${event.id ! ''}" />
+		</form>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/sjgl/view.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

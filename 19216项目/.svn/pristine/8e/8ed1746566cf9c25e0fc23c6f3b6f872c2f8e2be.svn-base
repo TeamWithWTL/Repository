@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>调查列表</title>
+	<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+        <style type="text/css">
+	      .name{
+	        width: 300px; 
+		    white-space: nowrap;  
+		    text-overflow: ellipsis; 
+		    overflow: hidden; 
+	       }
+       </style>
+</head>
+
+<body style="padding: 10px 40px;">
+
+	<div id="table-container" class="table-box" style="height: calc(100% - 20px);">
+				<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+					<thead>
+					 <tr class="table-secondary">
+		                  <th width="40%" class="text-center">标题</th>
+                          <th width="30%" class="text-center">创建时间</th>
+	              	 	  <th width="10%" class="text-center">操作</th>   
+	                 </tr>  
+					</thead>
+				  <tbody id="dqIds">	
+					@for(dc in dcList ! []){
+				    <tr>
+				        <td class="text-center text-overflow" title="${dc.title}">
+				        ${dc.title}
+	                    </td>
+	                    <td class="text-center text-overflow">
+		             	 ${dc.createDateFom}
+	                    </td>
+	                    <td class="text-center text-overflow">
+		                    <a href="javascript:void(0)"    onclick="goDcInfo('${dc.id}')">详情</a>
+	                    </td>
+	              
+			       </tr>
+					@}elsefor{
+					<tr>
+				        <td colspan="3" class="text-center">
+				        	没有找到要查询的数据
+				        </td>
+			    	</tr>
+					@}
+					</tbody>
+				</table>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	<script>
+	function goDcInfo(dcId){
+		top.layer.open({
+		    type: 2,
+		    title: "<div class='layerTitleDiv'></div><span class='layerTitleSpan'>调查详情</span>",
+		    fix: false,
+		   // shadeClose: true,
+		    area: ['500px', '450px'],
+		    content: $("#basePath").val()+'/shgl/sqmy/dcInfo.do?dcId='+dcId,
+		  });
+	}
+	</script>
+</body>
+</html>

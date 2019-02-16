@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>部门人员管理-首页</title>
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/common.css"/>
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/zTree_v3/css/metroStyle/metroStyle.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<style>
+	.ztree {
+	    margin: 0;
+	    padding: 10px;
+	    color: #333;
+	}
+	</style>
+</head>
+
+<body>
+	<div class="row heighter">
+		<div class="col-2 heighter" style="padding-right: 0">
+			<!-- ZTree -->
+			<div class="heighter">
+				<div class="cardbox-body" style="height:100%;">
+					<div class="ztree" style="overflow: auto;">
+						<iframe id="treeFrame" name="treeFrame" src="${ctxPath}/pub/deptTree/showDeptTree.do" style="height:calc(100% - 29px)" frameBorder=0></iframe>
+					</div>
+				</div>
+			</div>
+			<!-- END ZTree -->
+		</div>
+		<div class="col-10 heighter">
+				<div class="function-box">
+					<div class="query-criteria">
+					<form class="form-inline" action="" method="post">
+							<!-- 被选中的部门 -->
+						    <input type="hidden" id="deptId" value="${deptId ! ''}">
+						    <input type="text" id="name" class="form-control" placeholder="姓名" value="${name ! ''}">
+							<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+					</form>
+				</div>
+				<div class="function-btn">
+					<!-- <button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goAdd('添加')"><i class="fa fa-plus"></i> 添加</button>
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goUpdate('修改')"><i class="fa fa-pencil"></i> 修改</button>
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onClick="goDel()"><i class="fa fa-trash"></i> 删除</button> -->
+				</div>
+			</div>
+				<div id="bmry" class="table-box">
+					@#ajax table:{
+						<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+							<tr class="table-secondary">
+								<th width="5%" class="text-center">
+									<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+						        </th>
+						        <th width="15%">姓名</th>
+						        <th width="20%">职务</th>
+						        <th width="20%">操作</th>
+							</tr>
+							</thead>
+							<tbody>
+							@for(person in pagenate.list ! []){
+					    	<tr>
+						        <td class="text-center">
+						        	<input type="checkbox" name="icheck" value="${person.accCode}" />
+						        </td>
+					    		<td>${person.name ! ''}</td>
+						        <td>${person.duty ! ''}</td>
+						         <td><a  href="javascript:void(0);" onclick="payOut('${person.name ! ''}','${person.accCode}','${session.tzggEntity.id  ! ''}')"> 派发</a></td>
+					    	</tr>
+					    	@}elsefor{
+					    	<tr>
+						        <td colspan="4" class="text-center">
+						        	没有找到要查询的数据
+						        </td>
+					    	</tr>
+					    	@}
+					    	</tbody>
+						</table>
+						<input type="hidden"  id="tzgg_id"  name=""tzgg_id"" value="${tzggEntity.id  ! ''}"> 
+					<!-- 自定义分页标签 -->
+					<#pagenate func="initData" page="${pagenate}" />
+					@}
+				</div>
+		 </div>
+	  </div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/vendor/zTree_v3/js/jquery.ztree.all-3.5.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/public.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/xtgl/bmrygl/index.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/xtbg/tzgg/deptTree.js"></script>
+	
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>网格管理列表</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+</head>
+<body>
+	<header id="header" class="mui-bar mui-bar-nav">
+			<a class="icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">网格列表</h1>
+			<button id="OpenQuery" class="mui-btn mui-btn-link icon ion-ios-search-strong mui-pull-right"></button>
+	</header>
+	<div class="inquery">
+		<form class="mui-input-group">
+			<!-- <div class="mui-input-row">
+				<label>社区名称</label> 
+				<input type="text" id="name" class="mui-input-picker" placeholder="社区名称" />
+			</div> -->
+			<div class="mui-input-row">
+				<label>所属社区</label> 
+				<select class="form-control" id="wgCode1" onchange="showSsApp(this,'ssId')">
+	   				<option value="">--所属社区--</option>
+	   				@for(com in comList ![]){
+   					<option value="${com.id}">${com.name}</option>
+	   				@}
+  			    </select>
+			</div>
+			<div class="mui-input-row">
+				<label>所属服务站</label> 
+				<select class="form-control" id="ssId">
+	   				<option value="">-- 所属服务站--</option>
+  			 	</select>
+			</div>
+			<div class="mui-button-row">
+			<button class="mui-btn mui-btn-block mui-btn-primary" type="button" onclick="initData()">
+			<i class="icon ion-ios-search-strong"></i>点击查询</button>
+			</div>
+		</form>
+	</div>
+	
+	<div class="mask-backdrop"></div>
+
+	<div id="refreshContainer" class="mui-content mui-scroll-wrapper"  >
+			<div class="mui-scroll" id="">
+				<div class="listview-block" id="table-container">
+				@#ajax table:{
+				@for(com in pagenate.list ! []){
+						<div class="mui-card" id="wgId" name="${com.id}">
+							<div class="mui-card-header">
+								网格名称:${com.name}
+							</div>
+							<div class="mui-card-content">
+							<div class="mui-card-content-inner">
+								<p style="color:#666;">
+								所属社区：${com.serviceStation.community.name}
+								</p>
+								<p style="color:#666;">
+								所属服务站：${com.serviceStation.name}
+								</p>
+								<p style="color:#666;">
+								已入住户数: ${com.sjCount}&nbsp;&nbsp;&nbsp;
+								添加人: ${com.add_name}&nbsp;&nbsp;&nbsp;
+								添加时间:${com.addTimeFrm}
+								</p>
+							</div>
+							</div>
+							
+							<!--页脚，放置补充信息或支持的操作-->
+							<div class="mui-card-footer">
+								<a href="javascript:void(0)" name=""><i class="icon ion-android-list"></i>详情</a>
+							</div>
+						</div>
+					<input type="hidden" id="pageCnts" value="${pageCnts}" />
+					<input type="hidden" id="pageSize" value="${pageSize}" />
+					@}	
+				@}
+				</div>
+			</div>
+		</div>
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/wggl/app/app_index_wggl.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script type="text/javascript">
+		$(function() {
+			$("#OpenQuery").click(function() {
+				$(".mask-backdrop").toggle();
+				$(".inquery").toggleClass("show");
+			});//点击放大镜显示遮罩层，滑出筛选框
+			$(".mask-backdrop").click(function() {
+				$(this).hide();
+				$(".inquery").removeClass("show");
+			});//点击遮罩层关闭筛选和遮罩
+		});	
+		
+		//手机按键返回
+		/*function anGoBack(){
+			mui.back();
+			return;
+		}*/
+		
+		mui("#header").on('tap','a',function(){
+			//返回首页
+			window.location.href = $("#basePath").val() + "/app/home/jcxx.do";
+			return;
+		});
+	
+		//手机按键返回
+		function anGoBack(){
+			//返回首页
+			window.location.href = $("#basePath").val() + "/app/home/jcxx.do";
+			return;
+		}
+		
+		</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>社区服务-社区活动报名记录</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<style type="text/css">
+      .wrap{
+        width: 300px; 
+		white-space: nowrap;  
+		text-overflow: ellipsis; 
+		overflow: hidden; 
+      }
+    </style>
+</head>
+
+<body style="padding: 10px 40px;">
+	<div class="function-box">
+	 	<div class="query-criteria">
+			<form class="form-inline" action="" method="post">
+			</form>
+		</div>
+		</div>
+		<div id="table-container" class="table-box">
+			@#ajax table:{
+				<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+					<thead>
+					<tr class="table-secondary">
+						<th width="5%" class="text-center">
+							<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+				        </th>
+						<th width="15%">姓名</th>
+						<th width="15%">报名状态</th>
+						<th width="15%">报名时间</th>
+						<th width="15%">是否反馈</th>
+					</tr>
+					</thead>
+					<tbody id="dqIds">
+					@for(bm in pagenate.list ! []){
+					<tr>
+						<td class="text-center">
+				        	<input type="checkbox" class="i-checks" name="icheck" value="" />
+				        </td>
+				        <td class="text-left" title="${bm.userName ! ''}">
+				        	<div class="wrap">${bm.userName ! ''}</div>
+				        </td>
+				        <td style="color: #7ebc1d">已报名</td>
+				        <td>${bm.createTimeFmt ! ''}</td>
+				        @if(bm.isBack=="1"){
+				        <td style="color: #7ebc1d">已反馈</td>
+				        @}else{
+				        <td style="color: #fd5c1d">未反馈</td>
+				        @}
+					</tr>
+					@}elsefor{
+					<tr>
+				        <td colspan="5">
+				        	没有找到要查询的数据
+				        </td>
+			    	</tr>
+					@}
+				   </tbody>
+				</table>
+			<!-- 自定义分页标签 -->
+			<#pagenate func="initData" page="${pagenate}" />
+		@}
+	</div>
+	
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="sqhdId" value="${sqhdId}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	
+	<script src="${ctxPath}/assets/scripts/shfw/sqhd/bmjl.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

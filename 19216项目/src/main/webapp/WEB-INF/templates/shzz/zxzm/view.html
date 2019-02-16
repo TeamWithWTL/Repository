@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>社会组织-组织信息</title>
+		<!-- 第三方 CSS -->
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+		
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+			<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+			<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="container">
+		   <div class="article-header text-center">
+				<h2>${zxzm.title ! ''}</h2>
+				<span>发布时间：${zxzm.xs_create_time ! ''}</span>
+				<span>发布人：${zxzm.user_name ! ''}</span>
+				<!-- <span>
+				     @if(zxzm.sh_status == '0'){
+				                       审核状态：<span style="color: #ffa81f">待审核</span>
+				     @}else if(zxzm.sh_status == '1'){
+				                        审核人：${zxzm.sh_user_name ! ''}/审核状态：<span style="color: #7ebc1d">通过</span>
+				     @}else if(zxzm.sh_status == '2'){
+				                        审核人：${zxzm.sh_user_name ! ''}/审核状态：<span style="color: #fd5c1d">未通过</span>
+				     @}
+				</span> -->
+			</div>
+			<div class="article-body">
+				<div class="article-content">
+					${zxzm.content ! ''} 
+				</div>
+				<div class="form-arraylist">
+				  @if(isNotEmpty(zxzm.attrList)){
+					<h4 class="form-arraylist-title">附件列表：</h4>
+					@for(attr in zxzm.attrList  ! []){	
+						@if(attr.fileType == 'img'){
+						<li class="col-9">
+							<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/showPic?fileName=${attr.newFilename}"/>${attr.oldFilename}</a>
+						    <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'pdf'){
+						<li class="col-9">
+							<a href="javascript:void(0)" onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/>${attr.oldFilename}</a>
+						    <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'word'){
+						<li class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'txt'){
+						<li  class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'exl'){
+						<li  class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'video'){
+						<li  class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else{
+						  <li class="col-9">
+						   <a href="javascript:void(0)" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+					       <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+					     </li>
+						@}
+					@}
+			    @}
+			  </div>
+		    </div>
+		</div>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+		<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+		<script src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script type="text/javascript">
+			var basePath = $("#basePath").val();
+			//附件下载
+			function download(newFilename, oldFilename){
+				window.location.href = basePath + '/pub/downloadbystream.do?fileName=' + newFilename + '&oldFileName=' + oldFilename;
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>设置每月签到次数</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+</head>
+
+<body>
+	<div class="container-fluid">
+		<form id="addForm" class="form-horizontal">
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">一月</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="oneMonth" name="oneMonth" placeholder="一月"  value="${cts.oneMonth !''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">二月</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="twoMonth" name="twoMonth" placeholder="二月"  value="${cts.twoMonth !''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">三月</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="threeMonth" name="threeMonth" placeholder="三月"  value="${cts.threeMonth !''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">四月</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="fourMonth" name="fourMonth" placeholder="四月"  value="${cts.fourMonth !''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">五月</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="fiveMonth" name="fiveMonth" placeholder="五月"  value="${cts.fiveMonth !''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">六月</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="sixMonth" name="sixMonth" placeholder="六月"  value="${cts.sixMonth !''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">七月</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="sevenMonth" name="sevenMonth" placeholder="七月"  value="${cts.sevenMonth !''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">八月</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="eightMonth" name="eightMonth" placeholder="八月"  value="${cts.eightMonth !''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">九月</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="nineMonth" name="nineMonth" placeholder="九月"  value="${cts.nineMonth !''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">十月</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="tenMonth" name="tenMonth" placeholder="十月"  value="${cts.tenMonth !''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">十一月</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="elevenMonth" name="elevenMonth" placeholder="十一月"  value="${cts.elevenMonth !''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">十二月</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="twelveMonth" name="twelveMonth" placeholder="十二月"  value="${cts.twelveMonth !''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="page-operation text-right col-sm-11">
+					<button type="button" class="btn btn-primary" id="saveBtn" onclick="subMyForm()"><i class="fa fa-save"></i> 保存</button>
+					<button type="button" class="btn btn-outline-primary" id="cancleBtn"><i class="fa fa-reply"></i> 返回</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="ctsId" value="${cts.id !''}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+    <script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	
+	<script src="${ctxPath}/assets/scripts/shgl/set_month_count.js"></script>
+</body>
+</html>

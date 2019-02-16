@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">处理记录</h1>
+		</header>
+		<!-- 反馈 -->
+		<div class="inquery">
+			<form class="mui-input-group">
+				<div  id="content" class="content-block block-border">
+				<label id="suggest">反馈结果：</label>
+					<textarea rows="5" id="contentFk" name="content"></textarea>
+				</div>
+				
+				<div class="mui-button-row">
+					<button id="fkButton" type="button" class="mui-btn mui-btn-block mui-btn-primary" ><i class="icon ion-ios-search-strong"></i> 提交</button>
+				</div>
+			</form>
+		</div>
+		
+		<div class="mask-backdrop"></div>
+		<div class="mui-content mui-scroll-wrapper"  id="refreshContainer">
+			<div class="mui-scroll" id="">
+				<div class="listview-block" id="table-container">
+				@#ajax table:{
+					@for(content in pagenate.list ! []){
+					<div class="mui-card" name="${content.id}">
+						<!--页眉，放置标题-->
+						<div class="mui-card-header">
+							<div class="mui-checkbox">
+								<input name="checkbox1" value="Item 1" type="checkbox">
+							</div>
+							<p>${content.rwglEntity.title !}</p>
+							<p>${content.rwglEntity.create_dates !}</p>
+						</div>
+						<!--页脚，放置补充信息或支持的操作-->
+						<div class="mui-card-footer"   id="container"> 
+							@if(content.is_back=='1'){
+								<a id="details" href="javascript:void(0)" name="${content.id}"><i class="icon ion-android-list"></i> 详情</a>
+							@}else{
+								@if(content.is_back=='2'&& content.is_down=='2'){
+									<a id="fk" href="javascript:void(0)" name="${content.id}"><i class="icon ion-android-list"></i> 反馈</a> 
+									@if(isWgy!='yes'){
+										<a id="issue" href="javascript:void(0)" name="${content.id}"><i class="icon ion-android-list"></i> 下发</a> 
+									@}
+									<a id="details" href="javascript:void(0)"  name="${content.id}"><i class="icon ion-android-list"></i> 详情</a>
+								@}else{
+									<a id="fk" href="javascript:void(0)" name="${content.id}"><i class="icon ion-android-list"></i> 反馈</a> 
+									<a id="details" href="javascript:void(0)"  name="${content.id}"><i class="icon ion-android-list"></i> 详情</a>
+								@}
+							@}
+						</div>
+					</div>
+					<input type="hidden" id="pageCnts" value="${pageCnts}" />
+					<input type="hidden" id="pageSize" value="${pageSize}" />
+					@}
+				@}
+				</div>
+			</div>
+		</div>
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/rwgl/app/app_rwgl_cljl.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$("#OpenQuery").click(function() {
+					$(".mask-backdrop").toggle();
+					$(".inquery").toggleClass("show");
+				});
+				$(".mask-backdrop").click(function() {
+					$(this).hide();
+					$(".inquery").removeClass("show");
+				});
+			});
+			//$("#eventButton").click(function(){
+			mui(".mui-segmented-control-inverted").on('tap','#eventButton',function(){ 
+				tagFlag ="1";
+				initEventData();
+			});
+			//$("#recordButton").click(function(){
+			mui(".mui-segmented-control-inverted").on('tap','#recordButton',function(){ 
+				tagFlag ="2";
+				initRecordData();
+			});
+			
+			//手机按键返回
+			function anGoBack(){
+				mui.back();
+				return;
+			}
+			
+		</script>
+	</body>
+
+</html>

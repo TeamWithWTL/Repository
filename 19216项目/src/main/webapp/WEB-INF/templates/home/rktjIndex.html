@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${@com.jcwx.utils.ProjectUtils.getSysCfg("projectName")}</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+</head>
+
+<body>
+	
+	<div class="content-block">
+		<div class="container-fluid warpper">
+			
+			<!-- <div class="row"> -->
+				<div class="col col-12">
+					<!--社区人口统计-->
+					<div class="section-block">
+						
+						<div class="section-body">
+							<div id="charts-rksl" class="charts-block"  style="height:380px;"></div>
+							<input type="hidden" id="basePath" value="${ctxPath}" />
+						</div>
+					</div>
+				</div>
+				
+			
+			<!-- </div> -->
+		</div>
+	</div>
+	<input type="hidden" id="all" value="${all}">
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="roleCode" value="${session.sysAccCount.role_code}" />
+
+	<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/popper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://echarts.baidu.com/dist/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script type="text/javascript" src="${ctxPath}/assets/scripts/home/home.js"></script> -->
+	<script type="text/javascript">
+	var basePath = $("#basePath").val();
+	var roleCode = $("#roleCode").val();
+	
+	$(document).ready(function(){
+		// 文字滚动
+//		setInterval('AutoScroll("#ScrollBox")', 4000);
+		// 异步加载
+		$.ajaxSetup ({ 
+			cache: false 
+			});
+		
+		initData($("#all").val());//社区人口统计
+		
+	});
+	
+	
+	function initData(all){
+		
+		var msgIndex = layer.msg('数据加载中...', {
+			icon : 16,
+			shade : [ 0.5, '#999999' ],
+			time : 0
+		});
+		$.ajax({
+			type:'POST',
+			url:basePath+"/home/initSqrk.do?all="+all,
+			dataTypae:'json',
+			error :function(request){
+				layer.close(msgIndex);
+				layer.msg('程序出错，请联系管理员', {shade : [ 0.5, '#999999' ]});
+			},
+			success : function(data){
+				layer.close(msgIndex);
+				var jsonDate = JSON.parse(data);
+				if(jsonDate.code == 200){
+					initSqrkBar(jsonDate.result);
+				}
+			}
+		})
+	}
+	function initSqrkBar(data){
+		// 初始化图表数据
+		var myChart = echarts.init(document.getElementById('charts-rksl'));
+		window.onresize = myChart.resize;
+		var dataX = [];
+		var dataValue = [];
+		var zdyDate = [];
+		for(var i = 0; i<data.length; i++){
+			dataX[i] = data[i].sqName;
+			dataValue[i] = data[i].sqrkCount;
+			zdyDate[i] = data[i].id;
+		}
+		// 指定图表的配置项和数据
+		option = {
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: { // 坐标轴指示器，坐标轴触发有效
+					type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+				}
+			},
+			grid: {
+				top: '15%',
+				left: '3%',
+				right: '4%',
+				bottom: '2%',
+				containLabel: true,
+				y2: 140
+			},
+			xAxis: [{
+				type: 'category',
+//				data: ['乐安社区', '新城社区', '蒲姑社区', '干乘社区', '西谷王社区', '伏田社区', '西伏社区'],
+				data:dataX,
+				axisTick: {
+					alignWithLabel: true
+				},
+				axisLabel: {
+					interval: 0,
+					rotate:15,//改变倾斜度
+					fontSize:10 // 改变字体大小
+				}
+			}],
+			yAxis: [{
+				type: 'value'
+			}],
+			series: [{
+				name: '人口数量',
+				type: 'bar',
+				barWidth: '40%',
+				zdyDate:zdyDate,
+				label: {
+					normal: {
+						fontSize: '10px',
+					}
+				},
+				 itemStyle: {
+			            normal: {
+			                // 随机显示
+			                color:function(d){return "#"+Math.floor(Math.random()*(256*256*256-1)).toString(16);}
+			              
+			                // 定制显示（按顺序）
+//			                color: function(params) {
+//			                    var colorList = ['#C33531','#EFE42A','#64BD3D','#EE9201','#29AAE3', '#B74AE5','#0AAF9F','#E89589','#16A085','#4A235A','#C39BD3 ','#F9E79F','#BA4A00','#ECF0F1','#616A6B','#EAF2F8','#4A235A','#3498DB' ]; 
+//			                    return colorList[params.dataIndex];
+//			                }
+			            }
+			        },
+				data: dataValue
+			}]
+		};
+		// 使用刚指定的配置项和数据显示图表。
+		myChart.setOption(option);
+		myChart.on("click", eConsole);
+		function eConsole(param){
+			// 跳转到事件列表
+			//alert(param.value);
+			var sqName = zdyDate[param.dataIndex];
+		//	alert(param.data);
+			sqrkDetail(sqName);
+		//	alert(sjName);
+			//alert(sjName);
+		}
+	}
+	//分类清单表格
+	function sqrkDetail(sqName){
+/* 	var id='';
+	$.ajax({
+		url : basePath + '/home/findsqIdByName.do',
+		type : 'POST',
+		//dataTypae:'json',
+		data : {'sqName':sqName},
+		success : function(data){
+			id=data; */
+			top.layer.open({
+				type : 2,
+				title : "<div class='layerTitleDiv'></div><span class='layerTitleSpan'>社区人口列表</span>",
+				fix : false,
+				// shadeClose: true,
+				area : ['80%', '80%'],
+				content : basePath + "/home/sqrkList.do?sqName="+sqName,
+			})
+/* 		}
+	}); */
+	}
+	</script>
+</body>
+</html>

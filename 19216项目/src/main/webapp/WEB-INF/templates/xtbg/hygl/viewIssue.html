@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>协同管理-会议管理</title>
+		<!-- 第三方 CSS -->
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/webuploader/webuploader.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	
+	
+	</head>
+	<body>
+		<div class="article-body">
+			<div class="row">
+				<div class="col col-12">
+					<div class="page-title">会议详情</div>
+					<div class="page-body">
+						<table class="table table-lg table-striped table-event">
+							<tr>
+								<th>标题</th>
+								<td>${meetingEntity.title ! ''}</td>
+							</tr>
+							<tr>
+								<th>开始时间</th>
+								<td>${meetingEntity.fmtStart_date ! ''}</td>
+							</tr>
+							<tr>
+								<th>结束时间</th>
+								<td>${meetingEntity.fmtEnd_date ! ''}</td>
+							</tr>
+							<tr>
+								<th>会议地点</th>
+								<td>${meetingEntity.venue ! ''}</td>
+							</tr>
+							<tr>
+								<th>发布人</th>
+								<td>${meetingEntity.user_name ! ''}</td>
+							</tr>
+							<tr>
+								<th>内容</th>
+								<td>${meetingEntity.content ! ''}</td>
+							</tr>
+							@if(isNotEmpty(departMap)){
+							<tr>
+							<th>参会人员：</th>
+							<td>
+								<div class="form-arraylist">
+								@for(dept in departMap){
+										<li>【${dept.key}】： 
+									@for(attr in dept.value  ! []){
+										${attr.name !}； 
+									@}
+										</li> 
+								@}
+								</div>
+							</td>
+							</tr>
+							@}
+							@if(isNotEmpty(meetingEntity.meetAcceList)){
+							<tr>
+								<th>附件列表</th>
+								<td>
+									<div class="form-arraylist">
+										@for(attr in meetingEntity.meetAcceList  ! []){
+											@if(attr.file_type  == 'img'){
+												<li class="col-4">
+														<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.new_fileName !}')"  title="${attr.old_fileName !}" ><img src="${ctxPath}/showPic?fileName=${attr.new_fileName !}"/> ${attr.old_fileName !}</a>
+														<span title="下载" class="download" onclick="download('${attr.new_fileName !}', '${attr.old_fileName !}')"></span>
+												</li>
+											@}else if(attr.file_type  == 'pdf'){
+												<li class="col-4">
+														<a href="javascript:void(0)"  onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.new_fileName}')" title="${attr.old_fileName !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_fileName !}</a>
+									    				<span title="下载" class="download" onclick="download('${attr.new_fileName !}', '${attr.old_fileName !}')"></span>
+												</li>
+											@}else{
+												<li class="col-4">
+														<a href="javascript:void(0)"   title="${attr.old_fileName !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_fileName !}</a>
+									    				<span title="下载" class="download" onclick="download('${attr.new_fileName !}', '${attr.old_fileName !}')"></span>
+												</li>
+											@}
+										@}
+									</div>
+								</td>
+							</tr>
+							@}
+						</table>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	
+		<div class="container">
+			
+			
+			<div class="page-operation text-right">
+				<button type="button" class="btn btn-primary" onclick="issue('${meetingEntity.id !}','1')"><i class="fa fa-check"></i> 确认发布</button>
+			</div>
+		</div>
+		<input type="hidden" id="startDate" value="${meetingEntity.fmtStart_date ! ''}">
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+		<script src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/xtbg/hygl/viewIssue.js"></script>
+	</body>
+</html>

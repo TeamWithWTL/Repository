@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>我的公文</title>
+	<meta charset="UTF-8">
+		<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+		<link rel="stylesheet" type="text/css"
+			href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+</head>
+
+<body>
+	<div class="function-box">
+		 	<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+				<input type="text" class="form-control" id="title" placeholder="标题">
+				<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+			</div>
+			<div class="function-btn">
+			</div>
+		</div>
+		<div id="table-container" class="warpper">
+			@#ajax table:{
+		<div  class="table-box">
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+						<tr class="table-secondary">
+							<th width="7%">类型</th>
+							<th>标题</th>
+							<th width="15%">发文日期</th>
+							<th width="15%">处理状态</th>
+							<th width="15%" class="text-center">操作</th>
+						</tr>
+						</thead>
+						<tbody id="dqIds">
+						@for(deal in pagenate.list ! []){
+						<tr>
+					        <td>	
+					       	@if(deal.document.type == '1'){
+							发文
+							@}
+							@if(deal.document.type == '2'){
+							收文
+							@}
+							</td>
+					        <td>${deal.document.title}</td>
+							<td>
+								@if(deal.document.type == '1'){
+										@if(deal.document.fwStep=='1'){
+											党政办审批中
+										@}
+										@if(deal.document.fwStep=='2'){
+											党政办审批结束
+										@}
+									@}
+								@if(deal.document.type == '2'){
+									@if(deal.document.swStep=='1'){
+										党政办审批中
+									@}
+									@if(deal.document.swStep=='2'){
+										党政办审批结束
+									@}
+									@if(deal.document.swStep=='3'){
+										街道办审批中
+									@}
+									@if(deal.document.swStep=='4'){
+										街道办审批结束
+									@}
+								@}
+									</td>
+					        <td>${deal.document.createDatesh}</td>
+					        <td class="text-center">
+						        	<a href="javascript:void(0);" onclick="goView('${deal.document.id}')">查看</a>
+					        		@if(deal.status=='0'){
+					        		<a href="javascript:void(0);" onclick="goDeal('${deal.id}')">处理</a>
+					        		@}
+					        </td>
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="5" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+						</tbody>
+					</table>
+					</div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+		</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<!-- 日期控件JS -->
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="${ctxPath}/assets/scripts/xtbg/gwcl/gwcl_myreceive.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>组织活动-添加修改</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/webuploader/webuploader.css" type="text/css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/zTree_v3/css/metroStyle/metroStyle.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+</head>
+
+<body>
+	<div class="container-fluid">
+		<form id="addForm" class="form-horizontal">
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">标题</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="title" name="title" placeholder="标题" value="${hdgl.title ! ''}" />
+					<input type="hidden" class="form-control" id="id" placeholder="编号"  value="${hdgl.id ! ''}">
+				</div>
+			</div>
+				<div class="form-group row">
+				<label class="col-sm-2 col-form-label">一级组织活动</label>
+				<div class="col-sm-9">
+	   				<select id="type_one" name="type_one" class="form-control" onchange="showEjFw(this,'type_two','1')">
+						<option value="">一级组织活动</option>
+						@if(isNotEmpty(oneFwList)){
+							@for(yjfw in oneFwList){
+							<option value="${yjfw.code}" ${hdgl != null && yjfw.code == hdgl.type_one ? 'selected' : ''}  >${yjfw.name}</option>
+							@}
+						@}
+					</select>
+	   			</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">二级组织活动</label>
+				<div class="col-sm-9">
+	     			<select id="type_two" name="type_two" class="form-control">
+						<option value="">二级组织活动</option>
+						@if(isNotEmpty(twoFwList)){
+							@for(ejfw in twoFwList){
+							<option value="${ejfw.itemCode}" ${hdgl != null &&  ejfw.itemCode == hdgl.type_two ? 'selected' : ''}  >${ejfw.itemName}</option>
+							@}
+						@}
+					</select>
+	   			</div>
+			</div>
+			<div class="form-group row">
+				<label  class="col-sm-2 col-form-label">可参加组织</label>
+				<div class="col-sm-9">
+					<button type="button" class="btn btn-outline-secondary" onclick="showTree()"><i class="fa fa-user-plus"></i> 选择组织</button>
+				</div>
+			</div>
+			<div class="form-group row" id="zzlist">
+				<label class="col-sm-2 col-form-label"></label>
+				<div class="col-sm-9">
+				@for(list in zzList ! []){
+					<li id="${list.zzId}_num" class="form-user-tag" code="${list.zzId}">${list.name}<span class="colsed" onclick="deleteZz('${list.zzId}')"></span></li>
+				@}
+				</div>
+			</div>
+			<!-- <div class="form-group row">
+				<label class="col-sm-2 col-form-label">可参加组织</label>
+				<div class="col-sm-9">
+				<div id="names" class="well jsrlb">
+				  @if(hdgl!= null){
+				      <span id='_member'>社会组织1<a href='javascript:void(0)' onclick="deleteMember('1')"><i class='fa fa-minus-circle'></i></a></span>
+				  @}
+				  </div>
+				</div>
+			</div> -->
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">活动开始时间</label>
+				<div class="col-sm-9">
+				  <div class='input-group date' id='datetimepicker'>
+	              		<input type='text' id="startDateFmt" name="startDateFmt" class="form-control" placeholder="活动开始时间" value="${hdgl.startDateFmt ! ''}" readonly="readonly" />
+		                <span class="input-group-addon">
+		                <span class="fa fa-calendar" aria-hidden="true"></span>
+		                </span>
+		          </div>
+				</div>  
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">活动结束时间</label>
+				<div class="col-sm-9">
+				  <div class='input-group date' id='datetimepicker2'>
+	              		<input type='text' id="endDateFmt" name="endDateFmt" class="form-control" placeholder="活动结束时间" value="${hdgl.endDateFmt ! ''}" readonly="readonly" />
+		                <span class="input-group-addon">
+		                <span class="fa fa-calendar" aria-hidden="true"></span>
+		                </span>
+		          </div>
+				</div>  
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">内容</label>
+				<div class="col-sm-9">
+					<script  type="text/plain"  id="content"  style="height: 200px;"  name = "content" >${hdgl.content ! ''}</script>
+				</div>
+			</div>
+			<input type="hidden" name="contentText" id="contentText"/>
+			<div class="form-group row">
+				<label  class="col-sm-2 col-form-label">附件</label>
+				<div class="col-sm-9">
+					<div id="picker"></div>
+				<!-- </div> -->
+			<!-- </div>
+ 			<div class="form-group row">
+ 			<label class="col-sm-3 col-form-label"></label>
+ 			<div class="col-sm-9"> -->
+ 			<div class="form-arraylist" id="attrlist">
+ 			@for(attr in hdgl.attrList  ! []){
+				@if(attr.fileType == 'img'){
+				<li class="col-9">
+					<a href="javascript:void(0)" title="${attr.old_filename}"><img src="${ctxPath}/showPic?fileName=${attr.new_filename}"/> ${attr.old_filename}</a>
+					<span class="colsed" onclick="delFj('${attr.id}', this)"></span>
+				</li>
+				@}else if(attr.fileType == 'word'){
+				<li class="col-9">
+					<a href="javascript:void(0)" title="${attr.old_filename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.old_filename}</a>
+					<span class="colsed" onclick="delFj('${attr.id}', this)"></span>
+				</li>
+				@}else if(attr.fileType == 'txt'){
+				<li  class="col-9">
+					<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.old_filename}</a>
+					<span class="colsed" onclick="delFj('${attr.id}', this)"></span>
+				</li>
+				@}else if(attr.fileType == 'exl'){
+				<li  class="col-9">
+					<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.old_filename}</a>
+					<span class="colsed" onclick="delFj('${attr.id}', this)"></span>
+				</li>
+				@}else if(attr.fileType == 'video'){
+				<li  class="col-9">
+					<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.old_filename}</a>
+					<span class="colsed" onclick="delFj('${attr.id}', this)"></span>
+				</li>
+				@}else{
+				<li class="col-9">
+					<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/default-file.png"/>${attr.old_filename}</a>
+					<span class="colsed" onclick="delFj('${attr.id}', this)"></span>
+				</li>
+				@}
+			@}
+ 			</div>
+ 			</div>
+ 			</div>
+ 			<div class="form-group row">
+				<div class="page-operation text-right col-sm-12">
+					<button type="button" class="btn btn-primary" id="saveBtn" onclick="subMyForm()"><i class="fa fa-save"></i>  保存</button>
+ 					<button type="button" class="btn btn-outline-primary" id="cancleBtn"><i class="fa fa-reply"></i> 取 消</button>
+				</div>
+			</div>
+			<input type="hidden" id="fName" name="fName" />
+		</form>
+		<!-- <div class="col-md-4 column" style="margin-left:950px;margin-top:-660px;">
+			<ul id="zzTree" class="ztree">正在加载中..</ul>
+		</div> -->
+    </div>		
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+	
+	<!-- 附件 -->
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/webuploader/webuploader.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/subFromWithAttrs.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	
+	<script src="${ctxPath}/assets/vendor/zTree_v3/js/jquery.ztree.all-3.5.min.js"></script>
+	
+	<!-- UEditor编辑器 -->
+	<script src="${ctxPath}/assets/vendor/ueditor1.4.3/ueditor.config.js"></script>
+	<script src="${ctxPath}/assets/vendor/ueditor1.4.3/ueditor.all.js"></script>
+	<script type="text/javascript" charset="utf-8" src="${ctxPath}/assets/vendor/ueditor1.4.3/lang/zh-cn/zh-cn.js"></script>
+	
+	<!-- 日期控件 -->
+	<script src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
+	
+	<script src="${ctxPath}/assets/scripts/shzz/hdgl/index_addEdit.js"></script>
+</body>
+</html>

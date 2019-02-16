@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>网格详情页面</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+</head>
+<body>
+	<header id="header" class="mui-bar mui-bar-nav">
+			<a class="icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">网格详情</h1>
+	</header>
+	
+	<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<form class="mui-input-group jcxx-form">
+				
+					<div class="article-content">
+					
+						<div class="mui-input-row">
+						<label>网格名称</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${grid.name ! ''}">
+						</div>
+					
+						<div class="mui-input-row">
+							<label>所属社区</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${grid.serviceStation.community.name ! ''}">
+						</div>
+					
+						<div class="mui-input-row">
+							<label>所属服务站</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${grid.serviceStation.name ! ''}">
+						</div>
+						
+						<div class="mui-input-row">
+							<label>已入住户数</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${grid.sjCount ! ''}">
+						</div>
+					
+						<div class="mui-input-row">
+							<label>添加人</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${grid.add_name ! ''}">
+						</div>
+					
+						<div class="mui-input-row">
+							<label>添加时间</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${grid.addTimeFrm ! ''}">
+						</div>
+						
+					</div>
+					<div class="article-content">
+					
+						<div class="mui-input-row">
+							<label>负责人姓名</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${gmanager.manager ! ''}">
+						</div>
+						
+						<div class="mui-input-row">
+							<label>负责人联系方式</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${gmanager.phone ! ''}">
+						</div>
+						
+						<div class="mui-input-row">
+							<label>网格描述</label>
+							<span class="mui-input-area">${grid.description ! ''}</span>
+							<!-- <input readonly="readonly" type="text" class="mui-input mui-readonly"  value="${village.description ! ''}"/> -->
+						</div>
+					
+					</div>
+					
+				</form>
+			</div>
+		</div>
+	
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		
+		<script type="text/javascript">
+		var basePath = $("#basePath").val();
+		mui.init();
+		mui('.mui-scroll-wrapper').scroll({
+			indicators: false, //是否显示滚动条
+			startX: 0, //初始化时滚动至x
+			deceleration: 0.0004, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+			bounce: true //是否启用回弹
+		});  
+		
+		//手机按键返回
+		/*function anGoBack(){
+			mui.back();
+			return;
+		}*/
+		
+		mui("#header").on('tap','a',function(){
+			window.location.href = basePath + "/app/shgl/wggl/index.do";
+			return;
+		});
+		
+		//手机按键返回
+		function anGoBack(){
+			window.location.href = basePath + "/app/shgl/wggl/index.do";
+			return;
+		}
+		
+		</script>
+</body>
+
+</html>

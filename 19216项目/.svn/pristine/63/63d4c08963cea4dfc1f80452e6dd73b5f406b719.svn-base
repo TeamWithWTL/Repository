@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>部门结构树</title>
+<link rel="stylesheet" type="text/css"
+	href="${ctxPath}/assets/css/normalize.css" />
+<link rel="stylesheet"
+	href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+<link rel="stylesheet"
+	href="${ctxPath}/assets/vendor/zTree_v3/css/metroStyle/metroStyle.css">
+<style type="text/css">
+::-webkit-scrollbar {
+	width: 0px;
+}
+</style>
+</head>
+<body>
+	<!-- 本页面的Tree只能嵌套在iFrame中使用，否则Tree的callback函数无法使用 -->
+	<div id="deptTree" class="ztree"></div>
+	<input type="hidden" id="tree" value="">
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script
+		src="${ctxPath}/assets/vendor/zTree_v3/js/jquery.ztree.all-3.5.min.js"></script>
+	<script type="text/javascript">
+	var deptTreeObj;	//全局Tree对象，方便父页面获取
+	
+	//ZTree设置
+	var treeSetting = {
+		view: {
+			selectedMulti: false	//不允许同时选中多个节点
+		},
+		check : {
+			enable : true,
+			chkStyle : "checkbox",
+		},
+		edit: {
+			enable: true,//允许编辑树
+			drag: {
+				isCopy: false,//拖动为copy
+				isMove: true//拖动为移动
+			},
+			showRemoveBtn:false,//是否显示删除按钮
+			showRenameBtn:false//是否显示编辑按钮
+		},
+		async: {
+			enable: true,//开启异步加载模式
+			type: "post",
+			url: "${ctxPath}/xtbg/hygl/loadTreeData.do?oId="+parent.$("#ids").val(),//加载数据url,开启异步加载才有效
+			otherParam: {"deptId": "${deptId}","oId":"parent.$('#ids').val()"}//提交异步加载的查询参数
+		},
+		data: {
+			simpleData: {
+				enable: true,//使用  简单数据模式  不需要用户再把数据库中取出的 List 强行转换为复杂的 JSON 嵌套格式
+				idKey: "id",  //节点数据中保存唯一标识的属性名称   节点名，id
+				pIdKey: "pId",//节点名，上级id
+				rootPId: "0"//根节点
+			}
+		},
+		callback: {
+			beforeClick: zTreeBeforeClick,//用于捕获单击节点之前的事件回调函数，并且根据返回值确定是否允许单击操作
+			onClick: zTreeOnClick,//用于捕获节点被点击的事件回调函数			如果设置了 setting.callback.beforeClick 方法，且返回 false，将无法触发 onClick 事件回调函数。
+			onAsyncSuccess: zTreeOnAsyncSuccess,//用于捕获异步加载正常结束的事件回调函数			如果设置了 setting.callback.beforeAsync 方法，且返回 false，将无法触发 onAsyncSuccess / onAsyncError 事件回调函数。
+			beforeDrag: zTreeBeforeDrag,//用于捕获节点被拖拽之前的事件回调函数，并且根据返回值确定是否允许开启拖拽操作
+	        beforeDrop: zTreeBeforeDrop,//用于捕获节点拖拽操作结束之前的事件回调函数，并且根据返回值确定是否允许此拖拽操作
+	        onCheck: zTreeOnCheck,
+		}
+	};
+	var msgIndex_tree;
+	$(document).ready(function(){
+		msgIndex_tree = layer.msg('数据加载中...', {icon:16, shade:[ 0.5, '#999999' ], time:0});
+		//加载ZTree
+		$.fn.zTree.init($("#deptTree"), treeSetting);//id容器处加载zTree 初始化方法，创建 zTree 必须使用此方法
+		$("#tree").val($.fn.zTree.getZTreeObj("deptTree"));
+	
+	});
+	
+	
+	//选中checkbox事件
+	function zTreeOnCheck(event, treeId, treeNode) {
+		//查询之前被选的人员，并初始化
+		var oIds='';//初始化已经被选择的参会id
+		 var inputs=parent.$("#ul").find("li").find("input");
+		var ostr='';
+		    $.each(inputs,function(index,inpu){
+		    	oIds +=$(inpu).val()+',';
+		    	
+		    })
+		   
+		parent.$("#ids").val(oIds);
+		var ids=parent.$("#ids").val();
+		var str='';
+		parent.$("#ul").html("");
+		
+		 var treeObj = $.fn.zTree.getZTreeObj("deptTree");
+		var nodes = treeObj.getCheckedNodes(true);
+		 if(nodes.length == 0){
+				return;
+		    }
+		 for (var i = 0; i < nodes.length; i++) {
+			 var name =nodes[i].name;
+				var accCode = nodes[i].id;
+				var level = nodes[i].level;
+				
+			   
+				if (level>1) { 
+					if (!contains(ids.split(","),accCode)) {
+						ids=ids+accCode+",";
+					}
+					 
+					  str+="<li class='form-user-tag'>"+name+"<span id='"+accCode+"' onclick=\"delStaff('"+accCode+"',this)\" ></span><input type='hidden'  name='staffId' value='"+accCode+"'></li>";
+				 }  
+			   
+		}
+		 
+		    parent.$("#ul").append(str);
+		    parent.$("#ids").val(ids);
+	}
+	
+ function contains(arr, obj) {  
+  
+    for (var int = 0; int < arr.length; int++) {
+    	
+        if (arr[int] === obj) {  
+            return true;  
+        }  
+	}
+    return false;  
+}  
+	//移除接收人
+	/* function delStaff(accCode){
+		alert("111");
+		parent.$("#"+accCode).remove();
+		alert("111");
+		var treeObj = $.fn.zTree.getZTreeObj("deptTree");
+		var node = treeObj.getNodeByParam("id", accCode, null);
+		alert("111");
+		treeObj.checkNode(node, false, false);
+		zTreeOnCheck();
+	} */
+	
+	//节点被点击前校验：默认所有节点都可以被点击
+	function zTreeBeforeClick(treeId, treeNode, clickFlag){
+		if(parent.zTreeBeforeClick && typeof(parent.zTreeBeforeClick)=="function"){ 
+			parent.zTreeBeforeClick(treeId, treeNode, clickFlag); 
+		}else{
+			return true;
+		}
+	}
+	
+	//节点被点击时触发
+	function zTreeOnClick(event, treeId, treeNode){
+		if(parent.zTreeOnClick && typeof(parent.zTreeOnClick)=="function"){ 
+			parent.zTreeOnClick(event, treeId, treeNode); 
+		} 
+		
+	}
+	
+	//ZTree加载成功后触发
+	function zTreeOnAsyncSuccess(event, treeId, treeNode, msg){
+		layer.close(msgIndex_tree);
+		var treeObj = $.fn.zTree.getZTreeObj(treeId);
+		deptTreeObj = treeObj;
+		
+		if(parent.zTreeOnAsyncSuccess && typeof(parent.zTreeOnAsyncSuccess)=="function"){ 
+			parent.zTreeOnAsyncSuccess(event, treeId, treeNode, msg); 
+		}else{
+			
+		}
+	}
+	
+	//移动节点前处理
+	function zTreeBeforeDrag(treeId, treeNodes){
+		if(parent.zTreeBeforeDrag && typeof(parent.zTreeBeforeDrag)=="function"){ 
+			parent.zTreeBeforeDrag(treeId, treeNodes); 
+		}
+	}
+	
+	//拖拽释放之后结束前执行
+ 	function zTreeBeforeDrop(treeId, treeNodes, targetNode, moveType){
+		if(parent.zTreeBeforeDrop && typeof(parent.zTreeBeforeDrop)=="function"){ 
+			parent.zTreeBeforeDrop(treeId, treeNodes, targetNode, moveType); 
+		}
+	}; 
+	
+	</script>
+</body>
+</html>

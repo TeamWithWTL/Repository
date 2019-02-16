@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>楼宇管理列表</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+</head>
+<body>
+	<header id="header" class="mui-bar mui-bar-nav">
+			<a class="icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">楼宇列表</h1>
+			<button id="OpenQuery" class="mui-btn mui-btn-link icon ion-ios-search-strong mui-pull-right"></button>
+	</header>
+	
+	<div class="inquery">
+		<form class="mui-input-group">
+			<!-- <div class="mui-input-row">
+				<label>社区名称</label> 
+				<input type="text" id="name" class="mui-input-picker" placeholder="社区名称" />
+			</div> -->
+			<div class="mui-input-row">
+				<label>所属社区</label> 
+				<select class="mui-input-picker" id="lyCode1" onchange="showSsApp(this,'ssId')">
+	   				<option value="">--所属社区--</option>
+	   				@for(com in comList ![]){
+   					<option value="${com.id}">${com.name}</option>
+	   				@}
+  			    </select>
+			</div>
+			<div class="mui-input-row">
+				<label>所属服务站</label> 
+				<select class="mui-input-picker" id="ssId" onchange="showData(this,'gridId','xqId')">
+	   				<option value="">--所属服务站--</option>
+  			    </select>
+			</div>
+			<div class="mui-input-row">
+			<label>所属网格</label> 
+			<select id="gridId" class="mui-input-picker">
+	    		<option value="">--所属网格--</option>
+		    </select>
+			</div>
+			<div class="mui-input-row" style="display: none;" id="roleCodeId">
+			<label>所属小区</label> 
+			<select id="xqId" class="mui-input-picker">
+	    		<option value="">--所属小区--</option>
+		    </select>
+			</div>
+			<div class="mui-button-row">
+			<button class="mui-btn mui-btn-block mui-btn-primary" type="button" onclick="initData()">
+			<i class="icon ion-ios-search-strong"></i>点击查询</button>
+			</div>
+		</form>
+	</div>
+	
+	<div class="mask-backdrop"></div>
+
+	<div id="refreshContainer" class="mui-content mui-scroll-wrapper"  >
+			<div class="mui-scroll" id="">
+				<div class="listview-block" id="table-container">
+				@#ajax table:{
+				@for(com in pagenate.list ! []){
+						<div class="mui-card" id="lyId" name="${com.id}">
+							<div class="mui-card-header">
+								楼宇名称:${com.name}
+							</div>
+							<div class="mui-card-content">
+							<div class="mui-card-content-inner">
+								<p style="color:#666;">
+								所属社区：${com.village.serviceStation.community.name !''}
+								</p>
+								<p style="color:#666;">
+								所属服务站：${com.village.serviceStation.name !''}
+								</p>
+								<p style="color:#666;">
+								所属网格：${com.grid.name !''}
+								</p>
+								<p style="color:#666;">
+								所属小区：${com.village.name !''}
+								</p>
+							</div>
+							</div>
+							
+							<!--页脚，放置补充信息或支持的操作-->
+							<div class="mui-card-footer">
+								<a href="javascript:void(0)" name=""><i class="icon ion-android-list"></i>详情</a>
+							</div>
+						</div>
+					<input type="hidden" id="pageCnts" value="${pageCnts}" />
+					<input type="hidden" id="pageSize" value="${pageSize}" />
+						@}
+				@}
+				</div>
+			</div>
+		</div>
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<input type="hidden" id="roleCode" value="${roleCode}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/lygl/app/app_lygl_index.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script type="text/javascript">
+		$(function() {
+			$("#OpenQuery").click(function() {
+				$(".mask-backdrop").toggle();
+				$(".inquery").toggleClass("show");
+			});//点击放大镜显示遮罩层，滑出筛选框
+			$(".mask-backdrop").click(function() {
+				$(this).hide();
+				$(".inquery").removeClass("show");
+			});//点击遮罩层关闭筛选和遮罩
+		});	
+		
+		mui("#header").on('tap','a',function(){
+			  window.location.href = $("#basePath").val() + "/app/home/jcxx.do";
+		});
+		
+		//手机按键返回
+		function anGoBack(){
+			 window.location.href = $("#basePath").val() + "/app/home/jcxx.do";
+			return;
+		}
+		
+		</script>
+</body>
+</html>

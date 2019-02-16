@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>社会管理-任务管理-处理详情</title>
+		<!-- 第三方 CSS -->
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+	
+	</head>
+	<body>
+		<div class="article-body">
+			<div class="row">
+				<div class="col col-12">
+					<div class="page-title">任务处理详情</div>
+					<div class="page-body">
+						<table class="table table-lg table-striped table-event">
+						<tr>
+							<th>任务名称</th>
+							<td>${rwcl.rwglEntity.title ! ''}</td>
+						</tr>
+						<tr>
+							<th>发布日期</th>
+							<td>${rwcl.rwglEntity.create_dates ! ''}</td>
+						</tr>
+						<tr>
+							<th>结束日期</th>
+							<td>${rwcl.rwglEntity.finish_dates ! ''}</td>
+						</tr>
+						<tr>
+							<th>发布人</th>
+							<td>${rwcl.rwglEntity.fbr_name ! ''}</td>
+						</tr>
+						@if(rwcl.curName != null){
+						<tr>
+							<th>接收人</th>
+							<td>${rwcl.curName ! ''}</td>
+						</tr>
+						@}
+						<tr>
+							<th>内容</th>
+							<td>${rwcl.rwglEntity.content ! ''}</td>
+						</tr>
+						@if(isNotEmpty(rwcl.rwglEntity.attrList)){
+						<tr>
+							<th>附件</th>
+							<td>
+							<div class="form-arraylist">
+							@for(attr in rwcl.rwglEntity.attrList  ! []){
+								@if(attr.file_type  == 'img'){
+									<li class="col-9">
+										<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.new_filename  !}')"  title="${attr.old_filename !}" ><img src="${ctxPath}/showPic?fileName=${attr.new_filename !}"/> ${attr.old_filename !}</a>
+										<span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.file_type  == 'pdf'){
+									<li class="col-9">
+										<a href="javascript:void(0)"  onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.new_filename}')" title="${attr.old_filename !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_filename !}</a>
+									    <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'word'){
+									<li class="col-9">
+										<a href="javascript:void(0)" title="${attr.old_filename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.old_filename}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'txt'){
+									<li  class="col-9">
+										<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.old_filename}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'exl'){
+									<li  class="col-9">
+										<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.old_filename}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'video'){
+									<li  class="col-9">
+										<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.old_filename}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else{
+										<li class="col-9">
+										<a href="javascript:void(0)"   title="${attr.old_filename !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_filename !}</a>
+									    <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}
+								@}
+								</div>
+							</td>
+						</tr>
+						@}
+						@if(rwcl.content != null){
+						<tr>
+							<th>处理人</th>
+							<td>${rwcl.curName ! ''}</td>
+						</tr>
+						<tr>
+							<th>处理时间</th>
+							<td>${rwcl.end_dates ! ''}</td>
+						</tr>
+						<tr>
+							<th>反馈信息</th>
+							<td>${rwcl.content ! ''}</td>
+						</tr>
+						@if(isNotEmpty(rwcl.attrList)){
+						<tr>
+							<th>反馈附件</th>
+							<td>
+							<div class="form-arraylist">
+							@for(attr in rwcl.attrList  ! []){
+								@if(attr.file_type  == 'img'){
+									<li class="col-9">
+										<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.new_filename  !}')"  title="${attr.old_filename !}" ><img src="${ctxPath}/showPic?fileName=${attr.new_filename !}"/> ${attr.old_filename !}</a>
+										<span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.file_type  == 'pdf'){
+									<li class="col-9">
+										<a href="javascript:void(0)"  onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.new_filename}')" title="${attr.old_filename !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_filename !}</a>
+									    <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'word'){
+									<li class="col-9">
+										<a href="javascript:void(0)" title="${attr.old_filename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.old_filename}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'txt'){
+									<li  class="col-9">
+										<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.old_filename}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'exl'){
+									<li  class="col-9">
+										<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.old_filename}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'video'){
+									<li  class="col-9">
+										<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.old_filename}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else{
+										<li class="col-9">
+										<a href="javascript:void(0)"   title="${attr.old_filename !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_filename !}</a>
+									    <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}
+								@}
+								</div>
+							</td>
+						</tr>
+						@}
+						@}
+					</table>
+				</div>
+			</div>
+		</div>
+		</div>
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js" ></script>
+		<script src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/rwgl/view.js"></script>
+	</body>
+</html>

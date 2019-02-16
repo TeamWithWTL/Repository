@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>系统菜单管理-添加、编辑</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+	<div class="container-fluid">
+		<form id="myForm" class="form-horizontal">
+			<br>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">菜单名称</label>
+					<div class="col-sm-5">
+ 							<input type="text" class="form-control" id="menuName" name="menuName" placeholder="菜单名称" value="${sysMenu.menuName ! ''}" />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">菜单别名</label>
+					<div class="col-sm-5">
+ 							<input type="text" class="form-control" id="aliasName" name="aliasName" placeholder="菜单别名" value="${sysMenu.aliasName ! ''}" />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">菜单图标</label>
+					<div class="col-sm-5">
+ 							<input type="text" class="form-control" id="icoUrl" name="icoUrl" placeholder="菜单图标" value="${sysMenu.icoUrl ! ''}" />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">上级菜单</label>
+					<div class="col-sm-3">
+						<select class="form-control" name="parentId">
+							<option value="">根</option>
+							@for(menu in allMenu){
+							<option value="${menu.menuCode}" ${sysMenu != null && menu.menuCode == sysMenu.parentId ? 'selected' : ''}>${menu.menuName}</option>
+							@}
+						</select>
+					</div>
+					<div class="col-sm-4">
+						<span style="line-height: 33px; font-size: 12px; color: #666;">（* 系统菜单最多支持三级）</span>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">URL</label>
+					<div class="col-sm-5">
+ 							<input type="text" class="form-control" id="url" name="url" placeholder="URL" value="${sysMenu.url ! ''}" />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">排序</label>
+					<div class="col-sm-3">
+ 							<input type="text" class="form-control" id="orderNo" name="orderNo" placeholder="排序" value="${sysMenu.orderNo ! ''}" />
+					</div>
+					<div class="col-sm-4">
+						<span style="line-height: 33px; font-size: 12px; color: #666;">（* 数字越小，排序越靠前）</span>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="page-operation text-right col-sm-12">
+ 							<button type="button" class="btn btn-primary" id="saveBtn"><i class="fa fa-save"></i> 保 存</button>
+ 							<button type="button" class="btn btn-outline-primary" id="cancleBtn"><i class="fa fa-reply"></i> 返回</button>
+					</div>
+				</div>
+				
+				<input type="hidden" name="menuCode" value="${sysMenu.menuCode ! ''}" />
+					
+		</form>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"></script>
+	<script src="${ctxPath}/assets/scripts/xtgl/xtcdgl/addEdit.js"></script>
+</body>
+</html>

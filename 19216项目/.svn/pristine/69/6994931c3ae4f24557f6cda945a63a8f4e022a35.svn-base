@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>社会管理-社情民意--查看网格员调查住户人员列表</title>
+	<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+        <style type="text/css">
+	      .name{
+	        width: 300px; 
+		    white-space: nowrap;  
+		    text-overflow: ellipsis; 
+		    overflow: hidden; 
+	       }
+       </style>
+</head>
+
+<body>
+		<div id="table-container" class="table-box">
+			<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+				<thead>
+				 <tr class="table-secondary">
+	                  <th width="25%" class="text-center">姓名</th>
+	                  <th width="25%" class="text-center">与户主关系</th>
+	                  <th width="25%" class="text-center">婚姻状况</th>
+	                  <th width="25%" class="text-center">人员类别</th>
+                 </tr>  
+				</thead>
+			  <tbody id="dqIds">	
+				@for(wgyzhry in zhrylist ! []){
+				    <tr>
+				        <td class="text-center">
+				          <a href="javascript:void(0);" onclick="goView('${wgyzhry.id}')"> ${wgyzhry.name}</a>
+	                    </td>
+	                     <td class="text-center">
+		                    @if(isNotEmpty(hzgx)){
+								@for(hz in hzgx){
+									${hz.itemCode == wgyzhry.relation ? hz.itemName : ''}
+								@}
+							@}
+	                    </td>
+	                     <td class="text-center">
+		                    @if(isNotEmpty(hyzk)){
+								@for(da in hyzk){
+									${da.itemCode == wgyzhry.hy_status ? da.itemName : ''}
+								@}
+							@}
+	                    </td>
+				        <td class="text-center">
+				         @if(isNotEmpty(ryfl)){
+							@for(ry in ryfl){
+								${ry.itemCode == wgyzhry.ry_type ? ry.itemName : ''}
+							@}
+						 @}
+	                    </td>
+			       </tr>
+				@}elsefor{
+				<tr>
+			        <td colspan="4" class="text-center">
+			        	没有找到要查询的数据
+			        </td>
+		    	</tr>
+				@}
+				</tbody>
+			</table>
+		</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	<script type="text/javascript">
+	var basePath = $("#basePath").val();
+	
+	function goView(id){
+		top.layer.open({
+		    type: 2,
+		    title: "<div class='layerTitleDiv'></div><span class='layerTitleSpan'>查看调查住户详情</span>",
+		    fix: false,
+		   // shadeClose: true,
+		    area: ['950px', '450px'],
+		    content: basePath+'/shgl/sqmy/ckwgyzhxq.do?id='+id,
+		  });
+	}
+	</script>
+</body>
+</html>

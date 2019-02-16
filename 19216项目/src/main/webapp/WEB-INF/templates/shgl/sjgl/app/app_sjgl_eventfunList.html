@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<title>任务管理</title>
+			<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+			<meta name="apple-mobile-web-app-capable" content="yes">
+			<meta name="apple-mobile-web-app-status-bar-style" content="black">
+			<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+			<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+			<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<!-- <a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a> -->
+			<a class="icon ion-android-arrow-back mui-pull-left" id="backId"></a>
+			<h1 class="mui-title" id="title">事件管理</h1>
+		</header>
+
+		<div class="mui-content mui-scroll-wrapper" >
+			<div class="mui-scroll">
+			<div class="listview-block">
+			<ul class="listview-jcxx">
+				<li type="dbsx">
+				    <div class="jcxx-header">
+				        <h4>待办事项</h4>
+				        <p>DAIBANSHIXIANG</p>
+				    </div>
+				    <div class="jcxx-footer">
+						<span>查看详细 >></span>
+					</div>
+				</li>
+				<li type="cljl">
+				    <div class="jcxx-header">
+				        <h4>处理记录</h4>
+				        <p>CHULIJILU</p>
+				    </div>
+				    <div class="jcxx-footer">
+						<span>查看详细 >></span>
+					</div>
+				</li>
+				<li type="sjhz" id="sjhz" style="display:none;">
+				    <div class="jcxx-header">
+				        <h4>事件总览</h4>
+				        <p>SHIJIANZONGLAN</p>
+				    </div>
+				    <div class="jcxx-footer">
+						<span>查看详细 >></span>
+					</div>
+				</li>
+		    </ul>
+		    </div>
+		    </div>
+		</div>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<input type="hidden" id="roleCode" value="${roleCode ! ''}" />
+
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/sjgl/app/app_sjgl_eventfunList.js"></script>	
+		<script type="text/javascript">
+		var basePath = $("#basePath").val();
+		
+		$(function(){
+			var roleCode = $("#roleCode").val();
+			// 街道管理员 服务站管理员， 社区管理员，街道办信息员，街道办领导，admin 能查看
+			if(roleCode.indexOf("05")!=-1||roleCode.indexOf("02")!=-1 || roleCode.indexOf("03")!=-1  || roleCode.indexOf("04")!=-1  || roleCode.indexOf("12")!=-1 || roleCode.indexOf("99")!=-1){
+				$("#sjhz").show();
+			}
+		});
+		mui.init();
+		mui('.mui-scroll-wrapper').scroll({
+			indicators: false, //是否显示滚动条
+			startX: 0, //初始化时滚动至x
+			deceleration: 0.0004, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+			bounce: true //是否启用回弹
+		}); 
+		//返回界面
+		mui("#header").on('tap','a',function(){
+			window.location.href = $("#basePath").val() + "/app/home/index.do";
+		});
+		
+		//手机按键返回
+		function anGoBack(){
+			window.location.href = $("#basePath").val() + "/app/home/index.do";
+			return;
+		}
+		
+		//返回界面
+		mui(".listview-jcxx").on('tap','li',function(){
+			var type = this.getAttribute("type");
+			console.log("type:"+type);
+			var url = "";
+			if(type=="dbsx"){
+				url="/app/sjgl/myEvent.do";
+			}
+			if(type=="cljl"){
+				url="/app/sjgl/myRecord.do";			
+			}
+			if(type=="sjhz"){
+				url="/app/sjgl/allEvent.do";
+			}
+			window.location.href = $("#basePath").val() + url;
+		});
+		</script>
+	</body>
+
+</html>

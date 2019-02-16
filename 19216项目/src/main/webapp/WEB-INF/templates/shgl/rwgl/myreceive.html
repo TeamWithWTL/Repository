@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+<meta charset="UTF-8">
+<title>社会管理--待办事项</title>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+<style type="text/css">
+
+.text-overflow{
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	overflow:hidden;
+}
+</style>
+
+</head>
+<body>
+	<div class="function-box">
+		<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+						<input type="text" class="form-control" id="title" placeholder="标题" value="${title ! ''}">
+						<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+		</div>
+		<div class="function-btn">
+		
+	
+	<div id="table-container" class="table-box">
+			@#ajax table:{
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+						<tr class="table-secondary">
+							<th class="text-center">标题</th>
+							<th width="17%" class="text-center">下发人</th>
+					        <th width="20%" class="text-center">下发日期</th>
+					        <th width="10%" class="text-center">反馈状态</th>
+					        <th width="20%" class="text-center">操作</th>
+						</tr>
+						</thead>
+						<tbody>
+					@for(rwcl in pagenate.list ! []){
+						<tr>
+					        <td class="text-left text-overflow" title="${rwcl.rwglEntity.title}">${rwcl.rwglEntity.title ! ''}</td>
+					        <td class="text-left">${rwcl.pre_emp}</td>
+					        <td class="text-center">${rwcl.starte_dates}</td>
+					        @if(rwcl.is_back =='2'){
+					        	<td style="color: #ffa81f"  class="text-center">未反馈</td>
+					        @}else if(rwcl.is_back =='1'){
+					        	<td style="color: #ffa81f"  class="text-center">已反馈</td>
+					        @}
+				            <td class="text-center">
+				        		<a href="javascript:void(0);" onclick="goView('${rwcl.id}')">查看</a>&nbsp;
+					        	@if(rwcl.is_back == '1'){
+					        	@}else{
+					        			<a href="javascript:void(0);" onclick="goDeal('${rwcl.id}')">反馈</a>
+					        	@}
+					        	@if(rwcl.is_down == '1'){
+						       	@}else{
+							        	<a href="javascript:void(0);" onclick="showTree('${rwcl.id}')">下发</a>
+						       	@}
+				        	</td>
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="5" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+						</tbody>
+					</table>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+			</div>
+		</div>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/rwgl/myreceive.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

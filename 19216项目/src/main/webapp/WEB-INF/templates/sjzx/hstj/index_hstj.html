@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>数据中心--户数统计</title>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+</head>
+<body>
+<div class="content-block no-padding" style="height: 100%;">
+	<div class="block-content">
+	<div class="row">
+		<div class="col-12">
+			<div class="section-block">
+				<div class="section-block-title">
+					<i class="rader-icon"> 户数统计</i>
+				</div>
+				<div class="section-body">
+					<div id="charts-hstj" class="charts-block"></div>
+					<input type="hidden" id="basePath" value="${ctxPath}" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<input type="hidden" id="basePath" value="${ctxPath}" />
+	<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/popper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="http://echarts.baidu.com/dist/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/scripts/sjzx/hstj/index_hstj.js"></script>
+</body>
+</html>

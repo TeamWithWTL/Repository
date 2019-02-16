@@ -1,0 +1,205 @@
+.house {
+	width: 535px;
+	height: 315px;
+	float: left;
+}
+
+.house .h-top {
+	width: 100%;
+	float: left;
+	height: 60px;
+	background-color: #499DD9;
+}
+
+.house .h-top .h-top-j {
+	width: 60px;
+	height: 60px;
+}
+
+.house .h-top h1 {
+	width: 415px;
+	text-align: center;
+	line-height: 60px;
+	background-color: transparent;
+	color: #fff;
+	float: left;
+	font-size: 18px;
+	letter-spacing: 1px;
+}
+
+.house .h-content {
+	width: 98%;
+	margin: 4px 1%;
+	height: 448px;
+	float: left;
+	background-color: #fff;
+	overflow-y: auto;
+}
+
+.house .h-content .h-content-in {
+	/* width: 2000px;
+	overflow: hidden;
+	overflow-x: auto; */
+}
+
+.house .h-bottom {
+	width: 100%;
+	float: left;
+	height: 10px;
+	background-color: #499DD9;
+}
+
+.h-arrow-left {
+	width: 0px;
+	height: 0px;
+	border-width: 30px;
+	border-style: solid;
+	border-color: #fff transparent transparent #fff;
+}
+
+.h-arrow-right {
+	width: 0px;
+	height: 0px;
+	border-width: 30px;
+	border-style: solid;
+	border-color: #fff #fff transparent transparent;
+}
+
+.h-unit {
+	float: left;
+	margin: 4px 5px;
+}
+
+.h-unit th {
+	width: 100%;
+	line-height: 26px;
+	background-color: #BFC6D6;
+	color: #fff;
+	text-align: center;
+	letter-spacing: 1px;
+	font-size: 16px;
+}
+
+.h-unit .h-unit-con {
+	
+}
+
+.house-block {
+	width: 120px;
+	height: 60px;
+	border: 1px solid #808080;
+	margin: 3px 2px 1px 2px;
+	background-color: #fff;
+	cursor: pointer;
+	position: relative;
+}
+
+.house-block:hover {
+	background-color: #E8D6A6;
+}
+
+.house-block.selected {
+	background-color: #E0A5A1;
+}
+
+.house-block .topspan {
+	display: block;
+	line-height: 30px;
+	font-size: 18px;
+	letter-spacing: 1px;
+	color: #499DD9;
+	text-align: center;
+	position: absolute;
+	z-index: 10;
+	bottom: 0;
+	right: 5px;
+	text-align: right;
+}
+
+.house-block.selected span {
+	color: #fff;
+}
+
+.house-block .blewlist {
+	width: 100%;
+	height: 60px;
+	display: block;
+	position: absolute;
+	z-index: 1;
+}
+
+.house-block .blewlist i {
+	width: 24px;
+	height: 24px;
+	float: left;
+	margin: 3px;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+/* .house-block .blewlist i.youfu { */
+/* 	background-image: url(/Images/housetype/youfu.png); */
+/* } */
+
+/* .house-block .blewlist i.dibao { */
+/* 	background-image: url(/Images/housetype/dibao.png); */
+/* } */
+
+/* .house-block .blewlist i.tuixiu { */
+/* 	background-image: url(/Images/housetype/tuixiu.png); */
+/* } */
+
+/* .house-block .blewlist i.canji { */
+/* 	background-image: url(/Images/housetype/canji.png); */
+/* } */
+
+/* .house-block .blewlist i.dangyuan { */
+/* 	background-image: url(/Images/housetype/dangyuan.png); */
+/* } */
+
+/* .house-block .blewlist i.yuling { */
+/* 	background-image: url(/Images/housetype/yuling.png); */
+/* } */
+
+/* .house-block .blewlist i.teshu { */
+/* 	background-image: url(/Images/housetype/teshu.png); */
+/* } */
+
+/* .house-block .blewlist i.liushou { */
+/* 	background-image: url(/Images/housetype/liushou.png); */
+/* } */
+
+/* .house-block .blewlist i.gugua { */
+/* 	background-image: url(/Images/housetype/gugua.png); */
+/* } */
+
+/* .house-block .blewlist i.islet { */
+/* 	background-image: url(/Images/housetype/islet.png); */
+/* } */
+
+/******婊氬姩鏉�*****/
+::-webkit-scrollbar {
+	width: 14px;
+	height: 14px;
+}
+
+::-webkit-scrollbar-track, ::-webkit-scrollbar-thumb {
+	border-radius: 999px;
+	border: 12px solid transparent;
+}
+
+::-webkit-scrollbar-track {
+	box-shadow: 1px 1px 5px rgba(0, 0, 0, .2) inset;
+}
+
+::-webkit-scrollbar-thumb {
+	min-height: 20px;
+	-moz-background-clip: content-box;
+	-webkit-background-clip: content-box;
+	background-clip: content-box;
+	box-shadow: 0 0 0 5px rgba(0, 0, 0, .2) inset;
+}
+
+::-webkit-scrollbar-corner {
+	background: transparent;
+}

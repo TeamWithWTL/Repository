@@ -1,0 +1,142 @@
+<!doctype html>
+<html class="layerpage">
+
+<head>
+<title>协同办公-添加、编辑</title>
+<meta charset="UTF-8">
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<!-- 第三方 CSS -->
+		<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/webuploader/webuploader.css" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" />
+<style type="text/css">
+.ztree {
+	margin: 0;
+	padding: 10px;
+	color: #333;
+}
+</style>
+</head>
+
+<body>
+
+	<div class="col-md-12 column">
+		<form action="" id="addForm">
+
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">标题</label>
+				<div class="col-sm-7">
+					<input type="text" class="form-control" id="title" name="title"
+						placeholder="标题" value="${meetingEntity.title  ! ''}"> <input
+						type="hidden" class="form-control" id="id" name="id"
+						value="${meetingEntity.id ! ''}">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">会议地点</label>
+				<div class="col-sm-7">
+					<input type="text" class="form-control" id="venue" name="venue"
+						placeholder="会议地点" value="${meetingEntity.venue ! ''}">
+				</div>
+			</div>
+
+
+
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">开始</label>
+				<div class="col-sm-3">
+					<div class='input-group date form_datetime'  id='datetimepicker'>
+						<input type="text" class="form-control" id="start_date"  name="start_date" 
+						placeholder="开始时间" readonly="readonly" value="${meetingEntity.fmtStart_date! ''}"> <span
+						class="input-group-addon"
+						> <span
+						class="fa fa-calendar" ></span>
+					</span>
+				</div>
+
+				</div>
+				<label for="" class="col-sm-1 col-form-label">结束</label>
+				<div class="col-sm-3">
+					<div class='input-group date' id='datetimepicker2'>
+						<input type="text" class="form-control" id="end_date"  name="end_date" 
+						placeholder="结束时间" readonly="readonly" value="${meetingEntity.fmtEnd_date! ''}"> <span
+						class="input-group-addon"
+						> <span
+						class="fa fa-calendar" aria-hidden="true"></span>
+					</span>
+					</div>
+					
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">内容</label>
+				<div class="col-sm-7">
+					<textarea class="form-control"  rows="6" id="content" name="content">${meetingEntity.content ! ''}</textarea>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">参会人员</label>
+				<div class="col-sm-7">
+					<button type="button" class="btn btn-outline-secondary"
+						onclick="showTree()">
+						<i class="fa fa-user-plus"></i> 选择人员
+					</button>
+				</div>
+				<br>
+				<div class="form-user-group" id="personlist">
+					<br> @for(attr in departList ! []){
+					<li id="${attr.accCode !}_member"  class="form-user-tag"  code="${attr.accCode !}">${attr.name !} <span class="colsed"
+						onclick="delStaff('${attr.accCode !}', this)" ></span> 
+					</li> @}
+				</div>
+			</div>
+
+			<input type="hidden" id="ids" name="ids" value="">
+			<div class="form-group row">
+				<div class="col-sm-3"></div>
+				<div class="col-sm-7">
+					<div class="page-operation text-right">
+						<button id="saveBtn" type="button" class="btn btn-primary">
+							<i class="fa fa-save"></i> 保存
+						</button>
+						<button id="cancleBtn" type="button"
+							class="btn btn-outline-primary">
+							<i class="fa fa-reply"></i> 取消
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+
+	<input type="hidden" id="personlistValue" value="" />
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<!-- 日期控件JS -->
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/webuploader/webuploader.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/subFromWithAttrs.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	<script src="${ctxPath}/assets/scripts/xtbg/hygl/addEdit.js"></script>
+</body>
+</html>

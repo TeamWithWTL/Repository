@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<title>任务管理</title>
+			<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+			<meta name="apple-mobile-web-app-capable" content="yes">
+			<meta name="apple-mobile-web-app-status-bar-style" content="black">
+			<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+			<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+			<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<!-- <a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a> -->
+			<a class="icon ion-android-arrow-back mui-pull-left" id="backId"></a>
+			<h1 class="mui-title" id="title">任务管理</h1>
+		</header>
+
+		<div class="mui-content mui-scroll-wrapper" id="">
+			<div class="mui-scroll">
+			<div class="listview-block">
+			<ul class="listview-jcxx">
+				<li id="toDbrw" style="display: none;">
+				    <div class="jcxx-header">
+				        <h4>待办任务</h4>
+				        <p>DAIBANRENWU</p>
+				    </div>
+				    <div class="jcxx-footer">
+						<span>查看详细 >></span>
+					</div>
+				</li>
+				<li id="toMyxf" style="display: none;">
+				    <div class="jcxx-header">
+				        <h4>我的下发</h4>
+				        <p>WODEXIAFA</p>
+				    </div>
+				    <div class="jcxx-footer">
+						<span>查看详细 >></span>
+					</div>
+				</li>
+				<li id="toCljl">
+				    <div class="jcxx-header">
+				        <h4>处理记录</h4>
+				        <p>CHULIJILU</p>
+				    </div>
+				    <div class="jcxx-footer">
+						<span>查看详细 >></span>
+					</div>
+				</li>
+				<li id="toRwjz" style="display: none;">
+				    <div class="jcxx-header">
+				        <h4>任务汇总</h4>
+				        <p>RENWUHUIZONG</p>
+				    </div>
+				    <div class="jcxx-footer">
+						<span>查看详细 >></span>
+					</div>
+				</li>
+		    </ul>
+		    </div>
+		    </div>
+		</div>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<input type="hidden" id="roles" value="${roles ! ''}" />
+
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/rwgl/app/app_rwgl_index.js"></script>
+		<script type="text/javascript">
+		mui.init();
+		mui('.mui-scroll-wrapper').scroll({
+			indicators: false, //是否显示滚动条
+			startX: 0, //初始化时滚动至x
+			deceleration: 0.0004, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+			bounce: true //是否启用回弹
+		}); 
+		
+		mui("#header").on('tap','a',function(){
+			  window.location.href = $("#basePath").val() + "/app/home/index.do";
+		});
+		
+		//手机按键返回
+		function anGoBack(){
+			//返回首页
+			window.location.href = $("#basePath").val() + "/app/home/index.do";
+			return;
+		}
+			
+		</script>
+	</body>
+
+</html>

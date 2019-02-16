@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>热点新闻--增加修改页面</title>
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/webuploader/webuploader.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<!-- layui -->
+	<!-- <link rel="stylesheet" href="${ctxPath}/assets/vendor/layui/css/layui.css"> -->
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/layui.css">
+	<style type="text/css">
+		.layui-upload-button input{
+		}
+		.upload-wrap {
+		position:relative;
+		}
+		.upload-wrap .site-demo-upload {
+			position: absolute;
+			bottom: 0;
+			left: 10%;
+		}
+		#uploadCover img {
+		    max-width: 100%;
+		    text-align: center;
+		    border: 1px solid #ddd;
+		    border-radius: 4px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<form id="addForm" class="form-horizontal">
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">标题</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="title" name="title" placeholder="标题" value="${rdxw.title ! ''}" />
+					<input type="hidden" class="form-control" id="id" placeholder="编号"  value="${rdxw.id ! ''}">
+					<input type="hidden" class="form-control" id="isHot" name="isHot" placeholder="是否是热点"  value="${rdxw.isHot ! ''}">
+					<input type="hidden" class="form-control" id="isTop" name="isTop" placeholder="是否置顶"  value="${rdxw.isTop ! ''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">摘要</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="summary" name="summary" placeholder="摘要" value="${rdxw.summary ! ''}" />
+					 
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">类别</label>
+				<div class="col-sm-9">
+					<select  class="form-control" id="types" name="types" >
+					<option value="">--请选择类别--</option>
+					@if(null !=rdxw){
+					@if( rdxw.types =='1'){  
+					<option value="1" selected    >新闻快讯</option>
+					@}else{
+					<option value="1"    >新闻快讯</option>
+					@}
+					@if( rdxw.types =='2'){  
+					<option value="2"   selected >动态播报</option>
+					@}else{
+					<option value="2"    >动态播报</option>
+					@}
+					@if( rdxw.types =='3'){  
+					<option value="3"   selected >精彩活动</option>
+					@}else{
+					<option value="3" >精彩活动</option>
+					@}
+					@}else{
+					<option value="1"    >新闻快讯</option>
+					<option value="2"    >动态播报</option>
+					<option value="3" >精彩活动</option>
+					@}
+					</select>
+					 
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">内容</label>
+				<div class="col-sm-9">
+					<script  type="text/plain" style="height: 200px;"   id="content" name = "content" >${rdxw.content ! ''}</script>
+				</div>
+			</div>
+			<input type="hidden" name="contentText" id="contentText"/>
+			<div class="form-group row">
+				<label for="lastname" class="col-sm-2 col-form-label">封面图片<p>(建议图片宽高大于110*90，并且宽大于高为最佳显示效果)</p> </label>
+				<div class="col-sm-4" id="uploadCover">
+					<div class="option-img2">
+						@if(isEmpty(rdxw.picPath)){ 
+							<img id="myImg" src="${ctxPath}/assets/img/zwtp.png" /> 
+						@}else{ 
+							<img id="myImg" src="${ctxPath}/showPic?fileName=${rdxw.picPath}" /> 
+						@}
+					</div>
+				</div>
+				<div class="col-sm-5 upload-wrap">
+					<!-- 文件上传组件 -->
+					<div class="site-demo-upload">
+						<div class="site-demo-upbar">
+						    <input type="file" name="file" class="layui-upload-file">
+						</div>
+					</div>
+					<button type="button" class="layui-btn layui-btn-primary" id="fileBtn"><i class="layui-icon">&#xe67c;</i>选择文件</button>
+					<button type="button" class="layui-btn layui-btn-warm" id="uploadBtn">开始上传</button>
+				</div>
+				<input type="hidden" id="picPath" name="picPath" value="${rdxw.picPath !''}" />
+				
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">附件</label>
+				<div class="col-sm-9">
+					<div id="picker"></div>
+				<!-- </div>
+			</div>
+			<div class="form-group row">
+ 			<label class="col-sm-3 col-form-label"></label>
+ 			<div class="col-sm-9"> -->
+ 			<div class="form-arraylist" id="attrlist">
+				@for(attr in rdxw.attrList  ! []){
+					@if(attr.fileType == 'img'){
+					<li class="col-9">
+						<a href="javascript:void(0)" title="${attr.oldFileName}"><img src="${ctxPath}/showPic?fileName=${attr.newFileName}"/>${attr.oldFileName}</a>
+						<span class="colsed" onclick="delFj('${attr.id}', this)"></span>
+					</li>
+					@}else if(attr.fileType == 'word'){
+					<li class="col-9">
+						<a href="javascript:void(0)" title="${attr.oldFileName}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.oldFileName}</a>
+						<span class="colsed" onclick="delFj('${attr.id}', this)"></span>
+					</li>
+					@}else if(attr.fileType == 'txt'){
+					<li  class="col-9">
+						<a href="javascript:void(0)" title="${attr.oldFileName}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.oldFileName}</a>
+						<span class="colsed" onclick="delFj('${attr.id}', this)"></span>
+					</li>
+					@}else if(attr.fileType == 'exl'){
+					<li  class="col-9">
+						<a href="javascript:void(0)" title="${attr.oldFileName}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.oldFileName}</a>
+						<span class="colsed" onclick="delFj('${attr.id}', this)"></span>
+					</li>
+					@}else if(attr.fileType == 'video'){
+					<li  class="col-9">
+						<a href="javascript:void(0)" title="${attr.oldFileName}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.oldFileName}</a>
+						<span class="colsed" onclick="delFj('${attr.id}', this)"></span>
+					</li>
+					@}else{
+					<li class="col-9">
+						<a href="javascript:void(0)" title="${attr.oldFileName}"> <img src="${ctxPath}/assets/images/default-file.png"/>${attr.oldFileName}</a>
+						<span class="colsed" onclick="delFj('${attr.id}', this)"></span>
+					</li>
+					@}
+				@}
+			</div>
+			</div>
+			</div> 
+			<div class="form-group row">
+			<div class="col-sm-3"></div>
+				<div class="col-sm-8 page-operation text-right">
+					<button type="button" class="btn btn-primary" id="saveBtn" onclick="subMyForm()"><i class="fa fa-save"></i> 保 存</button>
+ 					<button type="button" class="btn btn-outline-primary" id="cancleBtn"><i class="fa fa-reply"></i> 取 消</button>
+				</div>
+			</div>
+				<input type="hidden" id="fName" name="fName" />
+			</form>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+	<!-- <script src="${ctxPath}/assets/vendor/layui/layui.js"></script> -->
+	<script src="${ctxPath}/assets/app/js/layui.js"></script>
+	
+	<!-- UEditor编辑器 -->
+	<script src="${ctxPath}/assets/vendor/ueditor1.4.3/ueditor.config.js"></script>
+	<script src="${ctxPath}/assets/vendor/ueditor1.4.3/ueditor.all.js"></script>
+	<script type="text/javascript" charset="utf-8" src="${ctxPath}/assets/vendor/ueditor1.4.3/lang/zh-cn/zh-cn.js"></script>
+	<!-- 附件 -->
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/webuploader/webuploader.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/subFromWithAttrs.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+
+	<script src="${ctxPath}/assets/scripts/xtbg/rdxw/addEdit.js"></script>
+</body>
+</html>

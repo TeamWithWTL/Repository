@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>社会服务-政务信息-首页</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<style type="text/css">
+      .wrap{
+        width: 300px; 
+		white-space: nowrap;  
+		text-overflow: ellipsis; 
+		overflow: hidden; 
+      }
+    </style>
+</head>
+
+<body>
+	<div class="function-box">
+		 	<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+					<input type="text" class="form-control" id="title" placeholder="标题" value="${title ! ''}">
+					<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+			</div>
+			<div class="function-btn">
+				<#roleBtn btnId="zwxxAdd" roleCode="${roleCode}">
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goAdd('添加界面')"><i class="fa fa-plus"></i> 添加</button>
+				</#roleBtn>
+				<#roleBtn btnId="zwxxUpdate" roleCode="${roleCode}">
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goUpdate('修改界面')"><i class="fa fa-pencil"></i> 修改</button>
+				</#roleBtn>
+					<!-- <button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goAuditing()"><i class="fa fa-location-arrow"></i> 审核</button> -->
+				<#roleBtn btnId="zwxxDel" roleCode="${roleCode}">
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goDel()"><i class="fa fa-trash"></i> 删除</button>
+				</#roleBtn>
+			</div>
+		</div>
+		<div id="table-container" class="warpper">
+			@#ajax table:{
+			<div class="table-box">
+				<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+					<thead>
+					<tr class="table-secondary">
+						<th width="5%" class="text-center">
+							<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+				        </th>
+						<th width="30%">标题</th>
+						<th width="20%">发布时间</th>
+				        <th width="20%">审核状态</th>
+				        <th>操作</th>
+					</tr>
+					</thead>
+					<tbody id="dqIds">
+					@for(zwxx in pagenate.list ! []){
+					<tr>
+						<td class="text-center">
+				        	<input type="checkbox" class="i-checks" name="icheck" value="${zwxx.id},${zwxx.shStatus}" />
+				        </td>
+				        <td class="text-left" title="${zwxx.title ! ''}">
+				        	<div class="wrap">
+					        	<!-- <a href="javascript:void(0);" onclick="goView('${zwxx.id}')"> -->
+					        		${zwxx.title ! ''}
+					        	<!-- </a> -->
+				        	</div>
+				        </td>
+				        <td>${zwxx.createTimeFmt}</td>
+				        @if(zwxx.shStatus=='0'){
+				        <td style="color: #ffa81f">待审核</td>
+				        @}else if(zwxx.shStatus=='1'){
+				        <td style="color: #7ebc1d">通过</td>
+				        @}else if(zwxx.shStatus=='2'){
+				        <td style="color: #fd5c1d">未通过</td>
+				        @}
+				        @if(zwxx.shStatus=='0'){
+				        <td class="function-btn">
+				        	<#roleBtn btnId="zwxxUpdate" roleCode="${roleCode}">
+				        	<a href="javascript:void(0);" onclick="goModify('${zwxx.id}')">
+				        		修改
+				        	</a>
+				        	</#roleBtn>
+				        	<#roleBtn btnId="zwxxAuditing" roleCode="${roleCode}">
+				        	<a href="javascript:void(0);" onclick="goSh('${zwxx.id}')">审核</a>
+				        	</#roleBtn>
+				        	<a href="javascript:void(0);" onclick="goView('${zwxx.id}')">查看</a>
+				        </td>
+				        @}else if(zwxx.shStatus=='1'){
+				        <td class="function-btn">
+				        	<#roleBtn btnId="zwxxAuditing" roleCode="${roleCode}">
+				        	<a href="javascript:void(0);" onclick="goSh('${zwxx.id}')">审核</a>
+				        	</#roleBtn>
+				        	<a href="javascript:void(0);" onclick="goView('${zwxx.id}')">查看</a>
+				        </td>
+				        @}else if(zwxx.shStatus=='2'){
+				        <td class="function-btn">
+				        	<#roleBtn btnId="zwxxUpdate" roleCode="${roleCode}">
+				        	<a href="javascript:void(0);" onclick="goModify('${zwxx.id}')">
+				        		修改
+				        	</a>
+				        	</#roleBtn>
+				        	<#roleBtn btnId="zwxxAuditing" roleCode="${roleCode}">
+				        	<a href="javascript:void(0);" onclick="goSh('${zwxx.id}')">审核</a>
+				        	</#roleBtn>
+				        	<a href="javascript:void(0);" onclick="goView('${zwxx.id}')">查看</a>
+				        </td>
+					    @}
+					</tr>
+					@}elsefor{
+					<tr>
+				        <td colspan="5">
+				        	没有找到要查询的数据
+				        </td>
+			    	</tr>
+					@}
+				   </tbody>
+				</table>
+			</div>	
+			<!-- 自定义分页标签 -->
+			<#pagenate func="initData" page="${pagenate}" />
+		@}
+	</div>
+	
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/shfw/zwxx/index.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

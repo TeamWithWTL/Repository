@@ -1,0 +1,377 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <title>位置标注</title>
+
+    <link rel="stylesheet" href="./../css/bootstrap.min.css">
+    
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/animate.min.css" rel="stylesheet" />
+    <link href="css/areadraw.css" rel="stylesheet" />
+    <link href="css/indexsearch.css" rel="stylesheet" />
+    <link href="widgets/map/theme/default/DrawingManager.css" rel="stylesheet" />
+    <link href="widgets/map/theme/default/MECPopup.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./../vendor/layer/skin/default/layer.css">
+    <link rel="stylesheet" href="css/areadrawsite-mapcontrol.css">
+</head>
+<body>
+    <div id="mapDiv" class="mapdiv"></div>
+    <!-- 
+    <div class="mapcontrol" style="right: 18px;">
+        <ul>
+            <li>
+                <div class="rule-single-select" style="padding-top:3px;">
+                    <select id="ddlmaptype">
+                        <option value="1">电子地图</option>
+                        <option value="2">影像地图</option>
+                        <option value="3">混合地图</option>
+                    </select>
+                </div>
+            </li>
+        </ul>
+    </div>
+     -->
+     <div class="content-block no-padding">
+	 	<div class="map-block warpper">
+	    	<div class="map-tabs btn-group">
+				<button type="button" class="btn2 btn-light active" onclick="changeMap('map1')"><i class="de de-map1"></i> 电子地图</button>
+				<button type="button" class="btn2 btn-light" onclick="changeMap('map2')"><i class="de de-map2"></i> 影像地图</button>
+				<button type="button" class="btn2 btn-light" onclick="changeMap('map3')"><i class="de de-map3"></i> 混合地图</button>
+			</div>
+			<div id="rcp1_map"></div>
+		</div>
+	</div>
+	<input type="hidden" id="txtpoint" class="layui-input" style="width:208px;" />
+
+    <input id="hflon" type="hidden" />
+    <input id="hflat" type="hidden" />
+
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/laytpl.js"></script>
+    <script src="./../vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="./../vendor/layer/layer.js"></script>
+
+    <script src="widgets/map/lib/OpenLayers.js"></script>
+    <script src="widgets/map/MECJS/MecMap.js"></script>
+    <script src="widgets/map/MECJS/MecMeasure.js"></script>
+    <script src="widgets/map/MECJS/DrawingManager.js"></script>
+    <script src="js/areadraw.js"></script>
+    <script src="widgets/map/MECJS/MECPopup.js"></script>
+    
+    <script type="text/javascript">
+    	// 去掉地图右上角工具
+    	DrawingManager.remove();
+    </script>
+    
+    <!--显示建筑信息 -->
+    <script id="dinfo-building" type="text/html">
+        <div id="buildDiv" class="mpc-con">
+            <table>
+                <tr>
+                    <td class="tit">单元数：</td>
+                    <td>{{d.Units}}单元</td>
+                </tr>
+                <tr>
+                    <td class="tit">层数：</td>
+                    <td>{{d.Floors}}层</td>
+                </tr>
+                <tr>
+                    <td class="tit">小区：</td>
+                    <td>{{d.Village}}</td>
+                </tr>
+				<tr>
+                    <td class="tit">地址：</td>
+                    <td>{{d.Addr}}</td>
+                </tr>
+                <tr>
+                    <td class="tit"></td>
+                    <td>
+                        <a href="javascript:void(0);" onclick="showInfo('{{d.ID}}','{{d.typeId}}');">查看详情</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </script>
+    <!-- 显示网格信息 -->
+    <script id="dinfo-area" type="text/html">
+        <div id="areaDiv" class="mpc-con">
+            <table>
+                <tr>
+                    <td class="tit">所属社区：</td>
+                    <td>{{d.cName}}</td>
+                </tr>
+				<tr>
+                    <td class="tit">所属服务站：</td>
+                    <td>{{d.sName}}</td>
+                </tr>
+                <tr>
+                    <td class="tit">人口数：</td>
+                    <td>{{d.perNumb}}</td>
+                </tr>
+            </table>
+        </div>
+    </script>
+    <!-- 显示事件信息 -->
+    <script id="dinfo-event" type="text/html">
+        <div id="eventDiv" class="mpc-con">
+            <table>
+                <tr>
+                    <td class="tit">事件类型：</td>
+                    <td>{{d.Type}}</td>
+                </tr>
+				<tr>
+					<td class="tit">事件状态：</td>
+                    <td>{{# var _state; switch(d.Status){case '1': _state = '已结束';break;case '2': _state = '未结束';break; } }}{{_state}}{{#}}</td>
+				</tr>
+                <tr>
+                    <td class="tit">上报人：</td>
+                    <td colspan="3">{{d.ApplyName}}</td>
+                </tr>
+                <tr>
+                    <td class="tit">上报时间：</td>
+                    <td colspan="3">{{d.Time}}</td>
+                </tr>
+                <tr>
+                    <td class="tit">上报地址：</td>
+                    <td colspan="3">{{d.Addr}}</td>
+                </tr>
+                <tr>
+                    <td class="tit"></td>
+                    <td>
+                        <a href="javascript:void(0);" onclick="showInfo('{{d.ID}}','{{d.typeId}}');">查看详情</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </script>
+    <!-- 显示机构信息 -->
+    <script id="dinfo-government" type="text/html">
+        <div id="goverDiv" class="mpc-con">
+           <table>
+                <tr>
+                    <td class="tit">机构描述：</td>
+                    <td>{{d.Description}}</td>
+                </tr>
+            </table>
+        </div>
+    </script>
+    
+    <!-- 显示人员信息 -->
+    <script id="dinfo-inmate" type="text/html">
+        <div id="buildDiv" class="mpc-con">
+            <table>
+                <tr>
+                    <td class="tit">姓名：</td>
+                    <td>{{d.Name}}</td>
+                </tr>
+				<tr>
+                    <td class="tit">身份证号：</td>
+                    <td>{{d.card_no}}</td>
+                </tr>
+				<tr>
+                    <td class="tit">手机号码：</td>
+                    <td>{{d.telephone}}</td>
+                </tr>
+				<tr>
+                    <td class="tit">所在楼宇：</td>
+                    <td>{{d.buildingName}}</td>
+                </tr>
+                <tr>
+                    <td class="tit"></td>
+                    <td>
+                        <a href="javascript:void(0);" onclick="showInfo('{{d.ID}}','{{d.typeId}}');">查看详情</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </script>
+     <!-- 显示社区服务站负责人信息-->
+    <script id="dinfo-sqfwz" type="text/html">
+        <div id="buildDiv" class="mpc-con">
+            <table> 	
+				<tr>
+                    <td class="tit">网格数量：</td>
+                    <td>{{d.wgCount}}</td>
+                </tr>
+				<tr>
+                    <td class="tit">居民数量：</td>
+                    <td>{{d.jmCount}}</td>
+                </tr>
+  				 <tr>
+                    <td class="tit">联系人：</td>
+                    <td>{{d.fzrname}}</td>
+                </tr>
+				<tr>
+                    <td class="tit">联系方式：</td>
+                    <td>{{d.telephone}}</td>
+                </tr>
+            </table>
+        </div>
+    </script>
+         <!-- 显示社区服务站负责人信息-->
+    <script id="dinfo-sq" type="text/html">
+        <div id="buildDiv" class="mpc-con">
+            <table>
+            	<tr>
+                    <td class="tit">服务站数量：</td>
+                    <td>{{d.fwzCount}}</td>
+                </tr>
+             	 <tr>
+                    <td class="tit">网格数量：</td>
+                    <td>{{d.wgCount}}</td>
+                </tr>
+				<tr>
+                    <td class="tit">居民数量：</td>
+                    <td>{{d.jmCount}}</td>
+                </tr>
+       		     <tr>
+                    <td class="tit">联系人：</td>
+                    <td>{{d.sqmanager}}</td>
+                </tr>
+       		     <tr>
+                    <td class="tit">联系方式：</td>
+                    <td>{{d.sqtel}}</td>
+                </tr>
+            </table>
+        </div>
+    </script>
+    <script>
+    var init = function () {
+		var obj =  window.parent.getData("/shgl/sqgl/getAreaData.do","");
+    	if(obj){
+    		for(var i=0;i<obj.length;i++){
+    			if(obj[i][0]){
+    				addPolygon(0, obj[i][0], obj[i][1], obj[i][2], obj[i][3], obj[i][4],"1",null,obj[i][10],obj[i][11],obj[i][12],obj[i][8],obj[i][9]);
+    				//社区服务中心标注点
+    	    		var obj1 = new Object();
+    	    		obj1.typeId = "9";
+    	    		obj1.itemName = "star";
+    	    		obj1.Lon = obj[i][6];    //经度
+    	    		obj1.Lat = obj[i][7];    //纬度
+//     	    		obj1.Name = "社区概况";  
+//     	    		obj1.sqName = obj[i][1];  
+//     	      		obj1.sqmanager = obj[i][8];    
+//     	      		obj1.sqtel = obj[i][9];  
+//      	      		obj1.fwzCount = obj[i][10];    //服务站树立哦昂
+//      	      		obj1.wgCount = obj[i][11];  //网格数量  
+//      	      		obj1.jmCount = obj[i][12];//居民数量  
+     	      		if(obj1.Lon && obj1.Lat){
+    					DrawMarks(obj1);
+    				}
+    			}
+    		}
+    	}
+    	var obj1 =  window.parent.getData("/shgl/fwzgl/getAreaData.do","");
+    	if(obj1){
+    		for(var i=0;i<obj1.length;i++){
+    			if(obj1[i][0]){
+    				addPolygon(0, obj1[i][0], obj1[i][1], obj1[i][2], obj1[i][3], obj1[i][4],"2",null,null,obj1[i][11],obj1[i][12],obj1[i][8],obj1[i][9]);
+    				//社区服务站标注点
+    	    		var obj2 = new Object();
+    	    		obj2.typeId = "8";
+    	    		obj2.itemName = "triangle";
+    	    		obj2.Lon = obj1[i][6];    //经度
+    	    		obj2.Lat = obj1[i][7];    //纬度
+//     	    		obj2.Name = "服务站概况";
+//     	     		obj2.fwzName = obj1[i][1];    //
+//     	    		obj2.fzrname = obj1[i][8];   //负责人姓名
+//     	    		obj2.telephone = obj1[i][9];//负责人电话
+//     	    		obj2.ID = obj1[i][10];       //服务站ID
+//     	    		obj2.wgCount = obj1[i][11];       //网格数量
+//     	    		obj2.jmCount = obj1[i][12];  //居民数量  
+    				if(obj2.Lon && obj2.Lat){
+    					DrawMarks(obj2);
+    				}
+    			}
+    		}
+    	}
+    	var obj2 =  window.parent.getData("/shgl/wggl/getAreaData.do","");
+    	if(obj2){
+    		for(var i=0;i<obj2.length;i++){
+    			if(obj2[i][0]){
+    				addPolygon(0, obj2[i][0], obj2[i][8]+"\r\n"+"—\r\n"+obj2[i][1], obj2[i][2], obj2[i][3], obj2[i][4],"3",null,obj2[i][7], obj2[i][8], obj2[i][9]);
+    			}
+    		}
+    	}
+	};
+	init();
+	MecMap.onMapZoom();
+	function initMarks(obj){
+		if(obj){
+			clearMarks();
+    		for(var i=0;i<obj.length;i++){
+    			if(obj[0].Lon && obj[0].Lat){
+    				MecMap.setMapCenter(obj[0].Lon, obj[0].Lat, 17);
+    			}
+    			DrawMarks(obj[i]);
+    		}
+    	}
+	}
+	function setAreaCenter(id,name,area,zoom){
+		if(area){
+			MecMap.map.setCenter(calculateCenter(area), zoom);
+			clickName(id,name, area.split(",")[0], area.split(",")[1]);
+		}
+	}
+	function zTreeOnClick(event, treeId, treeNode) {
+		//mapFrame.window.setAreaCenter(treeNode.id,treeNode.name,treeNode.area,treeNode.zoom);
+		MecMap.removeAllFeatures();
+		MecMap.removeMidAllFeatures();
+		MecMap.removeAllMark();
+		MecMap.removeMidAllMark();
+		if(treeNode.typeId == "1"){//点击社区
+			var obj = parent.window.getData("/shgl/sqgl/getAreaData.do",treeNode.id);
+	    	if(obj.length>0){
+    			if(obj[0][0]){
+    				addPolygon(0, obj[0][0], obj[0][1], obj[0][2], obj[0][3], obj[0][4],"1",null,obj[0][10],obj[0][11],obj[0][12],obj[0][8],obj[0][9]);
+    				//社区服务中心标注点
+    	    		var obj1 = new Object();
+    	    		obj1.typeId = "9";
+    	    		obj1.itemName = "star";
+    	    		obj1.Lon = obj[0][6];    //经度
+    	    		obj1.Lat = obj[0][7];    //纬度
+     	      		if(obj1.Lon && obj1.Lat){
+    					DrawMarks(obj1);
+    				}
+    			}else{
+    				top.layer.msg('该区域没有绘制！', {icon:0,time : 1000,shade : [ 0.5, '#999999' ]});
+   		    	}
+	    	}
+		}else if(treeNode.typeId == "2"){//点击服务站
+			var obj1 = parent.window.getData("/shgl/fwzgl/getAreaData.do",treeNode.id);
+	    	if(obj1.length>0){
+    			if(obj1[0][0]){
+    				addPolygon(0, obj1[0][0], obj1[0][1], obj1[0][2], obj1[0][3], obj1[0][4],"2",null,null,obj1[0][11],obj1[0][12],obj1[0][8],obj1[0][9]);
+    				//社区服务站标注点
+    	    		var obj2 = new Object();
+    	    		obj2.typeId = "8";
+    	    		obj2.itemName = "triangle";
+    	    		obj2.Lon = obj1[0][6];    //经度
+    	    		obj2.Lat = obj1[0][7];    //纬度
+    				if(obj2.Lon && obj2.Lat){
+    					DrawMarks(obj2);
+    				}
+    			}else{
+    				top.layer.msg('该区域没有绘制！', {icon:0,time : 1000,shade : [ 0.5, '#999999' ]});
+   		    	}
+	    	}
+		}else{//点击网格
+			var obj2 = parent.window.getData("/shgl/wggl/getAreaData.do",treeNode.id);
+	    	if(obj2.length>0){
+    			if(obj2[0][0]){
+    				addPolygon(0, obj2[0][0], obj2[0][8]+"\r\n"+"—\r\n"+obj2[0][1], obj2[0][2], obj2[0][3], obj2[0][4],"3",null,obj2[0][7], obj2[0][8], obj2[0][9]);
+    			}else{
+    				top.layer.msg('该区域没有绘制！', {icon:0,time : 1000,shade : [ 0.5, '#999999' ]});
+   		    	}
+    		}
+		}
+		setAreaCenter(treeNode.id,treeNode.name,treeNode.area,treeNode.zoom);
+	};
+	</script>
+</body>
+</html>

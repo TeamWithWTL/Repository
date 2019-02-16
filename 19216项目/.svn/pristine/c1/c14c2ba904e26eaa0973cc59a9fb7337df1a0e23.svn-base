@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>地图网格-查看详情</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/template/css/base.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/template/css/house.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/template/css/style.css" />
+	<style>
+		.control-label{
+			font-weight:normal;
+		}
+		/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/  
+		::-webkit-scrollbar {  
+		    width: 10px;  
+		    height: 10px;
+		    border-radius: 10px;
+		}  
+		  
+		/*定义滚动条轨道 内阴影+圆角*/  
+		::-webkit-scrollbar-track {  
+		    border-radius: 10px;
+		    background-color: #F5F5F5;
+		    border: none; 
+		}  
+		  
+		/*定义滑块 内阴影+圆角*/  
+		::-webkit-scrollbar-thumb {  
+		    border-radius: 10px;  
+		    background-color: #f99341; 
+		    border: none; 
+		    box-shadow: none;
+		}
+	</style>
+</head>
+
+<body class="mainbody" style="height: 100%;">
+	<div class="container-fluid">
+    	<form method="post" id="form1">
+			<div class="aspNetHidden">
+				<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTQxMTEyNjk2NGRkbEVEV/BGdkiekCBQah6ya0nYLOA/nd5fWVvJKus61dk=">
+			</div>
+			<div class="aspNetHidden">
+				<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="BF968B40">
+				<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAOFKBBaja1mQKVtZM15715qd613obB8kxBzg1nVbikTXFQBSGl11h0BUrrHzhx8WXv6O5ILgQ8FGvaK3Zbk5GQ8YwxCNbEt1iJ4Jvf63KIaag==">
+			</div>
+        	<table style="width: 100%;">
+	            <tbody>
+	            <tr>
+	                <td rowspan="2" style="vertical-align: top;">
+	                    <div class="house">
+	                        <div class="h-top">
+	                            <div class="h-top-j left">
+	                                <div class="h-arrow-left"></div>
+	                            </div>
+	                            <h1>${build.grid.serviceStation.community.name ! ''}${build.grid.serviceStation.name ! ''}${build.grid.name ! ''} ${build.name ! ''}号楼
+	                            </h1>
+	                            <div class="h-top-j right">
+	                                <div class="h-arrow-right"></div>
+	                            </div>
+	                        </div>
+	                        <div class="h-content">
+	                            <div class="">
+	                                @if(isNotEmpty(build.unit_cnt)){
+	                                	@for(var i=0;i<(units);i++){
+                                		<table class="h-unit">
+		                                    <tbody>
+			                                    <tr>
+			                                        <th colspan="${units}">${i+1}单元
+			                                        </th>
+			                                    </tr>
+		                                    	@for(var j=floors;j>0;j--){
+			                                    <tr>
+			                                    	@for(var k=0;k<(rooms);k++){
+		                                    		<td>
+			                                            <div class="house-block" data-id="${i+1+','+j+','+(k+1)}">
+			                                                <div class="blewlist">
+			                                                    <i class="yuling"></i>
+			                                                </div>
+			                                                 @if(k+1<10){
+				                                                    <span class="topspan" id="${i+1}${j}0${k+1}">
+				                                                    	${j}0${k+1}
+				                                                	 </span>
+			                                                   @}else{
+				                                                    <span class="topspan" id="${i+1}${j}${k+1}">
+				                                                    	${j}${k+1}
+				                                                	</span>
+			                                                	@}
+			                                            </div>
+		                                        	</td>
+			                                    	@}
+		                                        </tr>
+		                                        @}
+		                                	</tbody>
+		                                </table>
+										@}
+	                                @}
+	                            </div>
+	                        </div>
+	                        <div class="h-bottom"></div>
+	                    </div>
+	                </td>
+	                <td style="vertical-align: top; height: 125px;">
+	                    <table class="wordtable" style="width: 100%;">
+	                        <tbody>
+		                        <tr>
+		                            <td>单元数：${units}</td>
+		                            <td>层 数：${floors}</td>
+		                        </tr>
+		                        <tr>
+		                        	<td>户 数：${families}</td>
+		                            <td>人口数：${perNumb}</td>
+		                        </tr>
+		                        <tr>
+		                        	<td>每层户数：${familyCnt}</td>
+		                        </tr>
+	                    	</tbody>
+	                    </table>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td style="vertical-align: top; height: 340px; overflow-y: auto;">
+	                    <table class="ltable">
+	                        <tbody><tr class="odd_bg">
+	                            <th width="8%">序号</th>
+	                            <th>姓名</th>
+	                            <th width="8%">性别</th>
+	                            <th width="20%">出生日期</th>
+	                            <th width="15%">是否户主</th>
+	                            <th width="20%">与户主关系</th>
+	                            <th width="10%">操作</th>
+	                        </tr>
+	                        </tbody>
+	                        <tbody id="table-container">
+								@#ajax table:{ 
+									@for(person in pagenate.list ! []){
+										<tr>
+											<td>${personLP.index}</td>
+											<td>${person.name}</td>
+											<td>${person.sex == 'E'?'男':'女'}</td>
+											<td>${person.birthdayFrm}</td>
+											<td>${person.housemaster == '1'?'是':'否'}</td>
+											<td>${person.hm_relation}</td>
+											<td><a href="javascript:void(0);" onclick="goView('${person.id}')">查看</a></td>
+										</tr>
+									@}elsefor{
+										<tr class="odd_bg">
+			                                <td colspan="7" style="text-align: center;">
+			                                    <span>暂无数据记录...</span>
+			                                </td>
+			                            </tr>
+		                            @}
+	                            @}
+	                        </tbody>
+	                    </table>
+	                </td>
+	            </tr>
+	        </tbody>
+        </table>
+
+    </form>
+		<input type="hidden" id="id" name="id" value="${build.id ! ''}" />
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/sjgl/view.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+    <script>
+ 
+      $(function () {
+    	  //初始化 房屋颜色
+    	  var buildingId = $("#id").val();
+    	  initRoomColor(buildingId);
+          //横向滚动条计算
+          //112是经过计算得出，不要试图去修改
+          $('.h-content-in').width(5 * 2 * 132);
+
+          //高度计算
+          var _height =$(document).height() - $('.location').height() -  $('.h-top').height() -  $('.h-bottom').height() - 40;
+          if (($('.house-block').height() * 6) > _height) {
+              $('.h-content').height(_height);
+          }
+          
+          $('.house-block').click(function () {
+              $('.house-block').removeClass('selected');
+              $(this).addClass('selected');
+              var roomInfo = $(this).attr('data-id').split(",");
+              var unitNo = roomInfo[0];
+              var floor = roomInfo[1];
+              var fla = roomInfo[2];
+              var roomNo = "";
+              if(fla>10){
+            	  roomNo = floor + fla;
+              }else{
+            	  roomNo = floor+ "0" + fla;
+              }
+              initData(unitNo,roomNo);
+              //GetPerson($(this).attr('data-id'));
+              $('#hfhouseid').val($(this).attr('data-id'));
+          });
+      });
+    //Table数据加载
+      function initData(unitNo,roomNo){
+      	$("#table-container").load(
+     			$("#basePath").val() + "/wgdt/getPersons.do",
+     			{'ajaxCmd': 'table','buildId': $("#id").val(),unitNo:unitNo,roomNo:roomNo},
+     			function(response){
+    				if($(response).find("span").text()!=null && $(response).find("span").text()!=""){
+    					// alert($(response).find("span").eq(0).text());
+    					top.layer.msg('没有找到要查询的数据', {
+						icon : 0,
+						time : 1000,
+						shade : [ 0.5, '#999999' ]
+					});
+    				}
+     			});
+      }
+
+    //跳转查看界面
+    function goView(id){
+    	$(".btn").blur();
+    	top.layer.open({
+    	    type: 2,
+    	    title: "<div class='layerTitleDiv'></div><span class='layerTitleSpan'>居民信息详情</span>",
+    	    fix: false,
+    	   // shadeClose: true,
+    	    area: ['90%', '65%'],
+    	    content: $("#basePath").val() + '/shgl/jmxx/goView.do?id='+id,
+    	    end:function(){
+    	    	
+    		  }
+    	  });
+    }
+    
+      initData('','');
+      
+      function initRoomColor(buildingId){
+    		$.ajax({
+				type : "POST",
+				url : $("#basePath").val() + "/wgdt/initBuildColor.do",
+				data : {'buildingId':buildingId},
+				error : function(request) {
+				},
+				success : function(data) {
+					for(var key in data){
+						$("#"+key).css("color","red");
+					}
+				}
+			});
+      }
+  </script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>组织结构管理-首页</title>
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/common.css"/>
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/zTree_v3/css/metroStyle/metroStyle.css">
+	<style>
+	.ztree {
+	    margin: 0;
+	    padding: 10px;
+	    color: #333;
+	}
+	</style>
+</head>
+
+<body>
+	<div class="content-title">
+		<h4><img src="${ctxPath}/assets/img/icon-home.png" width="16"/> <a href="javascript:void(0);" onclick="goHome('${ctxPath}/home/index.do');">首页</a> <span class="fa fa-angle-right"></span> 系统管理 <span class="fa fa-angle-right"></span> 组织结构管理</h4>
+	</div>
+	<div class="content-body">
+		<div class="col-sm-3" style="height:100%;border: 1px solid #ddd;">
+			<!-- ZTree -->
+			<div class="heighter">
+				<div class="cardbox-title">
+					<h4>组织结构预览</h4>
+				</div>
+				<div class="cardbox-function">
+					<a class="btn btn-default" href="javascript:void(0);" id="editZzjg"><i class="fa fa-cogs"></i> 结构调整</a>
+				</div>
+				<div class="cardbox-body" style="height:100%;">
+					<iframe id="treeFrame" name="treeFrame" src="${ctxPath}/pub/orgTree/showOrgTree.do" style="width:100%; height:100%; overflow:auto;" frameBorder=0></iframe>
+				</div>
+			</div>
+			<!-- END ZTree -->
+		</div>
+		<div class="col-sm-9" style="height:100%;">
+			<div class="block-content heighter">
+				<div class="content-form">
+					<form class="form-inline" action="" method="post">
+						<div class="form-group">
+							<!-- 被选中的组织 -->
+						    <input id="orgCode" type="hidden" value="${orgCode ! ''}">
+						    <input id="orgName" type="text" class="form-control" placeholder="组织名称">
+						</div>
+						<div class="form-group">
+							<button type="button" class="btn btn-default" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+						</div>
+					</form>
+				</div>
+				<div class="content-function">
+					<a class="btn btn-default" href="javascript:void(0);" onClick="dels()"><i class="fa fa-trash"></i> 删除</a>
+				</div>
+				<div class="clearfix"></div>
+				<div id="zzjg">
+					@#ajax zzjg:{
+					<div class="content-article">
+						<table class="table table-bordered" cellspacing="" cellpadding="">
+							<tr>
+								<th width="5%" class="text-center">
+									<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+						        </th>
+						        <th width="45%">组织名称</th>
+						        <th width="50%">上级组织</th>
+							</tr>
+							@for(org in pagenate.list ! []){
+					    	<tr>
+						        <td class="text-center">
+						        	<input type="checkbox" name="icheck" value="${org.orgId}" />
+						        </td>
+					    		<td>${org.orgName ! ''}</td>
+						        <td>${org.parentName ! ''}</td>
+					    	</tr>
+					    	@}elsefor{
+					    	<tr>
+						        <td colspan="3" class="text-center">
+						        	没有找到要查询的数据
+						        </td>
+					    	</tr>
+					    	@}
+						</table>
+					</div>
+					<!-- 自定义分页标签 -->
+					<#pagenate func="initData" page="${pagenate}" />
+					@}
+				</div>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="pageNumber" value="1" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/vendor/zTree_v3/js/jquery.ztree.all-3.5.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/public.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/xtgl/zzjggl/index.js"></script>
+</body>
+</html>

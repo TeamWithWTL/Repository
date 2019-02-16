@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>地图网格-查看事件详情</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/template/css/base.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/template/css/house.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/template/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/template/css/projectline.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+	<style>
+		.control-label{
+			font-weight:normal;
+		}
+	</style>
+</head>
+
+<body class="mainbody">
+    <form method="post" id="form1">
+		<div class="aspNetHidden">
+		<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTA2MDQ4NzI0M2RkJ0M5nXAvl9Mtucjubfp96TwHrPjxkrHNo8vzAXxPcJI=">
+		</div>
+		
+		<div class="aspNetHidden">
+			<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="E44FCE9D">
+			<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAK18JTN7g8mBXOCk2flcjjad613obB8kxBzg1nVbikTXNLFcNTZ25+mOOYzRZmXPnJigQoniXxnqcB8YqLhBAbh">
+		</div>
+        <div id="spanBefore">
+           <div class="proleft">事件步骤</div>
+           <ul class="project">
+               <li data-type="0" class="profinish start"><span>&nbsp;</span>基本信息<i>&nbsp;</i></li>
+               @if(isNotEmpty(isOver) && isOver == "1"){
+	               <li data-type="1">
+	                   <span>&nbsp;</span>已结束<i>&nbsp;</i>
+	               </li>
+               @}
+           </ul>
+        </div>
+        <div class="layer-event-container">
+		<div class="tab-content" style="border: 0;" id="132">
+			<table class="tab-table">
+				<tbody>
+					<tr>
+						<td class="titletd">标 题：</td>
+						<td><span id="labName">${event.title ! ''}</span></td>
+						<td class="titletd">事件类型：</td>
+						<td><span id="labType">
+							@if(isNotEmpty(sysStations)){
+								@for(da in sysStations){
+									${da.value1 == event.type ? da.itemName : ''}
+								@}
+							@}
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="titletd">上报人：</td>
+						<td><span id="labPer">${event.applyName ! ''}</span></td>
+						<td class="titletd">上报时间：</td>
+						<td><span id="labDate">${event.applyTimeFrm ! ''}</span></td>
+					</tr>
+					<tr>
+						<td class="titletd">事件状态：</td>
+						<td>
+							<span id="labStatus">
+								@if(isNotEmpty(isOver)){
+									@if(isOver == "1"){
+										已结束
+									@}else if(isOver == "2"){
+										未结束
+									@}
+								@}
+							</span>
+						</td>
+						<td class="titletd">事件地址：</td>
+						<td><span id="labAddress">${event.applyAddr ! ''}</span></td>
+					</tr>
+					<tr>
+						<td class="titletd" style="vertical-align: top; padding-top: 12px;">事件内容：</td>
+						<td colspan="3"><span id="labContent">${event.content ! ''}</span></td>
+					</tr>
+					<tr>
+						<td class="titletd" style="vertical-align: top;">附件列表：</td>
+						<td colspan="2">
+							<div class="file-list">
+								<div class="file-list">
+									<ul>
+										@if(isNotEmpty(event.eventAttrs)){ 
+											@for(attr in event.eventAttrs){
+												@if(attr.file_type=='img'){
+												<li><a href="javascript:void(0)" style="width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><span class="ftp-preview"><img src="${ctxPath}/showPic?fileName=${attr.new_filename}" onclick="window.top.showBigPic('${ctxPath}/showPic?fileName=${attr.new_filename}')" /></span>${attr.old_filename}</a>
+													<div title="下载" onclick="download('${attr.new_filename}', '${attr.old_filename}')" class="ftpdownload"></div>
+												</li> 
+												@}else{
+													<li><a href="javascript:void(0)" style="width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><span class="ftp-${attr.file_type}"></span> ${attr.old_filename}</a>
+														<div title="下载" onclick="download('${attr.new_filename}', '${attr.old_filename}')" class="ftpdownload"></div>
+													</li>
+												 @}
+											@}
+										@}
+									</ul>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+      	<div class="tab-content" style="border: 0px solid #e1e1e1;" id="133">
+            <table class="tab-table">
+				<tbody>
+					<tr>
+						<td class="titletd">处理人：</td>
+						<td>
+							${clrName ! ''}
+						</td>
+					</tr>
+					<tr>
+						<td class="titletd">处理状态：</td>
+						<td>
+							@if(isNotEmpty(dealStatus)){
+								@if(dealStatus == "0"){
+									未处理
+								@}else if(dealStatus == "1"){
+									进行中
+								@}else{
+									已结束
+								@}
+							@}
+						</td>
+					</tr>
+					<tr>
+						<td class="titletd">处理时间：</td>
+						<td>
+							${dealDate ! ''}
+						</td>
+					</tr>
+					<tr>
+						<td class="titletd">处理结果：</td>
+						<td>
+							${content ! ''}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+        </div>
+        </div>
+   	</form>
+	<input type="hidden" id="id" name="id" value="${build.id ! ''}" />
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/sjgl/view.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+    <script type="text/javascript">
+		$(function() {
+			$("#133").hide();
+			//$('.project li:last-child').prev().addClass("profinish");
+			$('.project li').click(
+				function() {
+					$('.project li').removeClass('start').removeClass('profinish');
+					$(this).addClass("start");
+					$(this).prev().addClass("profinish");
+					var _type = $(this).attr('data-type');
+					var _src = '';
+					if (_type == undefined || _type == null || _type == '' || _type == '-1') {
+						return false;
+					}
+					if (_type == "0") {//基本信息
+						$("#132").show();
+						$("#133").hide();
+					}else {//已结束
+						$("#133").show();
+						$("#132").hide();
+					}
+				});
+		});
+		function download(newFileName, oldFileName){
+			window.location.href = basePath + '/pub/downloadbystream.do?fileName=' + newFileName + '&oldFileName=' + oldFileName;
+		}
+	</script>
+</body>
+</html>

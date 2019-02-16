@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+						http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd 
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+						">
+	
+    <!-- 开启组件自动扫描，将标注有注解的bean加到配置文件中 -->
+    <context:component-scan base-package="com.jcwx.service com.jcwx.dao"/>
+    
+    <!-- 加载properties属性文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    
+    <!-- 配置数据源 -->
+	 <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" 
+	  init-method="init" destroy-method="close"> 
+	  <property name="driverClassName" value="${jdbc.driver_class}" /> 
+	  <property name="url" value="${jdbc.url}" /> 
+	  <property name="username" value="${jdbc.username}" /> 
+	  <property name="password" value="${jdbc.password}" /> 
+	  <!-- 配置初始化大小、最小、最大 --> 
+	  <property name="initialSize" value="1" /> 
+	  <property name="minIdle" value="1" /> 
+	  <property name="maxActive" value="10" />
+	
+	  <!-- 配置获取连接等待超时的时间 --> 
+	  <property name="maxWait" value="10000" />
+	
+	  <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 --> 
+	  <property name="timeBetweenEvictionRunsMillis" value="60000" />
+	
+	  <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 --> 
+	  <property name="minEvictableIdleTimeMillis" value="300000" />
+	
+	  <property name="testWhileIdle" value="true" />
+	
+	  <!-- 这里建议配置为TRUE，防止取到的连接不可用 --> 
+	  <property name="testOnBorrow" value="true" /> 
+	  <property name="testOnReturn" value="false" />
+	
+	  <!-- 打开PSCache，并且指定每个连接上PSCache的大小 --> 
+	  <property name="poolPreparedStatements" value="true" /> 
+	  <property name="maxPoolPreparedStatementPerConnectionSize" 
+	   value="20" />
+	
+	  <!-- 这里配置提交方式，默认就是TRUE，可以不用配置 -->
+	
+	  <property name="defaultAutoCommit" value="true" />
+	
+	  <!-- 验证连接有效与否的SQL，不同的数据配置不同 --> 
+	  <property name="validationQuery" value="select 1 " /> 
+	  <property name="filters" value="stat" /> 
+	
+	 </bean>
+    <!-- 配置SessionFactory -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+      <property name="dataSource" ref="dataSource"/>
+      <property name="packagesToScan" value="com.jcwx.entity"/>
+      <property name="hibernateProperties">
+        <props>
+          <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+          <prop key="hibernate.show_sql">false</prop>
+          <prop key="hibernate.format_sql">false</prop>
+          <prop key="hibernate.hbm2ddl.auto">none</prop>
+          <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop>
+          <prop key="hibernate.temp.use_jdbc_metadata_defaults">false</prop>
+        </props>
+      </property>
+    </bean>
+
+    <!-- beanFactoty注册，在代码中可以直接beanName获取bean -->
+    <bean id="springFactory" class="com.jcwx.utils.SpringFactory"></bean>
+
+	<!-- 用于注入到BaseDao中 -->  
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">  
+        <property name="sessionFactory" ref="sessionFactory" />  
+    </bean>
+    
+    <!-- 配置一个事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+      <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    
+    <!-- 声明事务切面 -->
+    <aop:config>
+        <aop:advisor id="managerTx" advice-ref="txAdvice" pointcut="execution(* com.jcwx.service..*.*(..))"/>
+    </aop:config>
+    
+    <!-- 声明事务的传播特性 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+      <tx:attributes>
+	    <!-- 对get/select/find/search开头的方法支持当前事务 -->
+        <tx:method name="get*" propagation="SUPPORTS" />
+        <tx:method name="select*" propagation="SUPPORTS" />
+        <tx:method name="find*" propagation="SUPPORTS" />
+        <tx:method name="search*" propagation="SUPPORTS" />
+        <!-- 对其他方法支持当前事务并且必须要求事务 -->
+        <tx:method name="save*" propagation="REQUIRED" />
+        <tx:method name="upd*" propagation="REQUIRED" />
+        <tx:method name="ins*" propagation="REQUIRED" />
+        <tx:method name="*" propagation="REQUIRED" />
+      </tx:attributes> 
+    </tx:advice>
+    
+</beans>

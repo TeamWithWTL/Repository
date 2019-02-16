@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html  class="layerpage">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>党风廉政-曝光台</title>
+		<!-- 第三方 CSS -->
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/webuploader/webuploader.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	
+	</head>
+	<body>
+		<div class="container">
+			<div class="article-header text-center">
+				<h2>${exposureEntity.title ! ''}</h2>
+				<p>
+					<span>发布时间：${exposureEntity.fmtCreate_time ! ''}</span>
+					<!-- <span>文章类型：曝光台</span> -->
+					<span>发布人：${exposureEntity.user_name ! ''}</span>
+					<span>
+				     @if(exposureEntity.sh_status == '0'){
+				                       审核状态：<span style="color: #ffa81f">待审核</span>
+				     @}else if(exposureEntity.sh_status == '1'){
+				                       审核状态：<span style="color: #7ebc1d">通过</span>
+				     @}else if(exposureEntity.sh_status == '2'){
+				                      审核状态：<span style="color: #fd5c1d">未通过</span>
+				     @}
+					</span>
+				</p>
+			</div>
+			<div class="article-body">
+				<div class="article-content">
+					<p>${exposureEntity.content ! ''} </p>
+				</div>
+				
+				@if(isNotEmpty(exposureEntity.expList)){
+				<div class="form-arraylist form-arraylist-border">
+				<div class="form-arraylist">
+					<dt>附件列表：</dt>
+					<ul>
+						@for(attr in exposureEntity.expList  ! []){
+								@if(attr.file_type  == 'img'){
+									<li class="col-9">
+										<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.new_fileName !}')"  title="${attr.old_fileName !}" ><img src="${ctxPath}/showPic?fileName=${attr.new_fileName !}"/> ${attr.old_fileName !}</a>
+										<span title="下载" class="download"  onclick="download('${attr.new_fileName !}', '${attr.old_fileName !}')"></span>
+									</li>
+									@}else if(attr.file_type  == 'pdf'){
+									<li class="col-9">
+										<a href="javascript:void(0)"  onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.new_fileName}')" title="${attr.old_fileName !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_fileName !}</a>
+									    <span title="下载" class="download" onclick="download('${attr.new_fileName !}', '${attr.old_fileName !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'word'){
+									<li class="col-9">
+										<a href="javascript:void(0)" title="${attr.old_fileName}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.old_fileName}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_fileName !}', '${attr.old_fileName !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'txt'){
+									<li  class="col-9">
+										<a href="javascript:void(0)" title="${attr.old_fileName}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.old_fileName}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_fileName !}', '${attr.old_fileName !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'exl'){
+									<li  class="col-9">
+										<a href="javascript:void(0)" title="${attr.old_fileName}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.old_fileName}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_fileName !}', '${attr.old_fileName !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'video'){
+									<li  class="col-9">
+										<a href="javascript:void(0)" title="${attr.old_fileName}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.old_fileName}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_fileName !}', '${attr.old_fileName !}')"></span>
+									</li>
+									@}else{
+										<li class="col-9">
+										<a href="javascript:void(0)"   title="${attr.old_fileName !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_fileName !}</a>
+									    <span title="下载" class="download" onclick="download('${attr.new_fileName !}', '${attr.old_fileName !}')"></span>
+									</li>
+									@}
+								@}
+					</ul>
+				</div>
+				</div>
+				@}
+			</div>
+			<div class="page-operation text-right">
+				@if(exposureEntity.sh_status=='0'){
+					<button type="button" class="btn btn-primary" onclick="goAudit('${exposureEntity.id !}','1')"><i class="fa fa-check"></i> 通 过</button>
+					<button type="button" class="btn btn-outline-primary" onclick="goAudit('${exposureEntity.id !}','2')"><i class="fa fa-close"></i> 不通过</button>
+				@}else if(exposureEntity.sh_status=='1'){
+					<button type="button" class="btn btn-outline-primary" onclick="goAudit('${exposureEntity.id !}','2')"><i class="fa fa-close"></i> 不通过</button>
+				@}else if(exposureEntity.sh_status=='2'){
+					<button type="button" class="btn btn-primary" onclick="goAudit('${exposureEntity.id !}','1')"><i class="fa fa-check"></i> 通 过</button>
+				@}
+				
+			</div>
+		</div>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js" ></script>
+		<script src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/dflz/bggl/viewAudit.js"></script>
+	</body>
+</html>

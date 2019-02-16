@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>数据中心 -- 事件来源统计</title>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+
+</head>
+<body>
+	<div class="content-block no-padding">
+		<div class="block-content">
+			<div class="row">
+				<div class="col-12" style="height: auto;">
+					<div class="content-padding-md pb-0">
+						<div class="function-box">
+							<div class="query-criteria" style="margin-top: -20px;">
+								<form class="form-inline" action="" method="post">
+									 @if(roleCode == '05' || roleCode == '99'){
+									 	<div>
+										 <select id="sqid" name="sqid" class="form-control" onchange="showSs(this,'ssId','1')">
+										    <option value="">-- 所属社区--</option>
+												@if(isNotEmpty(sqList)){
+													@for(com in sqList){
+														<option value="${com.id}">${com.name}</option>
+													@}
+												@}
+									     </select>
+									     </div>
+									     <div>
+										    <select class="form-control" name="fwid" id="ssId">
+												<option value="">-- 所属服务站--</option>
+											</select>
+										 </div>
+										 <button type="button" class="btn btn-primary" onClick="cxAll();"><i class="fa fa-search"></i> 查询</button>
+									 @}else if(roleCode == '03'){
+									     <div>
+											 <select id="ssId" name="fwid" class="form-control">
+											    <option value="">-- 所属服务站--</option>
+													@if(isNotEmpty(ssList)){
+														 @for(ss in ssList){
+															<option value="${ss.id}">${ss.name}</option>
+														 @}
+													@}
+										     </select>
+									    </div>
+									    <button type="button" class="btn btn-primary" onClick="cxAll();"><i class="fa fa-search"></i> 查询</button>
+									 @}
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-12" style="margin-top: -15px;">
+					<div class="content-padding-md pr-0" style="height:calc(100% - 60px)">
+						<div class="section-block" style="height: 380px;">
+							<div class="section-block-title">
+								<i class="rader-icon"> 事件来源统计</i>
+							</div>
+							<div class="section-body">
+							   <div id="charts-sjly" class="charts-block"></div>
+						    </div>
+						</div>
+					</div>
+				</div>
+		   </div>
+	    </div>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="commId" value="${commId ! ''}">
+	<input type="hidden" id="ssId" value="${ssId ! ''}">
+	
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/popper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://echarts.baidu.com/dist/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/scripts/sjzx/sjtj/sjlytjindex.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>部门管理-重命名</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+	<div class="container-fluid">
+		<form id="myForm" class="form-horizontal">
+			<br>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">部门名称</label>
+					<div class="col-sm-5">
+ 						<input type="text" class="form-control" id="deptName" name="deptName" placeholder="部门名称" value="${os.deptName ! ''}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="button" class="btn btn-default" id="saveBtn">保 存</button>
+						<button type="button" class="btn btn-default" id="cancleBtn">取 消</button>
+					</div>
+				</div>
+				<!-- 部门编号 -->
+				<input type="hidden" name="deptId" value="${os.deptId ! ''}" />
+			</form>
+		</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.js"></script>
+	<script src="${ctxPath}/assets/scripts/xtgl/dept/rename.js"></script>
+</body>
+</html>

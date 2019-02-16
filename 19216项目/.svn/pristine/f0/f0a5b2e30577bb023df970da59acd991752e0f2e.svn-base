@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>服务站管理-首页</title>
+	<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<style type="text/css">
+    .accCode{
+      white-space: nowrap;  
+      text-overflow: ellipsis; 
+      overflow: hidden; 
+    }
+    .name{
+      width: 180px; 
+      white-space: nowrap;  
+      text-overflow: ellipsis; 
+      overflow: hidden; 
+    }
+   </style>
+</head>
+
+<body>
+		<div id="table-container" class="warpper">
+			<div class="table-box">
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+						<tr class="table-secondary">
+					        <th width="20%">负责人姓名</th>
+					        <th width="20%">联系方式</th>
+						</tr>
+						</thead>
+						<tbody id="dqIds">
+						@for(fzr in fzrList ! []){
+						<tr>
+					        <td>${fzr.manager}</td>
+					        <td>${fzr.phone}</td>
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="2" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+						</tbody>
+					</table>
+				</div>
+		</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

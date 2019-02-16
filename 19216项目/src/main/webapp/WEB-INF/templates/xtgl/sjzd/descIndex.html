@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html class="main">
+<title>数据字典-明细-首页</title>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/common.css"/>
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+</head>
+
+<body>
+	<div class="content-body" style="height: calc(100% - 0px);">
+		<div class="block-content heighter">
+			<div class="content-form">
+				<form class="form-inline" action="" method="post">
+					<div class="form-group">
+						<input type="text" class="form-control" id="itemCode" placeholder="参数项编码">
+					</div>
+					<div class="form-group">
+			    		<input type="text" class="form-control" id="itemName" placeholder="参数项名称">
+					</div>
+					<div class="form-group">
+						<button type="button" class="btn btn-default" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+					</div>
+				</form>
+			</div>
+			<div class="content-function">
+				<a class="btn btn-default" href="javascript:void(0);" onclick="goAdd('添加界面')"><i class="fa fa-plus"></i> 添加</a>
+				<a class="btn btn-default" href="javascript:void(0);" onclick="goUpdate('修改界面')"><i class="fa fa-pencil"></i> 修改</a>
+				<a class="btn btn-default" href="javascript:void(0);" onclick="goDel()"><i class="fa fa-trash"></i> 删除</a>
+			</div>
+			<div class="clearfix"></div>
+			<div id="table-container">
+			@#ajax table:{
+				<div class="content-article">
+					<table class="table table-bordered" cellspacing="" cellpadding="">
+						<tr>	
+							<th width="5%">
+								<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+					        </th>
+							<th width="10%">参数</th>
+							<th width="10%">参数名称</th>
+							<th width="15%">参数项编码</th>
+					        <th width="35%">参数项名称</th>
+					        <th width="20%">值1</th>
+					        <th>值2</th>
+						</tr>
+						@for(csx in pagenate.list ! []){
+						<tr>
+							<td>
+					        	<input type="checkbox" class="i-checks" name="icheck" value="${csx.id}" />
+					        </td>
+					        <td>${csx.code}</td>
+					        <td>${csx.name}</td>
+					        <td>${csx.itemCode}</td>
+					        <td>${csx.itemName}</td>
+					        <td>${csx.value1}</td>
+					        <td>${csx.value2}</td>
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="7" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+					</table>
+				</div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+			</div>
+		</div>
+	</div>
+	
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="code" value="${code}">
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/xtgl/sjzd/descIndex.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

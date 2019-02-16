@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html class="layerpage">
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.css">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+		<title>社会服务-社区活动意见留言评分</title>
+	</head>
+
+	<body>
+		<form id="addForm" method="post" class="form-score">
+			<div class="form-group text-center">
+				<label class="col-form-label"><span>【${yjly.userName ! ''}】</span>获得</label>
+				<div class="col-2 d-inline-block">
+					<input type="text" class="form-control" id="integral" name="integral" placeholder=""  value="${yjly.integral ! ''}">
+					<input type="hidden" class="form-control" id="id" name="id" placeholder="意见留言编号"  value="${id ! ''}">
+				</div>
+				<label class="col-form-label">积分！</label>
+			</div>
+			<div class="form-group text-right">
+				<button type="button" id="saveBtn" class="btn btn-primary" onclick="subMyForm()"><i class="fa fa-save"></i> 保存</button>
+				<button type="button" id="cancleBtn" class="btn btn-outline-primary"><i class="fa fa-reply"></i> 返回</button>
+			</div>
+		</form>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/jquery/jquery.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js" charset="utf-8"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/public.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/shfw/sqhd/score.js" charset="utf-8"></script>
+	</body>
+
+</html>

@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>社会管理-社情民意</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.css">
+	<link href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/webuploader/webuploader.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+</head>
+<style type="text/css">
+	.FormView {
+		display: flex;
+		margin-bottom: 40px;
+	}
+	
+	.form-scatic {
+		flex: 1;
+		margin-right: 100px;
+	}
+	
+	.form-aside {
+		flex: 0 0 auto;
+		width: 200px;
+	}
+	.form-group {
+		margin-bottom: 10px;
+	}
+	.col-form-label {
+		text-align: right;
+		padding: 8px 10px;
+		font-size: 1rem;
+		color: #868E96;
+	}
+	.form-plaintext {
+		font-size: 1rem;
+		margin: 0;
+		padding: 8px 0;
+	}
+	.upload-file {
+		height: 200px;
+		background: #F1F1F1;
+		margin-bottom: 10px;
+	}
+    .wrap{
+     	width: 600px; 
+		white-space: nowrap;  
+		text-overflow: ellipsis; 
+		overflow: hidden; 
+    }
+    .FormView legend.form-plaintext {
+    	max-width: 100%;
+	    overflow: hidden;
+	    word-wrap: break-word;
+    }
+</style>
+<body>
+	<div class="FormView">
+		<div class="form-scatic">
+				<div class="form-group row">
+					<label class="col-4 col-form-label">标题</label>
+					<div class="col-8">
+						<legend  class="form-plaintext">${sqmy.title ! ''}</legend>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-4 col-form-label">开始日期</label>
+					<div class="col">
+					  <div class='input-group date' id='start'>
+		            	<legend  class="form-plaintext">${sqmy.XSstart_date ! ''}</legend>
+			          </div>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-4 col-form-label">结束日期</label>
+					<div class="col">
+					  <div class='input-group date' id='end'>
+		            	<legend  class="form-plaintext">${sqmy.XSend_date ! ''}</legend>
+			          </div>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-4 col-form-label">调查数量</label>
+					<div class="col">
+						<legend  class="form-plaintext">${sqmy.dc_num ! ''}</legend>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-4 col-form-label">描述</label>
+					<div class="col-8">
+						<legend  class="form-plaintext">${sqmy.content ! ''}</legend>
+					</div>
+				</div>
+				<div class="form-group row">
+				<label for="" class="col-4 col-form-label">附件</label>
+				<div class="col-8">
+					<div id="picker"></div>
+					<div class="form-arraylist" id="attrlist">
+						@for(attr in sqmy.attrList  ! []){
+							@if(attr.fileType == 'img'){
+							<li class="col-9 wrap">
+								<a href="javascript:void(0)"><img src="${ctxPath}/showPic?fileName=${attr.newFilename}"/> ${attr.oldFilename}</a>
+								<span title="下载" class="download" onclick="download('${attr.newFilename !}', '${attr.oldFilename !}')"></span>
+							</li>
+							@}else if(attr.fileType == 'word'){
+							<li class="col-9 wrap">
+								<a href="javascript:void(0)" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.oldFilename}</a>
+								<span title="下载" class="download" onclick="download('${attr.newFilename !}', '${attr.oldFilename !}')"></span>
+							</li>
+							@}else if(attr.fileType == 'txt'){
+							<li  class="col-9 wrap">
+								<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.oldFilename}</a>
+								<span title="下载" class="download" onclick="download('${attr.newFilename !}', '${attr.oldFilename !}')"></span>
+							</li>
+							@}else if(attr.fileType == 'exl'){
+							<li  class="col-9 wrap">
+								<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.oldFilename}</a>
+								<span title="下载" class="download" onclick="download('${attr.newFilename !}', '${attr.oldFilename !}')"></span>
+							</li>
+							@}else if(attr.fileType == 'video'){
+							<li  class="col-9 wrap">
+								<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.oldFilename}</a>
+								<span title="下载" class="download" onclick="download('${attr.newFilename !}', '${attr.oldFilename !}')"></span>
+							</li>
+							@}else{
+							<li class="col-9 wrap">
+								<a href="javascript:void(0)"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+								<span title="下载" class="download" onclick="download('${attr.newFilename !}', '${attr.oldFilename !}')"></span>
+							</li>
+							@}
+				        @}elsefor{
+				        	 <p>无</p>
+				        @}
+				        <input type="hidden" id="fName" name="fName" />
+					  </div>
+				   </div>
+			    </div> 
+				<!-- <div class="form-group row">
+					<div class="page-operation text-right col-sm-12">
+						<button type="button" class="btn btn-outline-primary" id="cancleBtn"><i class="fa fa-reply"></i> 返回</button>
+					</div>
+				</div> -->
+			</div>
+    </div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="id" value="${id ! ''}" />
+
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+	<!-- 附件 -->
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/webuploader/webuploader.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/subFromWithAttrs.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	<script type="text/javascript">
+	var basePath = $("#basePath").val();
+
+	//附件下载
+	function download(newFilename, oldFilename){
+		window.location.href = basePath + '/pub/downloadbystream.do?fileName=' + newFilename + '&oldFileName=' + oldFilename;
+	}
+	</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+		<title>${@com.jcwx.utils.ProjectUtils.getSysCfg("projectName")}</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+		
+	</head>
+<body>
+		<div class="header-block">
+			<li>
+				<a href="#">首页</a>
+			</li>
+			<li>${firstMenuName}><span id="secondMenuName"></span></li>
+		</div>
+		<div class="content-block no-padding">
+			<div class="nav-silder">
+			<ul id="accordion">
+			@for(menu in secondMenuList){
+				@if(isEmpty(menu.thirdMenus)){
+					@if(menuLP.index ==1){
+					<li class="active" id="${menu.menuCode}" data-url="${menu.url}" name="${menu.menuName}"><a href="javascript:void(0)" onclick="changeSecondMenu('${menu.url}','${menu.menuName}','${menu.menuCode}')"><i class="denav denav-yhgl"></i> ${menu.menuName}</a></li>
+					@}else{
+					<li id="${menu.menuCode}" data-url="${menu.url}" name="${menu.menuName}"><a href="javascript:void(0)" onclick="changeSecondMenu('${menu.url}','${menu.menuName}','${menu.menuCode}')"><i class="denav denav-yhgl"></i> ${menu.menuName}</a></li>
+					@}
+				@}else{
+					<li >
+						<a id="${menu.menuCode}" href="#collapse-sjzdgl_${menu.menuCode}" data-toggle="collapse"><i class="denav denav-yhgl"></i> ${menu.menuName}</a>
+						<ul class="collapse  ${menuType!='task'&& menuLP.index ==1?'show':''}  ${menuType=='task'&& menuLP.index ==2?'show':''}" id="collapse-sjzdgl_${menu.menuCode}">
+							@for(mm in menu.thirdMenus){
+								<li class="${menuType!='task'&& menuLP.index ==1 && mmLP.index == 1?'active':''} ${menuType=='task'&& menuLP.index ==2 && mmLP.index == 1?'active':''}" id="${mm.menuCode}" data-url="${mm.url}" name="${mm.menuName}"><a href="javascript:void(0)" onclick="changeSecondMenu('${mm.url}','${mm.menuName}','${mm.menuCode}')">${mm.menuName}</a></li>
+							@}
+						</ul>	
+					</li>
+				@}
+			@}
+		</ul>
+	</div>
+	<div class="block-content content-off-nav-silder">
+		<div class="row">
+			<div class="col-12">
+				<div class="content-padding-md">
+			<iframe id="secondMainFrame" name="secondMainFrame" src="${ctxPath}/${loadUrl}" style="width:100%; height:100%" frameBorder=0 scrolling=no></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/popper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/secondMain.js"></script>
+	
+</body>
+</html>

@@ -1,0 +1,79 @@
+<div class="section-block-title">
+	<i class="index-icon index-icon-tsrktj"></i> 特殊人口统计
+	<div class="section-block-after">
+		<a href="#" class="section-more">更多..</a>
+	</div>
+</div>
+<div class="section-body">
+	<div id="charts-tsrktj" class="charts-block"></div>
+</div>
+<script type="text/javascript">
+	// 初始化图表数据
+	var myChart = echarts.init(document.getElementById('charts-tsrktj'));
+	window.onresize = myChart.resize;
+	// 指定图表的配置项和数据
+	option = {
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: {
+				type: 'shadow'
+			}
+		},
+		grid: {
+			top: '8%',
+			left: '3%',
+			right: '3%',
+			bottom: '5%',
+			containLabel: true,
+		},
+		xAxis: {
+			axisLine: {
+				show: false
+			},
+			splitLine: {
+				show: false
+			},
+			axisTick:{
+				show:false
+			},
+			type: 'value',
+			boundaryGap: [0, 0.01]
+		},
+		yAxis: {
+			axisLine: {
+				show: false
+			},
+			splitLine: {
+				show: false
+			},
+			splitArea: {
+				show: true
+			}, //保留网格区域
+			axisTick:{
+				show:false
+			},
+			type: 'category',
+			data: ['孤寡老人', '留守儿童', '特殊人群', '育龄妇女', '党员', '残疾人', '离退干部', '低保人员', '优抚对象'],
+		},
+		series: [{
+			name: '2017年',
+			type: 'bar',
+			barWidth: '60%', //柱图宽度
+			data: [18203, 23489, 29034, 104970, 23489, 29034, 23489, 131744, 230230],
+			itemStyle: {
+				normal: {
+					color: '#aacf79',
+					barBorderRadius: [10, 10, 10, 10],
+				}
+			},
+			label: {
+				normal: {
+					show: true,
+					position: 'right',
+				}
+			},
+		}]
+	};
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+</script>

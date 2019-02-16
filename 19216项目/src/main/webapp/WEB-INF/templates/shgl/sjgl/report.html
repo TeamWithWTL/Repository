@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>事件管理-上报</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+</head>
+
+<body>
+	<div class="container-fluid">
+		<form id="addForm" class="form-horizontal">
+			<br>
+			<div class="form-group">
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="name" name="name" placeholder="姓名">
+				</div>
+				<button type="button" class="btn btn-default" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-10">
+					<div id="table-container">
+					@#ajax table:{
+						<div class="content-article">
+							<table class="table table-bordered" cellspacing="" cellpadding="">
+								<tr>
+									<th width="5%" class="text-center"></th>
+									<th>姓名</th>
+									<th>电话</th>
+								</tr>
+								@for(acc in pagenate.list ! []){
+								<tr>
+									<td class="text-center">
+							        	<input type="radio" class="i-checks" name="icheck" value="${acc.accCode}" />
+							        </td>
+							        <td>${acc.sysAccdesc.name}</td>
+							        <td>${acc.phone}</td>
+								</tr>
+								@}elsefor{
+								<tr>
+							        <td colspan="3" class="text-center">
+							        	没有找到要查询的数据
+							        </td>
+						    	</tr>
+								@}
+							</table>
+						</div>
+						<!-- 自定义分页标签 -->
+						<#pagenate func="initData" page="${pagenate}" />
+						@}
+					</div>
+				</div>
+			</div>
+			<div class="form-group col-sm-10" style="position:fixed; bottom:0;">
+					<button type="button" class="btn btn-default" id="saveBtn">确定</button>
+					<button type="button" class="btn btn-default" id="cancleBtn">取 消</button>
+			</div>
+			<input type="hidden" id="id" name="id" value="${event.id ! ''}" />
+		</form>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/sjgl/report.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>居民信息</title>
+	<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<style type="text/css">
+    .accCode{
+      white-space: nowrap;  
+      text-overflow: ellipsis; 
+      overflow: hidden; 
+    }
+    .name{
+      width: 180px; 
+      white-space: nowrap;  
+      text-overflow: ellipsis; 
+      overflow: hidden; 
+    }
+   </style>
+</head>
+
+<body style="margin: 25px;margin-right: 20px; width: 96%">
+		<div id="table-container" class="warpper" >
+			@#ajax table:{
+			<div class="table-box">
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+						<tr class="table-secondary">
+							
+					        <th>姓名</th>
+							<th>身份证号</th>
+					        <th>性别</th>
+					        <th>出生日期</th>
+					        <th>联系电话</th>
+					        <th>民族</th>
+					        <th>所属社区</th>
+					        <th>所属网格</th>
+					        <th>房屋</th>
+					        
+						</tr>
+						</thead>
+						<tbody id="dqIds">
+						@for(person in pagenate.list ! []){
+						<tr>
+							
+					        <td title="${person.name}"><a href="javascript:void(0);" onclick="goView('${person.id}')" id="View"><div class="accCode">${person.name}</div></a></td>
+					        <td title="${person.card_no}"><div class="accCode">${person.card_no}</div></td>
+					        <td>${person.sex == 'E'?'男':'女'}</td>
+					        <td>${person.birthdayFrm}</td>
+					        <td>${person.telephone}</td>
+					        <td>@if(isNotEmpty(sysStations)){
+									@for(da in sysStations){
+										${da.value1 == person.nation ? da.itemName : ''}
+									@}
+								@}
+							</td>
+					        <td title="${person.build.village.serviceStation.community.name}"><div class="accCode">${person.build.village.serviceStation.community.name}</div></td>
+					        <td title="${person.build.grid.name !''}"><div class="accCode">${person.build.grid.name !''}</div></td>
+					        <td title="${person.build.name}#${person.unit_no}单元${person.room_no}"><div class="accCode">${person.build.name}#${person.unit_no}单元${person.room_no}</div></td>
+					       
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="9" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+						</tbody>
+					</table>
+				</div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+		</div>
+		<input type="hidden" id="sqName" value="${sqName}">
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<!-- <script src="${ctxPath}/assets/scripts/shgl/jmxx/index.js"></script> -->
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	<script type="text/javascript">
+	var basePath = $("#basePath").val();
+
+	$(function(){
+		initData(1);
+	});
+	
+	//Table数据加载
+	function initData(pageNumber){
+		var msgIndex = top.layer.msg('数据加载中', {icon:16, shade:[ 0.5, '#999999' ], time:0});
+		$("#table-container").load(basePath + "/home/sqrkList.do",{'ajaxCmd': 'table','sqName':$("#sqName").val(), 'pageNumber': pageNumber}, function(){
+			top.layer.close(msgIndex);
+			
+		});
+	}
+	
+	//跳转查看界面
+	function goView(id){
+		$(".btn").blur();
+		top.layer.open({
+		    type: 2,
+		    title: "<div class='layerTitleDiv'></div><span class='layerTitleSpan'>居民信息详情</span>",
+		    fix: false,
+		   // shadeClose: true,
+		    area: ['90%', '90%'],
+		    content: basePath + '/shgl/jmxx/goView.do?id='+id,
+		    end:function(){
+		    	
+			  }
+		  });
+	}
+	</script>
+</body>
+</html>

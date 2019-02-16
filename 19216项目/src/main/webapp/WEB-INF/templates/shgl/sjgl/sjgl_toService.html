@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html class="layerpage">
+	<head>
+	<title>事件管理-上报</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	
+	</head>
+	<body>
+		<form id="addForm" action="" method="post">
+			<div class="form-group row">
+				<label  class="col-sm-3 col-form-label">服务站</label>
+				<div class="col-sm-9">
+					<button type="button" class="btn btn-outline-secondary" onclick="showTree()"><i class="fa fa-user-plus"></i> 选择服务站</button>
+				</div>
+				<div class="form-user-group" id="personlist">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">意见</label>
+				<div class="col-sm-8">
+					<textarea class="form-control"  rows="6" id="content" name ="content"></textarea>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-3"></div>
+				<div class="col-sm-9">
+					<button id="saveBtn" class="btn btn-outline-primary"><i class="fa fa-expand"></i>提交</button>
+					<button id="cancleBtn" class="btn btn-outline-primary"><i class="fa fa-reply"></i> 返回</button>
+				</div>
+			</div>
+		</form>
+		
+		<input  type="hidden" id="curRoleId" name="curRoleId" value="${curRoleId}" />
+		<input  type="hidden" id="id" name="id" value="${eventDeal.id ! ''}" />
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+		<input type="hidden" id="personlistValue" value="" />
+			
+		<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/sjgl/sjgl_toservice.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+	</body>
+
+</html>

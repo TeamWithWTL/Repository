@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>事件统计</title>
+		<meta charset="UTF-8">
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css"	/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	</head>
+
+	<body>
+		<div class="content-block no-padding">
+				<div class="row">
+					<div class="col-12" style="height: auto;" id="center">
+						<div class="content-padding-md pb-0">
+							<div class="function-box">
+								<div class="query-criteria" style="margin: 0;">
+									<form class="form-inline" action="" method="post">
+									    <div class='input-group date form_datetime' id='start'>
+											<input type="text" class="form-control" id="startTime" placeholder="开始时间" readonly="readonly" value="${startTime ! firstday}">
+											 <span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+								                <span class="fa fa-calendar" aria-hidden="true"></span>
+								             </span>
+								        </div>
+								        <div class='input-group date form_datetime' id='end'>
+											<input type="text" class="form-control" id="endTime" placeholder="结束时间" readonly="readonly" value="${endTime ! lastday}">
+											 <span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+								                <span class="fa fa-calendar" aria-hidden="true"></span>
+								             </span>
+								        </div>
+								        @if(roleCode == '05' || roleCode == '99'){
+											<select id="commId" name="commId" class="form-control" onchange="showSs(this,'ssId','1')" style="width: 200px;">
+											    <option value="">-- 所属社区--</option>
+													@if(isNotEmpty(comList)){
+														@for(com in comList){
+															<option value="${com.id}" ${commId != null && com.id == commId ? 'selected' : ''}>${com.name}</option>
+														@}
+													@}
+										    </select>
+										    <select class="form-control" name="ssId" id="ssId" style="width: 200px;">
+												<option value="">-- 所属服务站--</option>
+											</select>
+								        @}else if(roleCode == '03'){
+											 <select id="ssId" name="ssId" class="form-control" style="width: 200px;"> 
+											    <option value="">-- 所属服务站--</option>
+													@if(isNotEmpty(ssList)){
+														 @for(ss in ssList){
+															<option value="${ss.id}">${ss.name}</option>
+														 @}
+													@}
+										     </select>
+								        @}
+										<button type="button" class="btn btn-primary" onClick="cxAll();"><i class="fa fa-search"></i> 查询</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="content-padding-md pr-0" style="height:calc(100% - 60px)">
+							<div class="section-block">
+								<div class="section-block-title">
+									<i class="rader-icon"> 各类事件数量统计</i>
+								</div>
+								<div class="section-body" style="height: 500px;">
+ 									<div id="tsrktj" class="charts-block" style="height:280px;"></div> 
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="content-padding-md pl-0" style="height:calc(100% - 60px)">
+							<div class="section-block">
+								<div class="section-block-title">
+									<i class="rader-icon"> 各类事件占比</i>
+								</div>
+								<div class="section-body" style="height: 500px;">
+									<div id="tsrktjbt" class="charts-block" style="height:300px;"></div> 
+								</div>
+							</div>
+						</div>
+					</div>
+			</div>
+		</div>
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<input type="hidden" id="roleCode" value="${roleCode}" />
+			<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+		
+	    <script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	    <script src="http://echarts.baidu.com/dist/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+	    
+	    <!-- 日期控件JS -->
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js" ></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js" ></script>
+	    <script src="${ctxPath}/assets/scripts/sjzx/sjtj/index.js"></script>
+	</body>
+
+</html>

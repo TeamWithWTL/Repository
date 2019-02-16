@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+	</head>
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class=" icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">调查列表</h1>
+		</header>
+		<div class="mask-backdrop"></div>
+
+		<div id="addDc" class="addsometh" >
+		<a href="javascript:void(0)"><i class="icon ion-android-add"></i> 添加调查</a>
+		</div>
+		<div id="refreshContainer" class="mui-content mui-scroll-wrapper" >
+			<div class="mui-scroll">
+				<div id="table-container" class="listview-block">
+				@#ajax table:{
+				@for(dc in dcList! []){
+					<div class="mui-card">
+						<!--页眉，放置标题-->
+						<div class="mui-card-header">
+							<div class="mui-checkbox">
+								<input name="checkbox1" value="Item 1" type="checkbox">
+							</div>
+							${dc.title !''}
+						</div>
+						<!--内容区-->
+						<div class="mui-card-content">
+							<div class="mui-card-content-inner">
+								<p class="mui-ellipsis-2" style="color:#666;">
+									创建时间:  ${dc.createDateFom !''}
+								</p>
+							</div>
+						</div>
+						<!--页脚，放置补充信息或支持的操作-->
+						<div class="mui-card-footer">
+							<a href="javascript:void(0)" name="${dc.id}"><i class="icon ion-android-list"></i>详情</a>
+						</div>
+					</div>
+					@}
+							<input type="hidden" id ="sqmyWgyId" value="${sqmyWgyId}">
+				@}
+				</div>
+			</div>
+		</div>
+		
+		
+
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/sqmy/app_sqmy_dclist.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script>
+		mui.init({
+			pullRefresh: {
+				container: "#refreshContainer", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+				up: {
+					height:50,//可选.默认50.触发上拉加载拖动距离
+					range:'50px', //可选 默认100px,控件可下拉拖拽的范围
+					contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
+					contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
+					callback: pullupRefresh
+				}
+			}
+		});
+		function pullupRefresh() {
+			mui('#refreshContainer').pullRefresh().endPullupToRefresh(true); 
+		}
+
+		//返回界面
+		mui("#header").on('tap','a',function(){
+			  window.location.href = $("#basePath").val() + "/app/shgl/sqmy/index.do";
+		});
+		
+		//手机键返回
+		function anGoBack(){
+			  window.location.href = $("#basePath").val() + "/app/shgl/sqmy/index.do";
+			  return;
+		}
+		
+		</script>
+	</body>
+</html>

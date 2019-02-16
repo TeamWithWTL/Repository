@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>社会管理-社情民意首页</title>
+	<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+        <style type="text/css">
+	      .name{
+	        width: 235px; 
+		    white-space: nowrap;  
+		    text-overflow: ellipsis; 
+		    overflow: hidden; 
+	       }
+       </style>
+</head>
+
+<body>
+	<div class="function-box">
+		 	<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+		            <input type="text" class="form-control" id="title" placeholder="标题">
+		            <select name="zzxz" id="is_over" class="form-control">
+		                 <option value="">全部</option>
+		                  <option value="1">已结束</option>
+		           		 <option value="0">进行中</option>
+		            </select>
+		            <button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+			   </form>
+			</div>
+			<div class="function-btn">
+					
+			</div>
+		</div>
+		<div id="table-container" class="warpper">
+			@#ajax table:{
+			<div  class="table-box">
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+						 <tr class="table-secondary">
+<!-- 							  <th width="5%" class="text-center"> -->
+<!-- 			                     <input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/> -->
+<!-- 			                  </th> -->
+			                  <th width="25%" class="text-center">标题</th>
+			                  <th width="15%" class="text-center">所属社区</th>
+			                  <th width="90px" class="text-center">下发状态</th>
+<!-- 			                  <th width="15%" class="text-center">下发日期</th> -->
+			                  <th width="90px" class="text-center">是否结束</th>
+			                  <th width="110px" class="text-center">结束日期</th>
+			                  <th width="150px"class="text-center">操作</th>
+		                 </tr>  
+						</thead>
+					  <tbody id="dqIds">	
+						@for(sqmy in pagenate.list ! []){
+						<tr>
+<!-- 							<td class="text-center"> -->
+<!-- 					        	<input type="checkbox" class="i-checks" name="icheck" value="${sqmy.id},${sqmy.status}" /> -->
+<!-- 					        </td> -->
+					        <td class="text-left text-overflow" title="${sqmy.title}">
+			                 	 ${sqmy.title}
+		                    </td>
+     					    <td class="text-left text-overflow" title="${sqmy.commName}">
+			                 	 ${sqmy.commName}
+		                    </td>
+		                    <td class="text-center text-overflow">
+		                        @if(sqmy.status == '1'){
+		                                                                                           未下发
+		                        @}else if(sqmy.status == '2'){
+		                                                                                           已下发
+		                        @}
+		                    </td>
+<!-- 		                    <td class="text-center text-overflow">${sqmy.XScreate_date}</td> -->
+		                    <td class="text-center text-overflow">
+		                       @if(sqmy.is_over == '0'){
+		                                                                                        未结束
+		                       @}else if(sqmy.is_over == '1'){
+		                                                                                       已结束
+		                       @}
+		                    </td>
+		                    <td>${sqmy.XSend_date}</td>
+		                    <td class="text-center ">
+	                            <a href="javascript:void(0);" onclick="goView('${sqmy.id}')">调查详情</a>
+	                            <a href="javascript:void(0);" onclick="viewSqmyInfo('${sqmy.id}')">查看</a>
+		                    </td>
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="6" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+						</tbody>
+					</table>
+				 </div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+		</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	<script>
+	/**
+	 * 社会管理-社情民意-首页
+	 */	
+	var basePath = $("#basePath").val();
+
+	$(function(){
+		initData(1);
+	});
+
+	//Table数据加载
+	function initData(pageNumber){
+		var msgIndex = top.layer.msg('数据加载中', {icon:16, shade:[ 0.5, '#999999' ], time:0});
+		$("#table-container").load(basePath + "/shgl/sqmy/allsqmyList.do",{'ajaxCmd': 'table', 'pageNumber': pageNumber, 'title': $("#title").val(),isOver:$("#is_over").val()}, function(){
+			top.layer.close(msgIndex);
+		});
+	}
+	//跳转查看网格员列表页面
+	function goView(id){
+		var name ="";
+		top.layer.open({
+		    type: 2,
+		    title: "<div class='layerTitleDiv'></div><span class='layerTitleSpan'>查看网格员列表</span>",
+		    fix: false,
+		   // shadeClose: true,
+		    area: ['80%', '80%'],
+		    content: basePath+'/shgl/sqmy/ckwgylist.do?id='+id+'&name'+name,
+		  });
+	}
+	function viewSqmyInfo(id){
+		top.layer.open({
+		    type: 2,
+		    title: "<div class='layerTitleDiv'></div><span class='layerTitleSpan'>详情</span>",
+		    fix: false,
+		   // shadeClose: true,
+		    area: ['60%', '60%'],
+		    content: basePath+'/shgl/sqmy/viewSqmyInfo.do?id='+id,
+		  });
+	}
+	</script>
+</body>
+</html>

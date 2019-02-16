@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html class="layerpage">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/webuploader/webuploader.css" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" />
+	</head>
+	<body>
+		<form id="addForm" action="" method="post">
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">事件标题</label>
+				<!--input文本类使用col-sm-6-->
+				<div class="col-sm-6">
+					<input type="text" class="form-control" id="title" name="title" placeholder="事件标题">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">事件位置</label>
+				<!--input文本类使用col-sm-6-->
+				<div class="col-sm-6">
+					<input type="text" class="form-control" id="addr" name="addr" placeholder="请输入事件位置">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">事件详情</label>
+				<!--input文本类使用col-sm-6-->
+				<div class="col-sm-8">
+					<textarea class="form-control" rows="6" id="content" name="content" placeholder="请输入事件详情"></textarea>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">经度</label>
+				<div class="col-sm-2">
+					<input type="text" class="form-control" id="lon" name="lon" placeholder="经度" value="${build.lon ! '0'}" readonly="readonly"/>
+				</div>
+				<label for="" class="col-sm-1 col-form-label">纬度</label>
+				<div class="col-sm-2">
+					<input type="text" class="form-control" id="lat" name="lat" placeholder="纬度" value="${build.lat ! '0'}" readonly="readonly"/>
+				</div>
+				<div class="col-sm-4">
+					<button type="button" class="btn btn-info" onclick="choseEventArea('/shgl/sjgl/choseEventArea.do')">绘 制</button>
+					<button type="button" class="btn btn-warning" onclick="clearInput()">清 除</button>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">事件类型</label>
+				<div class="col-sm-6">
+					<div class="select-after">
+						<!--所有的select需要增加select-after类-->
+						<select class="form-control" name="sjlx" id="sjlx">
+							@for(type in eventType ! []){
+							<option value="${type.itemCode}" ${type.itemName=='其他'?'selected':''}>${type.itemName}</option>
+							@}
+						</select>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">事件来源</label>
+				<div class="col-sm-6">
+					<div class="select-after">
+						<!--所有的select需要增加select-after类-->
+						<select class="form-control" name="sjly" id="sjly">
+							@for(eft in eventFromType ! []){
+								<option value="${eft.itemCode}" ${eft.itemName=='其他'?'selected':''}>${eft.itemName}</option>
+							@}
+						</select>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">附件</label>
+				<div class="col-sm-6">
+				<div id="picker"><button class="btn btn-outline-secondary" ><i class="fa fa-upload"></i> 上传附件</button></div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label"></label>
+				<div class="col-sm-9">
+				<div class="form-arraylist"  id ="attrlist">
+						
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<div class="col-sm-3"></div>
+				<div class="col-sm-8 text-right">
+					<button type="button" class="btn btn-primary"  id="saveBtn" onclick="save()"><i class="fa fa-save"></i> 保存</button>
+					<button type="button" class="btn btn-outline-primary" id="cancleBtn"><i class="fa fa-reply"></i> 取消</button>
+				</div>
+			</div>
+			
+		<input type="hidden" id="fName" name="fName" />
+		</form>
+
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="commId" value="${session.sysAccCount.commId}" />
+
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<!-- 日期控件JS -->
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/webuploader/webuploader.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/subFromWithAttrs.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/shgl/sjgl/add.js"></script>
+	
+	<script>
+		function clearInput(){
+			$("#lon").val("");
+			$("#lat").val("");
+		}
+	</script>
+	
+	</body>
+
+</html>

@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>任务汇总-查看</title>
+	<meta charset="UTF-8">
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+	<style type="text/css">
+			body {
+				font-size: 14px;
+			}
+			
+			.task-processing+.task-processing {
+				border-top: 1px solid #DDDDDD;
+			}
+			
+			.task-header {
+				border-bottom: 1px solid #ddd;
+				padding: 10px 20px;
+				background: #f9fafe;
+			}
+			
+			.task-processing span {
+				display: inline-block;
+				margin-right: 15px;
+			}
+			
+			.task-body>ul {
+				padding: 20px 30px 10px;
+				list-style: none;
+				margin: 0;
+				background: #f7f4f4;
+			}
+			
+			.task-body>ul>li {
+				border-bottom: 1px dashed #ddd;
+				margin-bottom: 15px;
+				padding-bottom: 5px;
+				margin-left: 40px;
+			}
+			
+			.task-body>ul>li:before {
+				float: left;
+				content: "\f045";
+				width: 24px;
+				height: 24px;
+				margin-left: -40px;
+				border-radius: 4px;
+				background-color: #f29b76;
+				text-align: center;
+				font: normal normal normal 17px/25px FontAwesome;
+				padding-left: 2px;
+				color: #FFFFFF;
+			}
+			
+			.task-body>ul>li h4 {
+				font-size: 100%;
+				font-weight: normal;
+			}
+			
+			.task-body>ul>li p i {
+				font-style: normal;
+				color: #ff611e;
+			}
+			
+			.task-fujian {
+				display: flex;
+			}
+			
+			.task-fujian label {
+				flex: 0 0 auto;
+			}
+			
+			.task-fujian .form-arraylist {
+				flex: 1;
+				font-weight: normal;
+			}
+			
+			.task-fujian dt a {
+				width: 16.666667%;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				margin-bottom: 10px;
+				cursor: pointer;
+			}
+			
+			.task-fujian dt a img {
+				width: 40px;
+				height: 32px;
+				background: url(../images/default-file.png) no-repeat;
+				background-size: cover;
+				margin-right: 6px;
+			}
+			.task-fujian .form-arraylist {
+				padding-left: 15px;
+			}
+		</style>
+</head>
+
+<body>
+		<div class="article-body">
+			<div class="page-title">基本资料</div>
+			<div class="page-body">
+				<table class="table table-lg table-striped table-event">
+					<tr>
+						<th>标题</th>
+						<td colspan="5">${rwgl.title}</td>
+					</tr>
+					<tr>
+						<th>发布人</th>
+						<td>${rwgl.fbr_name}</td>
+						<th>发布日期</th>
+						<td>${rwgl.create_dates}</td>
+						<th>结束日期</th>
+						<td>${rwgl.finish_dates}</td>
+					</tr>
+					<tr>
+						<th>内容</th>
+						<td colspan="5">${rwgl.content}</td>
+					</tr>
+					<tr>
+						<th>附件列表</th>
+						<td colspan="5">
+							<div class="form-arraylist">
+							 @if(isNotEmpty(rwgl.attrList)){
+								@for(attr in rwgl.attrList  ! []){	
+									@if(attr.file_type == 'img'){
+									<li class="col-3">
+										<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.new_filename}')" title="${attr.old_filename}"><img src="${ctxPath}/showPic?fileName=${attr.new_filename}"/>${attr.old_filename}</a>
+									    <span title="下载" onclick="download('${attr.new_filename}', '${attr.old_filename}')" class="download"></span>
+									</li>
+									@}else if(attr.file_type == 'pdf'){
+									<li class="col-3">
+										<a href="javascript:void(0)" onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.new_filename}')" title="${attr.old_filename}"><img src="${ctxPath}/assets/images/default-file.png"/>${attr.old_filename}</a>
+									    <span title="下载" onclick="download('${attr.new_filename}', '${attr.old_filename}')" class="download"></span>
+									</li>
+									@}else if(attr.file_type == 'word'){
+									<li class="col-3">
+										<a href="javascript:void(0)" title="${attr.old_filename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.old_filename}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'txt'){
+									<li  class="col-3">
+										<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.old_filename}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'exl'){
+									<li  class="col-3">
+										<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.old_filename}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.file_type == 'video'){
+									<li  class="col-3">
+										<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.old_filename}</a>
+										 <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else{
+									  <li class="col-3">
+									   <a href="javascript:void(0)"  title="${attr.old_filename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_filename}</a>
+								       <span title="下载" onclick="download('${attr.new_filename}', '${attr.old_filename}')" class="download"></span>
+								     </li>
+									@}
+								@}
+						    @}else{
+						     	无
+						    @}
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="page-title">任务处理</div>
+			<div class="page-body">
+			@for(rws in rwLists ![]){
+				<div class="task-processing">
+					<div class="task-header">
+						<span>下发人：${rws.preName ! ''}</span>
+						<span>下发时间：${rws.starte_dates ! ''}</span>
+					</div>
+					<div class="task-body">
+						<ul>
+						@for(rg in rwgls ![]){
+							@if(rws.pre_emp == rg.pre_emp){
+							<li>
+								<h4>
+									<span>处理人：${rg.curName ! ''}</span>
+									<span>处理时间：${rg.end_dates ! ''}</span>
+								</h4>
+								@if(rg.is_back == '1'){
+								<p>已反馈：${rg.content ! ''}</p>
+								
+								<div class="task-fujian">
+									<label>反馈附件：</label>
+									<ul class="form-arraylist row">
+									@if(isNotEmpty(rg.attrList)){
+										@for(attr in rg.attrList  ! []){
+											@if(attr.file_type == 'img'){
+											<li class="col-2">
+												<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.new_filename}')" title="${attr.old_filename}"><img src="${ctxPath}/showPic?fileName=${attr.new_filename}"/>${attr.old_filename}</a>
+											    <span title="下载" onclick="download('${attr.new_filename}', '${attr.old_filename}')" class="download"></span>
+											</li>
+											@}else if(attr.file_type == 'pdf'){
+											<li class="col-2">
+												<a href="javascript:void(0)" onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.new_filename}')" title="${attr.old_filename}"><img src="${ctxPath}/assets/images/default-file.png"/>${attr.old_filename}</a>
+											    <span title="下载" onclick="download('${attr.new_filename}', '${attr.old_filename}')" class="download"></span>
+										    </li>
+											@}else if(attr.file_type == 'word'){
+											<li class="col-2">
+												<a href="javascript:void(0)" title="${attr.old_filename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.old_filename}</a>
+												<span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+											</li>
+											@}else if(attr.file_type == 'txt'){
+											<li class="col-2">
+												<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.old_filename}</a>
+												<span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+											</li>
+											@}else if(attr.file_type == 'exl'){
+											<li class="col-2">
+												<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.old_filename}</a>
+												<span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+											</li>
+											@}else if(attr.file_type == 'video'){
+											<li class="col-2">
+												<a href="javascript:void(0)" title="${attr.old_filename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.old_filename}</a>
+												<span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+											</li>
+											@}else{
+											<li class="col-2">
+											   <a href="javascript:void(0)"  title="${attr.old_filename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_filename}</a>
+										       <span title="下载" onclick="download('${attr.new_filename}', '${attr.old_filename}')" class="download"></span>
+										    </li>
+											@}
+										@}
+									@}
+									</ul>
+								</div>
+								@}else{
+								<p>未反馈：暂未处理</p>
+								@}
+							</li>
+							@}
+						@}
+						</ul>
+					</div>
+				</div>
+				@}
+			</div>
+		</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/public.js"></script>
+	<script type="text/javascript">
+	var basePath = $("#basePath").val();
+
+	//附件下载
+	function download(newFilename, oldFilename){
+		window.location.href = basePath + '/pub/downloadbystream.do?fileName=' + newFilename + '&oldFileName=' + oldFilename;
+	}
+	</script>
+</body>
+</html>

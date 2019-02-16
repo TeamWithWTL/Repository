@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>添加住户页面</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.picker.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css" />
+	</head>
+<body>
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+	<h1 class="mui-title">添加小区</h1>
+</header>
+
+
+<nav class="mui-bar mui-bar-tab mui-bar-cogs">
+	<a class="mui-tab-item mui-active"  id="saveBtn">
+		<span class="icon ion-filing"></span>
+		<span class="mui-tab-label">提交</span>
+	</a>
+</nav>
+<div class="mui-content mui-scroll-wrapper">
+		<div class="mui-scroll">
+			<form  id="addForm" action="" method="post">
+				<div class="mui-input-group">
+					<div class="mui-input-row">
+						<label>小区名称</label>
+						<input id="xqName" name="xqName" type="text" class="mui-input-clear" placeholder="小区名称">
+					</div>
+				</div>
+				<div class="mui-input-group">
+					<div class="mui-input-row">
+						<label>所属小区</label>
+						<select class="mui-input-picker" id="xqCode"  name="" onchange="showSsApp(this,'ssId')"> 
+							<option value="" >--所属社区--</option>
+							@for(com in comList ! []){
+							<option value="${com.id}" >${com.name}</option>
+							@}
+						</select>
+					</div>
+				</div>
+				<div class="mui-input-group">
+					<div class="mui-input-row">
+						<label>所属服务站</label>
+						<select class="mui-input-picker" id="ssId"  name="" onchange=""> 
+							<option value="" >--所属服务站--</option>
+						</select>
+					</div>
+				</div>
+				<div class="mui-input-group">
+					<div class="mui-input-row">
+						<label>负责人</label>
+						<button type="button" onClick="addOption(this)">添加负责人</button>
+					</div>
+				</div>
+				
+				<!--固定字段开始-->
+				<div class="mui-input-group">
+					<div class="mui-input-row">
+						<input id="fzrName" name="fzrName" type="text" class="mui-input-clear" placeholder="姓名">
+						<input id="fzrPhone" name="fzrPhone" type="text" class="mui-input-clear" placeholder="电话号码">
+						<span class="input-group-btn">
+						<button type="button" class="btn btn-secondary"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+						</span>
+					</div>
+				</div>
+				<!--固定字段结束-->
+				<!--循环字段开始-->
+				<div id="fzr_xh">
+				<div class="mui-input-group">
+					<div class="mui-input-row">
+						<input id="fzrName" name="fzrName" type="text" class="mui-input-clear" placeholder="姓名">
+						<input id="fzrPhone" name="fzrPhone" type="text" class="mui-input-clear" placeholder="电话号码">
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-danger" onClick="delOption(this)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+						</span>
+					</div>
+				</div>
+				</div>
+				<!--循环字段结束-->
+				<div class="mui-input-group">
+					<div class="mui-input-row">
+						<label>小区描述</label>
+						<textarea id="xqms" name="xqms" type="text"  placeholder="社区描述"></textarea>
+					</div>
+				</div>
+				<div class="delimiter"></div>
+				<input type="hidden" name="vilId" value="${village.id ! ''}" />
+				<input type="hidden" name="managers" id="managers" />
+				<input type="hidden" name="phones" id="phones" />
+			</form>
+		</div>
+		<div class="mask-backdrop"></div>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+	<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/xqxx/app/app_xqxx_add.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+	<script type="text/javascript">
+	//添加负责人div
+	function addOption(obj){
+		var html = '';
+		html = '<div class="mui-input-group">'+
+					'<div class="mui-input-row">'+
+						'<label>负责人</label>'+
+						'<input id="fzrName" name="fzrName" type="text" class="mui-input-clear" placeholder="姓名">'+
+						'<input id="fzrPhone" name="fzrPhone" type="text" class="mui-input-clear" placeholder="电话号码">'+
+						'<span class="input-group-btn">' +
+						'<button type="button" class="btn btn-danger" onClick="delOption(this)"><i class="fa fa-trash" aria-hidden="true"></i></button>' +
+						'</span>' +
+					'</div>'+
+				'</div>';
+			
+		$("#fzr_xh").append(html);
+	}
+
+	//删除负责人div
+	function delOption(obj){
+		$(obj).parent().parent().parent().parent().remove();
+	}
+	
+	//手机按键返回
+	function anGoBack(){
+		mui.back();
+		return;
+	}
+	
+	</script>
+</body>
+</html>

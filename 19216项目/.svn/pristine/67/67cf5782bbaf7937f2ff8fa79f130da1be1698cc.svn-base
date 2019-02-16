@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>入户调查</title>
+<meta charset="UTF-8">
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<link rel="stylesheet" type="text/css"
+	href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css" />
+<link rel="stylesheet" type="text/css"
+	href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" />
+<link rel="stylesheet" type="text/css"
+	href="${ctxPath}/assets/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="${ctxPath}/assets/css/main.css" />
+</head>
+
+<body>
+	<div class="content-block no-padding">
+		<div class="row">
+			<div class="col-12" style="height: auto;" id="center">
+				<div class="content-padding-md pb-0">
+					<div class="function-box">
+						<div class="query-criteria" style="margin: 0;">
+							<form class="form-inline" action="" method="post">
+								<div class='input-group date form_datetime' id='datetimepicker'>
+									<input readonly="readonly" type="text" class="form-control"
+										name="startTime" id="startTime" placeholder="开始日期"
+										value="${startTime ! firstday}" /> <span
+										class="input-group-addon"
+										style="margin-left: -10px; margin-right: 10px"> <span
+										class="fa fa-calendar" aria-hidden="true"></span>
+									</span>
+								</div>
+
+								<label>至&nbsp;&nbsp;</label>
+								<div class='input-group date form_datetime' id='datetimepicker1'>
+									<input readonly="readonly" type="text" class="form-control"
+										name="endTime" id="endTime" placeholder="结束日期"
+										value="${endTime ! lastday}" /> <span
+										class="input-group-addon"
+										style="margin-left: -10px; margin-right: 10px"> <span
+										class="fa fa-calendar" aria-hidden="true"></span>
+									</span>
+								</div>
+
+								<!-- 	<div  id="commId">
+											<select id="commId" name="commId" class="form-control" onchange="showSs(this,'ssId','1')">
+											    <option value="">-- 所属社区--</option>
+													@if(isNotEmpty(comList)){
+														@for(com in comList){
+															<option value="${com.id}" ${commId != null && com.id == commId ? 'selected' : ''}>${com.name}</option>
+														@}
+													@}
+										    </select>
+									    </div>
+									    <div id="ssDev">
+										    <select class="form-control" name="ssId" id="ssId">
+												<option value="">-- 所属服务站--</option>
+													@if(isNotEmpty(ssList)){
+														@for(ss in ssList){
+															<option value="${ss.id}" ${ssId != null && ss.id == ssId ? 'selected' : ''}>${ss.name}</option>
+														@}
+													@}
+											</select>
+										</div> -->
+								<button type="button" class="btn btn-primary" onClick="cxAll();">
+									<i class="fa fa-search"></i> 查询
+								</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="content-padding-md pr-0"
+					style="height: calc(100% - 60px)">
+					<div class="section-block">
+						<div class="section-block-title">
+							<i class="rader-icon"> 各社情民意任务完成数量统计</i>
+						</div>
+						<div class="section-body">
+							<div id="tsrktj" class="charts-block" style="height: 280px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="content-padding-md pl-0"
+					style="height: calc(100% - 60px)">
+					<div class="section-block">
+						<div class="section-block-title">
+							<i class="rader-icon">各社情民意任务完成数量对比</i>
+						</div>
+						<div class="section-body">
+							<div id="tsrktjbt" class="charts-block" style="height: 280px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="roleCode" value="${roleCode}" />
+	<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js"
+		type="text/javascript" charset="utf-8"></script>
+
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"
+		type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/popper.min.js"
+		type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js"
+		type="text/javascript" charset="utf-8"></script>
+	<script src="http://echarts.baidu.com/dist/echarts.min.js"
+		type="text/javascript" charset="utf-8"></script>
+
+	<!-- 日期控件JS -->
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="${ctxPath}/assets/scripts/sjzx/rhdc/index.js"></script>
+</body>
+
+</html>

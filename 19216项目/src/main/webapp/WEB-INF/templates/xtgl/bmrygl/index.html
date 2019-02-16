@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>部门人员管理-首页</title>
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/zTree_v3/css/metroStyle/metroStyle.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<style>
+	.ztree {
+	    margin: 0;
+	    padding: 10px;
+	    color: #333;
+	}
+    .accCode{
+      width: 120px; 
+      white-space: nowrap;  
+      text-overflow: ellipsis; 
+      overflow: hidden; 
+    }
+    .name a{
+      width: 120px; 
+      white-space: nowrap;  
+      text-overflow: ellipsis; 
+      overflow: hidden; 
+    }
+	</style>
+</head>
+
+<body>
+	<div class="row warpper">
+		<div class="col-2 warpper" style="padding-right: 0">
+			<!-- ZTree -->
+				<div class="cardbox-body warpper" >
+					<div class="ztree" style="overflow: auto;">
+						<iframe id="treeFrame" name="treeFrame" src="${ctxPath}/pub/deptTree/showDeptTree.do" style="height:calc(100% - 29px)" frameBorder=0></iframe>
+					</div>
+				</div>
+			<!-- END ZTree -->
+		</div>
+		<div class="col-10 warpper">
+				<div class="function-box">
+					<div class="query-criteria">
+						<form class="form-inline" action="" method="post">
+								<!-- 被选中的部门 -->
+							    <input type="hidden" id="deptId" value="${deptId ! ''}">
+							    <input type="text" id="name" class="form-control" placeholder="姓名" value="${name ! ''}">
+							    <select name="roleCode" id="roleCode" class="form-control">
+							         <option value="" selected="selected">选择角色</option>
+							    @for(role in sysroles ![]){
+							    	@if(role.roleCode != '14' && role.roleCode != '01' && role.roleCode != '02' && role.roleCode != '03' && role.roleCode != '04' && role.roleCode != '05' && role.roleCode != '06' && role.roleCode != '13'){
+							    		<option value="${role.roleCode}">${role.roleName}</option>
+							    	@}
+					            @}
+					            </select>
+								<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+						</form>
+					</div>
+				</div>
+				<div class="function-btn">
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goAdd('添加界面')"><i class="fa fa-plus"></i> 添加</button>
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goUpdate('修改界面')"><i class="fa fa-pencil"></i> 修改</button>
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onClick="goDel()"><i class="fa fa-trash"></i> 删除</button>
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="resetKey()"><i class="fa fa-key"></i> 密码重置</button>
+				</div>
+				<div id="bmry" class="warpper">
+					@#ajax table:{
+				<div  class="table-box">
+						<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+							<tr class="table-secondary">
+								<th width="4%" class="text-center">
+									<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+						        </th>
+						        <th width="15%">姓名</th>
+						        <th width="15%">账号</th>
+						        <th width="20%">职务</th>
+						        <th width="15%">手机号</th>
+						        <th width="7%">状态</th>
+						        <th width="">操作</th>
+							</tr>
+							</thead>
+							<tbody>
+							@for(person in pagenate.list ! []){
+					    	<tr>
+						        <td class="text-center">
+						        	<input type="checkbox" name="icheck" value="${person.accCode}" />
+						        </td>
+					    		<td>
+					    		 <div class="accCode">
+					    			<a href="javascript:void(0);" onclick="goView('${ctxPath}/xtgl/bmrygl/goView.do?code=${person.accCode}')">${person.name ! ''}</a>
+					    		 </div>
+					    		</td>
+					    		 <td>
+					    		 <div class="accCode">
+					    		 ${person.accCode ! ''}
+					    		 </div>
+					    		 </td>
+						        <td>${person.duty ! ''}</td>
+						        <td>${person.phone ! ''}</td>
+						        <td>
+						          @if(person.validFlag == '0'){
+						              <span style="color: #fd5c1d">无效</sapn>
+						          @}else if(person.validFlag == '1'){
+						              <span style="color: #7ebc1d">有效</span>
+						          @}
+						        </td>
+						        <td class="function-btn">
+										<a href="javascript:void(0);" onclick="goUpdateDq('${person.accCode}')">修改</a>&nbsp;
+										<a  href="javascript:void(0);" onclick="resetKeyDq('${person.accCode}')"> 密码重置</a>&nbsp;
+										@if(person.validFlag == '0'){
+										   <a  href="javascript:void(0);" onclick="Sz('${person.accCode}','1')"> 设置有效</a>
+										@}else if(person.validFlag == '1'){
+										   <a  href="javascript:void(0);" onclick="Sz('${person.accCode}','0')"> 
+										      <span style="color: red;">设置无效</span>
+										   </a>
+										@}
+				        		 </td>
+					    	</tr>
+					    	@}elsefor{
+					    	<tr>
+						        <td colspan="7" class="text-center">
+						        	没有找到要查询的数据
+						        </td>
+					    	</tr>
+					    	@}
+					    	</tbody>
+						</table>
+						</div>
+					<!-- 自定义分页标签 -->
+					<#pagenate func="initData" page="${pagenate}" />
+					<input type="hidden" id="defaultPwd" value="${defaultPwd}" />
+					@}
+				</div>
+		 </div>
+	  </div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/vendor/zTree_v3/js/jquery.ztree.all-3.5.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/public.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/xtgl/bmrygl/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>社区管理-首页</title>
+	<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<style type="text/css">
+    .accCode{
+      white-space: nowrap;  
+      text-overflow: ellipsis; 
+      overflow: hidden; 
+    }
+    .name{
+      width: 180px; 
+      white-space: nowrap;  
+      text-overflow: ellipsis; 
+      overflow: hidden; 
+    }
+   </style>
+</head>
+
+<body>
+	<div class="function-box">
+		 	<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+					<input type="text" class="form-control" id="name" placeholder="名称">
+					<!-- <input type="text" class="form-control" id="manager" placeholder="负责人">
+					<input type="text" class="form-control" id="phone" placeholder="负责人联系方式"> -->
+					<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+			</div>
+			<div class="function-btn">
+				<#roleBtn btnId="sqglAdd" roleCode="${roleCode}">
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goAdd('添加界面')"><i class="fa fa-plus"></i> 添加</button>
+				</#roleBtn>
+				<#roleBtn btnId="sqglEdit" roleCode="${roleCode}">	
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goUpdate('修改界面')"><i class="fa fa-pencil"></i> 修改</button>
+				</#roleBtn>
+				<#roleBtn btnId="sqglDel" roleCode="${roleCode}">
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goDel()"><i class="fa fa-trash"></i> 删除</button>
+				</#roleBtn>
+				
+				<#roleBtn btnId="sqglImpFile" roleCode="${roleCode}">
+				<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goImpFile()"><i class="fa fa-sign-in"></i> 导入</button>
+				</#roleBtn>
+				
+				<#roleBtn btnId="sqglExport" roleCode="${roleCode}">
+				<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goExport()"><i class="fa fa-sign-out"></i> 导出</button>
+				</#roleBtn>
+			</div>
+		</div>
+		<div id="table-container" class="warpper">
+			@#ajax table:{
+			<div class="table-box">
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+						<tr class="table-secondary">
+							<th width="5%" class="text-center">
+								<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+					        </th>
+					        <th width="20%">社区名称</th>
+					        <th width="20%">行政区划</th>
+					        <th width="10%">实际入住户数</th>
+					        <th width="15%">添加人</th>
+					        <th width="15%">添加日期</th>
+					        <th>操作</th>
+						</tr>
+						</thead>
+						<tbody id="dqIds">
+						@for(com in pagenate.list ! []){
+						<tr>
+							<td class="text-center">
+					        	<input type="checkbox" class="i-checks" name="icheck" value="${com.id}" />
+					        </td>
+					        <td title="${com.name}">
+					          <div class="accCode">${com.name}</div>
+					        </td>
+					        <td>${com.strative_name}</td>
+					        <td>${com.sjCount}</td>
+					        <td>${com.add_name}</td>
+					        <td>${com.addTimeFrm}</td>
+					        <td class="function-btn">
+					          <a href="javascript:void(0);" onclick="choseArea('${com.id}','${com.name}','/shgl/sqgl/choseArea.do')"> 绘制</a>
+					           <a href="javascript:void(0);" onclick="choseArea('${com.id}','${com.name}','/shgl/sqgl/choseBz.do')"> 标注</a>
+					          <#roleBtn btnId="sqglEdit" roleCode="${roleCode}">	
+					          <a href="javascript:void(0);" onclick="goUpdateDq('${com.id}')"> 修改</a> 
+							  </#roleBtn>
+							  <#roleBtn btnId="sqglDel" roleCode="${roleCode}">
+							  <a href="javascript:void(0);" onclick="goDelDq('${com.id}')"> 删除</a>
+							  </#roleBtn>
+					        </td>
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="7" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+						</tbody>
+					</table>
+				</div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+		</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/sqgl/index.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!doctype html>
+<html>
+
+	<head>
+		<title></title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.picker.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+		<style type="text/css">
+			.mui-toast-container {bottom: 50% !important;}
+		</style>
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav" id="backId">
+			<!-- <a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a> -->
+			<a class="icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title">新建下发任务</h1>
+		</header>
+		<nav class="mui-bar mui-bar-tab mui-bar-cogs">
+			<a class="mui-tab-item  mui-active" id="saveBtn">
+				<span class="icon ion-share"></span>
+				<span class="mui-tab-label" >保存并下发</span>
+			</a>
+		</nav>
+		<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<form action="" method="post">
+					<div class="mui-input-group">
+					<div class="mui-input-row">
+						<label>标题</label> 
+						<input type="text" id="titleName" class="mui-input-picker" placeholder="标题" />
+					</div>
+					<div id="content" class="content-block block-border">
+					<label id="suggest">任务内容：</label>
+						<textarea rows="5" id="rwContent" name="content"></textarea>
+					</div>
+					<div class="mui-input-row">
+						<label>完成时间</label>
+						<input id="finish_date" name="finish_date" type="date" class="mui-input-clear" placeholder="完成时间">
+					</div>
+					<div class="delimiter"></div>
+					<div class="mui-input-row">
+						<label>选择人员</label>
+						<button type="button" class="mui-btn btn-input" id="Add_User">选择 <i class="icon ion-android-person-add"></i></button>
+					</div>
+					<div class="mui-input-row col-list"  id="person">
+					</div>
+					<div class="mui-input-row array-list">
+						<label>附件上传</label>
+						 <ul id="fjItems">
+						 	<li class="array-funciton array-photograph" onclick="openCamera()"><span class="icon ion-camera"></span><p>拍摄照片</p>
+							</li>
+							<li class="array-funciton array-upfile" onclick="openFile()"><span class="icon ion-filing"></span><p>上传文件</p>
+							</li>
+						</ul>
+					</div>
+					<div class="delimiter"></div>
+					</div>
+					<input type="hidden" id="fName" value=""/>
+				</form>
+			</div>
+		</div>
+		<div class="popup">
+			<div class="popup-header">
+				<h4 class="popup-header-title">人员选择</h4>
+				<span id="closed-popup" class="icon ion-ios-close-empty"></span>
+			</div>
+			<div class="popup-body">
+			@for(map in mapSysRole ! []){
+				<!--start checkbox list-->
+				
+				
+				<div class="checkbox-list">
+					<div class="checkbox-list-title">
+						<div class="mui-input-row mui-radio">
+							<label>${map.key.roleName}</label>
+						</div>
+					</div>
+					<ul class="mui-input-group">
+					@for(person in map.value ![]){
+						<div class="mui-input-row mui-checkbox">
+							<label>${person.name}</label>
+							<input type="checkbox"  name="radio"  class="person" roleCode="${map.key.roleCode}"  nam = "${person.name}" namid = "${person.accCode}">
+						</div>
+					
+					@}
+					</ul>
+				</div>
+				@}elsefor{
+				<div class="checkbox-list">
+					<div class="checkbox-list-title">
+						<div class="mui-input-row mui-radio">
+							<label>亲！你没有权限。</label>
+						</div>
+					</div>
+				
+				</div>
+				@}
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-block" id="submit">确定</button>
+				</div>
+			</div>
+		</div>
+		<div class="full-mask-backdrop"></div>
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui('.mui-scroll-wrapper').scroll({
+				indicators: false, //是否显示滚动条
+				startX: 0, //初始化时滚动至x
+				deceleration: 0.0004, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+				bounce: true //是否启用回弹
+			});
+			
+			$(document).ready(function(){
+				jsCleanFJ();
+			});
+			
+			//调用手机端方法打开附件
+			function openFile() {
+				toAndroid.jsOpenFile();
+			}
+			//调用手机端方法打开附件
+			function openFileImg() {
+				toAndroid.jsOpenImage();
+			}
+			//拍照
+			function openCamera() {
+				toAndroid.jsCallCamera();
+			}
+
+			//确定所选文件后执行  根据不同的附件类型显示相应的图片
+			function getImgs(paths) {
+				   var arrs = paths.split(',');      //多个选择附件，用逗号分割
+					for (var i = 0; i < arrs.length; i++) {
+						var fileType=arrs[i].substring(arrs[i].lastIndexOf('.')+1);
+						var fileName=arrs[i].substring(arrs[i].lastIndexOf('/')+1);
+						fileType = fileType.toLocaleLowerCase();
+						var html ='<li><img  onClick="imgClick(\'' + arrs[i] + '\')"  src="'+basePath+'/assets/images/default-file.png" class="adaption"/><a href="javascript:;" id="' + arrs[i] + '" onClick="tapholdHandler(this)" class="icon ion-android-cancel"></a></li>';
+						$("#fjItems").prepend(html);
+					}
+			}
+
+
+			//查看上传图片
+			function imgClick(path) {
+				toAndroid.jsSeeFile(path);
+			}
+
+			//删除上传附件
+			function tapholdHandler(obj) {
+				top.layer.confirm("确定要删除该文件么？", {
+					icon: 0, 
+					title: "提示",
+					yes: function(index){
+						layer.close(index);
+						//清除删除的img
+						$(obj).parent().remove();
+						//删除文件
+						toAndroid.jsDeleteFj(obj.id);
+						
+					},
+					cancel : function(index) {
+						layer.close(index);
+					}
+				});
+			}
+			
+			
+			$("#Add_User").click(function(){
+				$(".popup").css("top", "1rem");
+				$(".full-mask-backdrop").fadeIn(200);
+			});
+			$("#closed-popup, #submit").click(function(){
+				$(".popup").removeAttr("style");
+				$(".full-mask-backdrop").fadeOut(200);
+			});
+			
+			var basePath=$("#basePath").val();
+			
+			$("#submit").click(function(){
+				var persons=$(".person");
+				var ryCode='';
+				var ryName='';
+				$("#person").html("");
+				$.each(persons, function(index, person) {
+					if ($(person).is(":checked")) {
+						ryName = $(person).attr("nam");
+						ryCode = $(person).attr("namid");
+						roleCode=$(person).attr("roleCode");
+						if (ryName!='') {
+							$("#person").append('<li roleCode="'+roleCode+'"  personId="'+ryCode+'">'+ryName+'<a href="javascript:void(0)" class="icon ion-android-cancel" personCode="'+ryCode+'" id="personId"></a></li>');
+						}
+					}
+				});
+			});
+			mui(".col-list").on('tap','.ion-android-cancel',function(){
+				var ryCode = '';
+				var aa = this.getAttribute("personCode");
+				$(this).parent().remove();
+				var persons=$(".person");
+				$.each(persons, function(index, person) {
+					if ($(person).is(":checked")) {
+					    ryCode = $(person).attr("namid");
+						if(aa == ryCode){
+							mui("input[namid='"+ryCode+"']").each(function(){ 
+		                        this.checked=false; 
+		                    }); 
+						}
+					}
+				});
+			});
+			
+			//$("#saveBtn").click(function(){
+			mui(".mui-bar-cogs").on('tap','a',function(){ 
+				var per=$("#person").html();
+				var titleName = $("#titleName").val();
+				var finish_date = $("#finish_date").val();
+				if(titleName == null || titleName == ''){
+					mui.toast('标题不能为空',{ duration:'long', type:'div' });
+					return false;
+				}
+				if(finish_date == null || finish_date == ''){
+					mui.toast('完成时间不能为空',{ duration:'long', type:'div' });
+					return false;
+				}
+				if ($( "#person:has(li)" ).length==0) {
+					mui.toast('请选择下发人',{ duration:'long', type:'div' });
+					return false;
+				}
+				var persons=$("#person").find("li");
+				var personId='';
+				var personIds='';
+				var curRoleId='';//当前处理角色id
+				$.each(persons, function(index, person) {
+						personId = $(person).attr("personId");
+						personIds += personId+";";
+						curRoleId=$(person).attr("roleCode");
+				});
+				msgIndex1 = top.layer.msg('数据保存中...', {			icon : 16,			shade : [ 0.5, '#999999' ]});
+				$.ajax({
+					type : "POST",
+					url : basePath+"/app/shgl/appRwgl/doAddRw.do",
+					data : {
+						'jsrIds':personIds,
+						'curRoleId':curRoleId,
+						'titleName':titleName,
+						'rwContent':$("#rwContent").val(),
+						'finish_date':finish_date
+					},
+					error : function(request) {
+						top.layer.close(msgIndex1);
+						top.layer.msg('下发失败，请联系管理员', {shade : [ 0.5, '#999999' ]});
+					},
+					success : function(data) {
+						var data = $.parseJSON(data);
+						top.layer.close(msgIndex1);
+						if(data.result == "success"){
+							var str = '{"pid":"' + data.pid + '","table":"RwglAttrEntity"}';
+							jsUpDataFJ(str);
+							top.layer.msg('下发成功',{icon : 6,time : 2000,shade : [0.5,'#999999' ]},function(){
+								top.layer.close(top.layer.getFrameIndex(window.name));
+								window.location.href = $("#basePath").val() + "/app/shgl/appRwgl/myXF.do";
+								});
+						}else{
+							top.layer.msg('下发失败，请联系管理员', {shade : [ 0.5, '#999999' ]});
+						}
+					}
+				});
+			});
+		
+			mui("#backId").on('tap','a',function(){
+				  window.location.href = basePath + "/app/shgl/appRwgl/myXF.do";
+			});
+			
+			//手机按键返回
+			function anGoBack(){
+				window.location.href = $("#basePath").val() + "/app/shgl/appRwgl/myXF.do";
+				return;
+			}
+			
+		</script>
+	</body>
+
+</html>

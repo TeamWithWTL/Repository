@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />>
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">会议详情</h1>
+		</header>
+		
+		<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<div class="article-content">
+					<div class="article-header">
+						<h4 class="article-header-title">${detailEntity.title !}</h4>
+					</div>
+					<div class="article-body">
+						<p>${detailEntity.content !}</p>
+					</div>
+					<div class="article-form">
+						<div class="mui-input-group">
+							<div class="mui-input-row">
+								<label>发布人：</label>
+								<input readonly="readonly" type="text" class="mui-input" value="${detailEntity.user_name !}">
+							</div>
+							<div class="mui-input-row">
+								<label>开始时间：</label>
+								<input readonly="readonly" type="text" class="mui-input" value="${detailEntity.fmtStart_date !}">
+							</div>
+							<div class="mui-input-row">
+								<label>结束时间：</label>
+								<input readonly="readonly" type="text" class="mui-input" value="${detailEntity.fmtEnd_date !}">
+							</div>
+							@if(isNotEmpty(departMap)){
+							<div class="mui-input-row">
+								<label>参会人员：</label>
+							<div class="mui-input-row col-list">
+							@for(dept in departMap){
+										【${dept.key}】： <br>
+									@for(attr in dept.value  ! []){
+										<li> ${attr.name !}； </li> 
+									@}
+										<br>
+								@}
+							</div>
+							@}
+							
+							@if(isNotEmpty(classifyMap)){
+							<div class="article-content">
+							@for(ify in classifyMap){
+								<div class="block-title">${ify.key}-上传</div>
+								<div class="article-array" id="article-container">
+									@for(attr in ify.value  ! []){
+									<div>
+										@if(attr.file_type == 'img'){
+										<li>
+											<a href="javascript:;"><dt><img src="${ctxPath}/showPic?fileName=${attr.new_fileName}" class="adaption"/></dt>${attr.old_fileName}</a>
+											<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_fileName}"></a>
+										</li>
+										@}else{
+										<li>
+											<a href="javascript:;"><dt><img src="${ctxPath}/assets/images/default-file.png" class="adaption"/></dt>${attr.old_fileName}</a>
+											<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_fileName}"></a>
+										</li>
+										@}
+									</div>	
+									@}
+								</div>
+								@}
+							</div>
+							@}
+						</div>
+					</div>
+					</div>
+						<div class="mui-input-group">
+						<div class="mui-input-row array-list">
+							<label>附件上传</label>
+							<ul id="fjItems">
+								<li class="array-funciton array-photograph" onclick="openCamera()"><span class="icon ion-camera"></span><p>拍摄照片</p>
+								</li>
+								<li class="array-funciton array-upfile" onclick="openFile()"><span class="icon ion-filing"></span><p>上传文件</p>
+								</li>
+							</ul>
+						</div>
+					</div>
+					
+					
+					<div class="mui-bar mui-bar-tab mui-bar-cogs">
+							<a class="mui-tab-item mui-active"  id="saveBtn"  onclick="save('${ctxPath}','${detailEntity.id}')">
+							<span class="icon ion-filing"></span>
+							<span class="mui-tab-label">上传</span>
+							</a>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		
+		<script type="text/javascript">
+			mui.init();
+			mui('.mui-scroll-wrapper').scroll({
+				indicators: false, //是否显示滚动条
+				startX: 0, //初始化时滚动至x
+				deceleration: 0.0004, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+				bounce: true //是否启用回弹
+			});
+			
+			//下载
+			function downloadFile(path){
+				toAndroid.jsSeeFJ(path);
+			}
+			//点击下载跳转
+			mui("#article-container").on('tap','a',function(){
+				var path = this.getAttribute("name");
+				downloadFile(path);
+			});
+			
+
+			
+			//调用手机端方法打开附件---手机文件
+			function openFile() {
+				toAndroid.jsOpenFile();
+			}
+			//调用手机端方法打开附件---手机图库
+			function openFileImg(){
+				toAndroid.jsOpenImage();
+			}
+			//拍照
+			function openCamera() {
+				toAndroid.jsCallCamera();
+			}
+			
+			// 确定所选文件后执行  根据不同的附件类型显示相应的图片
+			function getImgs(paths) {
+				var arrs = paths.split(',');
+		   	/* 	var html = ""; */
+		   		for (var i = 0; i < arrs.length; i++) {
+		   			var fileType=arrs[i].substring(arrs[i].lastIndexOf('.')+1);
+		   			var fileName=arrs[i].substring(arrs[i].lastIndexOf('/')+1);
+		   			fileType = fileType.toLocaleLowerCase();
+		   			var html='<li><img  onClick="imgClick(\'' + arrs[i] + '\')"   src="'+basePath+'/assets/images/default-file.png" class="adaption"/><a href="javascript:;" id="' + arrs[i] + '" onClick="tapholdHandler(this)" class="icon ion-android-cancel"></a></li>';
+			   		$("#fjItems").prepend(html);
+		   		}
+			}
+			
+		//	toAndroid.jsCleanFJ();//清空附件缓存
+			
+			//查看上传图片
+			function imgClick(path) {
+				toAndroid.jsSeeFile(path);
+			}
+			
+			//删除上传附件
+			function tapholdHandler(obj) {
+				top.layer.confirm("确定要删除该文件么？", {
+					icon: 0, 
+					title: "提示",
+					yes: function(index){
+						layer.close(index);
+						//清除删除的img
+						$(obj).parent().remove();
+						//删除文件
+						toAndroid.jsDeleteFj(obj.id);
+						
+					},
+					cancel : function(index) {
+						layer.close(index);
+					}
+				});
+			}
+			
+			//保存
+			function save(basePath,id){
+				$.ajax({
+					type : "post",
+					url : basePath + "/app/xtbg/appMeeting/save.do",
+					data : {'hygl_id':id},
+					success : function(data) {
+						var data = $.parseJSON(data);
+						if (data.result == "success") {
+							var str = '{"pid":"' + data.pid + '","table":"MeetingAcceEntity"}';
+							toAndroid.jsUpDataFJ(str);
+						/* 	top.layer.msg('保存成功',{icon : 6,time : 2000,shade : [0.5,'#999999' ]},function(){
+								//mui.plus();
+								});
+							); */
+							top.layer.msg('保存成功',{icon : 6,time : 2000,shade : [0.5,'#999999' ]},
+								function(){
+								window.location.reload();
+								}
+							
+							); 
+						} else {
+							top.layer.msg('保存失败，请联系管理员',{icon : 6,time : 2000,shade : [0.5,'#999999' ]}
+							); 
+						}
+					},
+					error : function(req) {
+				
+					}
+				});
+			}
+		//	toAndroid.jsCleanFJ();//清空附件缓存
+		</script>
+	</body>
+
+</html>

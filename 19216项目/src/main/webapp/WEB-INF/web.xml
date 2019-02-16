@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xmlns="http://java.sun.com/xml/ns/javaee" 
+		xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
+		xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
+		id="WebApp_ID" 
+		version="3.0">
+
+<display-name>博昌网格化管理平台</display-name>
+<absolute-ordering />
+  <!-- 系统默认首页 -->
+  <welcome-file-list>
+    <welcome-file>login.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <!-- 配置编码 -->  
+  <filter>
+  	<filter-name>characterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <async-supported>true</async-supported>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>characterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  <!-- session过期配置，单位分钟 -->
+  <session-config>
+    <session-timeout>60</session-timeout>
+  </session-config>
+  
+  <!-- Hibernate的Session过滤 -->
+  <filter>
+    <filter-name>SpringOpenSessionInViewFilter</filter-name>
+    <filter-class>com.jcwx.filter.OpenSessionInViewFilterOvr</filter-class>
+    <async-supported>true</async-supported>
+  </filter>
+  <filter-mapping>
+    <filter-name>SpringOpenSessionInViewFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  <!-- log4j的配置 -->
+  <context-param>
+    <param-name>log4jConfigLocation</param-name>
+    <param-value>classpath:log4j.properties</param-value>
+  </context-param>
+  
+  <!-- spring对log4j的监听，动态的改变记录级别和策略，不需要重启Web应用，必须放在上下文监听器前边，否则会出现警告信息 -->
+  <listener>
+    <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+  </listener>
+  
+  <!-- 加载spring配置文件 -->
+  <context-param>
+  	<param-name>contextConfigLocation</param-name>
+    <param-value>
+      classpath*:/applicationContext-config.xml
+      classpath*:/applicationContext-upInput.xml
+    </param-value>
+  </context-param>
+  
+  <!-- spring上下文监听器 -->
+  <listener>  
+  	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  
+  <!-- spring清理缓存，防止内存泄漏 -->
+  <listener>
+	<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+  </listener>
+  
+  <!-- session监听 -->
+  <listener>
+    <listener-class>com.jcwx.listener.OnLineUserListener</listener-class>
+  </listener>
+  
+  <!-- spring MVC -->  
+  <servlet>  
+  	<servlet-name>dispatcherServlet</servlet-name>  
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>  
+    <init-param>  
+      <param-name>contextConfigLocation</param-name>  
+      <param-value>
+<!--        classpath*:/spring-WebSocket.xml -->
+      classpath*:/dispatcher-servlet.xml</param-value>  
+    </init-param>  
+    <load-on-startup>1</load-on-startup>
+    <async-supported>true</async-supported>
+  </servlet>
+  <servlet-mapping>  
+    <servlet-name>dispatcherServlet</servlet-name>  
+    <url-pattern>*.do</url-pattern>  
+  </servlet-mapping>
+  
+  <!-- 生成登录验证码 -->
+  <servlet>  
+    <servlet-name>CodeImage</servlet-name>  
+    <servlet-class>com.jcwx.servlet.CodeImage</servlet-class>  
+    <async-supported>true</async-supported>
+  </servlet>  
+  <servlet-mapping>  
+    <servlet-name>CodeImage</servlet-name>  
+    <url-pattern>/codeImage</url-pattern>  
+  </servlet-mapping>
+  
+  <!-- 页面显示磁盘上的图片 -->
+  <servlet>
+    <servlet-name>showPic</servlet-name>
+    <servlet-class>com.jcwx.servlet.ShowServerPic</servlet-class>
+    <async-supported>true</async-supported>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>showPic</servlet-name>
+    <url-pattern>/showPic</url-pattern>
+  </servlet-mapping>
+  
+  <!-- 页面显示磁盘上的PDF -->
+  <servlet>
+    <servlet-name>showPDF</servlet-name>
+    <servlet-class>com.jcwx.servlet.ShowServerPDF</servlet-class>
+    <async-supported>true</async-supported>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>showPDF</servlet-name>
+    <url-pattern>/showPDF</url-pattern>
+  </servlet-mapping>
+	
+  <servlet>
+    <servlet-name>CXFServlet</servlet-name>
+    <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+    <async-supported>true</async-supported>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CXFServlet</servlet-name>
+    <url-pattern>/ws/*</url-pattern>
+  </servlet-mapping>
+ 
+   <!-- 下载路径 -->
+   <servlet>
+    <servlet-name>downloadfile</servlet-name>
+    <servlet-class>com.jcwx.servlet.DownLoadFileServlet</servlet-class>
+    <async-supported>true</async-supported>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>downloadfile</servlet-name>
+    <url-pattern>/downloadfile</url-pattern>
+  </servlet-mapping>
+  
+  <!-- 上传附件 -->
+  <servlet>
+    <servlet-name>appuploadfile</servlet-name>
+    <servlet-class>com.jcwx.servlet.AppUploadServlet</servlet-class>
+    <async-supported>true</async-supported>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>appuploadfile</servlet-name>
+    <url-pattern>/appuploadfile</url-pattern>
+  </servlet-mapping>
+  
+  <servlet> 
+     <servlet-name>DruidStatView</servlet-name> 
+     <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class> 
+     <async-supported>true</async-supported>
+ </servlet> 
+ <servlet-mapping> 
+     <servlet-name>DruidStatView</servlet-name> 
+     <url-pattern>/druid/*</url-pattern> 
+ </servlet-mapping> 
+ <filter> 
+  <filter-name>druidWebStatFilter</filter-name> 
+  <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class> 
+  <async-supported>true</async-supported>
+  <init-param> 
+   <param-name>exclusions</param-name> 
+   <param-value>/public/*,*.js,*.css,/druid*,*.jsp,*.swf</param-value> 
+  </init-param> 
+  <init-param> 
+   <param-name>principalSessionName</param-name> 
+   <param-value>sessionInfo</param-value> 
+  </init-param> 
+  <init-param> 
+   <param-name>profileEnable</param-name> 
+   <param-value>true</param-value> 
+  </init-param> 
+ </filter> 
+ <filter-mapping> 
+  <filter-name>druidWebStatFilter</filter-name> 
+  <url-pattern>/*</url-pattern> 
+ </filter-mapping>
+ 
+</web-app>

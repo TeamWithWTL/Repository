@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html  class="layerpage">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>社会组织-动态播报</title>
+		<!-- 第三方 CSS -->
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+<!-- 		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css"> -->
+	<!-- 	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" /> -->
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+<!-- 		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" /> -->
+		
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+			<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+			<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	
+	
+	</head>
+	<body>
+		<div class="container">
+			<div class="article-header text-center">
+				<h2>${dtbbEntity.title ! ''}</h2>
+				<p>
+					<span>发布时间：${dtbbEntity.createTimes ! ''}&nbsp;</span>
+					<span>&nbsp;文章类型：动态播报&nbsp;</span>
+					<span>&nbsp;发布人：${dtbbEntity.userName ! ''}</span>
+				</p>
+			</div>
+			<div class="article-body">
+				<div class="article-content">
+					<p>${dtbbEntity.content ! ''} </p>
+				</div>
+				@if(isNotEmpty(dtbbEntity.attrList)){
+				<div class="form-arraylist">
+					<dt>附件下载：</dt>
+					<ul>
+						@for(attr in dtbbEntity.attrList  ! []){
+								@if(attr.fileType  == 'img'){
+									<li>
+										<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.new_filename !}')"  title="${attr.old_filename !}" ><img src="${ctxPath}/showPic?fileName=${attr.new_filename !}"/> ${attr.old_filename !}</a>
+										<span title="下载" class="download"  onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.fileType  == 'pdf'){
+									<li >
+										<a href="javascript:void(0)"  onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.new_fileName}')" title="${attr.old_filename !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_filename !}</a>
+									    <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else{
+										<li >
+										<a href="javascript:void(0)"   title="${attr.old_filename !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_filename !}</a>
+									    <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}
+								@}
+					</ul>
+				</div>
+				@}
+			</div>
+			<div class="page-operation text-right">
+				<button type="button" class="btn btn-primary" onclick="goAudit('${dtbbEntity.id !}','1')"><i class="fa fa-check"></i> 通 过</button>
+				<button type="button" class="btn btn-outline-primary" onclick="goAudit('${dtbbEntity.id !}','2')"><i class="fa fa-close"></i> 不通过</button>
+			</div>
+		</div>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js" ></script>
+		<script src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/shzz/dtbb/view_examine.js"></script>
+	</body>
+</html>

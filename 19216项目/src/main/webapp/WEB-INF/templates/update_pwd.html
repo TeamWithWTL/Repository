@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>修改密码</title>
+<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+	<!-- layui -->
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layui/css/layui.css">
+</head>
+
+<body>
+		<form action="" method="post" class="container-fluid" id="addForm" >
+			<div class="row">
+				<div class="col-4">
+					<div class="page-body text-center">
+						<div class="user-avatar">
+							<dt>
+								@if(isEmpty(sysacc.pic_path)){
+								<img id="myImg" style="width:116px;height:116px;" src="${ctxPath}/assets/img/user.png"/>
+								@}else{
+								<img id="myImg" style="width:116px;height:116px;" src="${ctxPath}/showPic?fileName=${sysacc.pic_path}"/>
+								@}
+								<input type="hidden" id="picPath" name="picPath" value="${sysacc.pic_path ! ''}">
+						</dt>
+							<div class="site-demo-upload">
+								  <div class="site-demo-upbar">
+								    <input type="file" name="file" class="layui-upload-file">
+								  </div>
+							</div>
+							<!-- <button type="button" class="updata-avatar"><i class="fa fa-bars"></i> 上传头像</button> -->
+						</div>
+					</div>
+				</div>
+				<div class="col-8">
+					<div class="page-body">
+						<div class="form-change-password">
+							<div class="form-group row">
+								<label for="password" class="col-sm-4 col-form-label">原密码</label>
+								<div class="col-sm-6">
+									<input type="password" class="form-control" id="password" name="password" placeholder="原密码" >
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="pwd" class="col-sm-4 col-form-label">新密码</label>
+								<div class="col-sm-6">
+									<input type="password" class="form-control" id="pwd" name="pwd" placeholder="新密码" >
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="pwd1" class="col-sm-4 col-form-label">确认密码</label>
+								<div class="col-sm-6">
+									<input type="password" class="form-control" id="pwd1" name="pwd1" placeholder="确认密码" >
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+				<div class="form-group text-right">
+					<button type="button" class="btn btn-primary" id="saveBtn"><i class="fa fa-save"></i> 保 存</button>
+					<button type="button" class="btn btn-outline-primary" id="cancleBtn"><i class="fa fa-reply"></i> 取 消</button>
+				</div>
+		</form>
+	
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/popper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/layui/layui.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	<script src="${ctxPath}/assets/scripts/update_pwd.js"></script>
+</body>
+</html>

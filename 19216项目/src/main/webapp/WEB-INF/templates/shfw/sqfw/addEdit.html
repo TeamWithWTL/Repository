@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>社会服务-社区服务</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/webuploader/webuploader.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+</head>
+
+<body>
+	<div class="container-fluid">
+		<form id="addForm" class="form-horizontal">
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">标题</label>
+				<div class="col-sm-9">
+						<input type="text" class="form-control" id="title" name="title" placeholder="标题"  value="${sqfw.title ! ''}">
+				<input type="hidden" class="form-control" id="id" placeholder="编号"  value="${sqfw.id ! ''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">一级社区服务</label>
+				<div class="col-sm-9">
+	   				<select id="typeOne" name="typeOne" class="form-control" onchange="showEjFw(this,'typeTwo','1')">
+						<option value="">一级社区服务</option>
+						@if(isNotEmpty(oneFwList)){
+							@for(yjfw in oneFwList){
+							<option value="${yjfw.code}" ${sqfw != null && yjfw.code == sqfw.typeOne ? 'selected' : ''}  >${yjfw.name}</option>
+							@}
+						@}
+					</select>
+	   			</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">二级社区服务</label>
+				<div class="col-sm-9">
+	     			<select id="typeTwo" name="typeTwo" class="form-control">
+						<option value="">二级社区服务</option>
+						@if(isNotEmpty(twoFwList)){
+							@for(ejfw in twoFwList){
+							<option value="${ejfw.itemCode}" ${sqfw != null &&  ejfw.itemCode == sqfw.typeTwo ? 'selected' : ''}  >${ejfw.itemName}</option>
+							@}
+						@}
+					</select>
+	   			</div>
+			</div>
+			<div class="form-group row">
+				<label for="" class="col-sm-2 col-form-label">内容</label>
+				<div class="col-sm-9">
+					<script type="text/plain" id="content" name="content" style="height: 200px;">${sqfw.content ! ''}</script>
+				</div>
+			</div>
+			<input type="hidden" name="contentText" id="contentText"/>
+			<div class="form-group row">
+				<label for="" class="col-sm-2 col-form-label">附件</label>
+				<div class="col-sm-9">
+					<div id="picker"></div>
+					<div class="form-arraylist" id="attrlist">
+						@for(attr in sqfw.attrList  ! []){
+							@if(attr.fileType == 'img'){
+							<li class="col-9">
+								<a href="javascript:void(0)"><img src="${ctxPath}/showPic?fileName=${attr.newFilename}"/> ${attr.oldFilename}</a>
+								<span onclick="delFj('${attr.id}', this)" class="colsed"></span>
+							</li>
+							@}else if(attr.fileType == 'word'){
+							<li class="col-9">
+								<a href="javascript:void(0)" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.oldFilename}</a>
+								<span onclick="delFj('${attr.id}', this)" class="colsed"></span>
+							</li>
+							@}else if(attr.fileType == 'txt'){
+							<li  class="col-9">
+								<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.oldFilename}</a>
+								<span onclick="delFj('${attr.id}', this)" class="colsed"></span>
+							</li>
+							@}else if(attr.fileType == 'exl'){
+							<li  class="col-9">
+								<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.oldFilename}</a>
+								<span onclick="delFj('${attr.id}', this)" class="colsed"></span>
+							</li>
+							@}else if(attr.fileType == 'video'){
+							<li  class="col-9">
+								<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.oldFilename}</a>
+								<span onclick="delFj('${attr.id}', this)" class="colsed"></span>
+							</li>
+							@}else{
+							<li class="col-9">
+								<a href="javascript:void(0)"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+								<span onclick="delFj('${attr.id}', this)" class="colsed"></span>
+							</li>
+							@}
+				        @}
+					</div>
+				</div>
+			</div> 
+			<div class="form-group row">
+				<div class="page-operation text-right col-sm-11">
+					<button type="button" class="btn btn-primary" id="saveBtn" onclick="subMyForm('2')"><i class="fa fa-save"></i> 保存</button>
+					<!-- <button type="button" class="btn btn-outline-primary" id="saveBtn" onclick="subMyForm('1')"><i class="fa fa-upload"></i> 提交</button> -->
+					<button type="button" class="btn btn-outline-primary" id="cancleBtn"><i class="fa fa-reply"></i> 返回</button>
+				</div>
+			</div>
+			<input type="hidden" id="fName" name="fName" />
+		</form>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+	<!-- 附件 -->
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/webuploader/webuploader.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/subFromWithAttrs.js"></script>
+    <script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+    
+	<!-- UEditor编辑器 -->
+	<script type="text/javascript" charset="utf-8" src="${ctxPath}/assets/vendor/ueditor1.4.3/ueditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="${ctxPath}/assets/vendor/ueditor1.4.3/ueditor.all.js"></script>
+	<script type="text/javascript" charset="utf-8" src="${ctxPath}/assets/vendor/ueditor1.4.3/lang/zh-cn/zh-cn.js"></script>
+	
+	<script src="${ctxPath}/assets/scripts/shfw/sqfw/addEdit.js"></script>
+</body>
+</html>

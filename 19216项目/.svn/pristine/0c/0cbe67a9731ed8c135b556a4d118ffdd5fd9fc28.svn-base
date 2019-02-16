@@ -1,0 +1,40 @@
+<div class="section-block-title">
+	<i class="index-icon index-icon-rdxw"></i> 待办事项
+	<div class="section-block-after">
+		<a href="#" class="section-more">更多..</a>
+	</div>
+</div>
+<div class="section-body">
+	<div class="nav nav-tabs border-0 warpper">
+		<div class="dbsx-header">
+			<ul>
+				<li><a href="#db-class-1" class="active" data-toggle="tab"><i class="fa fa-bookmark-o"></i> 分类01</a></li>
+				<li><a href="#db-class-2" data-toggle="tab"><i class="fa fa-bookmark-o"></i> 分类02</a></li>
+			</ul>
+		</div>
+		<div class="dbsx-body tab-content">
+			<ul class="tab-pane fade show active" id="db-class-1">
+				<li><dd>分类02</dd><a href="#">关于某某会议下发的精神落实的办理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">关于某某会议下发的精神落实的办理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">关于某某会议下发的精神落实的办理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">关于某某会议下发的精神落实的办理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">关于某某会议下发的精神落实的办理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">关于某某会议下发的精神落实的办理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">关于某某会议下发的精神落实的办理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">关于某某会议下发的精神落实的办理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">精神落实的办理任务</a><span>2017/10/09</span></li>
+			</ul>
+			<ul class="tab-pane fade" id="db-class-2">
+				<li><dd>分类02</dd><a href="#">关发的精神落实的办理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">关于某某会议下神落实的办理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">关于某某会议精神落实的办理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">关于某某会议下办理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">关于某某会议下发的精神落实的办理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">关于某某会议实的办理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">关于某某会议下发的精神落实的理任务</a><span>2017/10/09</span></li>
+				<li><dd>分类02</dd><a href="#">关于某某会议落实的办理任务</a><span>2017/10/09</span></li>
+			</ul>
+		</div>
+	</div>
+	
+</div>

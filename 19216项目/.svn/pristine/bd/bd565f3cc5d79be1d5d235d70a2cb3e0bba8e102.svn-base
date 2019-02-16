@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>添加住户页面</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.picker.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css" />
+	</head>
+<body>
+	<header class="mui-bar mui-bar-nav">
+		<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+		<h1 class="mui-title">添加住户</h1>
+	</header>
+	
+	
+	<nav class="mui-bar mui-bar-tab mui-bar-cogs">
+		<a class="mui-tab-item mui-active"  id="saveBtn">
+			<span class="icon ion-filing"></span>
+			<span class="mui-tab-label">提交</span>
+		</a>
+	</nav>
+	<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<form  id="addForm" action="" method="post">
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>所属小区</label>
+							<select class="mui-input-picker" id="xq_id"  name="xq_id" onchange="showxq(this,'ly_id')"> 
+								<option value="">-- 所属小区--</option>
+								@if(isNotEmpty(vList)){
+								@for(v in vList ! []){
+								<option value="${v.id}" >${v.name}</option>
+								@}
+							@}
+							</select>
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>所属楼宇</label>
+							<select class="mui-input-picker" id="ly_id" name="ly_id">
+								<option value="">-- 所属楼宇--</option>
+							</select>
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>单元号</label>
+							<input id="unit_num" name="unit_num" type="text" class="mui-input-clear" placeholder="单元号">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>室号</label>
+							<input id="room_num" name="room_num" type="text" class="mui-input-clear" placeholder="室号">
+						</div>
+					</div>
+					<div class="delimiter"></div>
+				</form>
+			</div>
+			<div class="mask-backdrop"></div>
+		</div>
+		<input type="hidden" id="sqmy_id" value="${sqmy_id}">
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/sqmy/add_sqmy_app.js"></script>
+
+</body>
+</html>

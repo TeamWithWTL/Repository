@@ -1,0 +1,97 @@
+﻿.mec_popup_panel {
+    background-color: transparent;
+    cursor: default;
+}
+
+.mec_popup_title {
+    width: 100%;
+    min-height: 30px;
+    float: left;
+    border: 1px solid #45AAFF;
+    border-bottom: 0;
+    background-color: #fff;
+    font: 14px arial,宋体,sans-serif;
+    text-align: inherit;
+    letter-spacing: 1px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    /*padding:4px 0 4px 10px;*/
+}
+
+    .mec_popup_title span {
+        display: inline-block;
+        float: left;
+        line-height: 20px;
+        color: #45AAFF;
+        font-weight: 600;
+        width:80%;
+        margin:4px 0 4px 10px;
+    }
+
+    .mec_popup_title a {
+        display: inline-block;
+        float: right;
+        color: #ccc;
+        line-height: 30px;
+        width: 35px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+        .mec_popup_title a:hover {
+            color: #45AAFF;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+.mec_popup_content {
+    overflow-y: auto;
+    font: 12px arial,宋体,sans-serif;
+    width: 100%;
+    float: left;
+    border: 1px solid #45AAFF;
+    border-top: 0;
+    background-color: #fff;
+}
+
+    .mec_popup_content .mpc-con {
+        width: 95%;
+        height: auto;
+        margin: 0 auto;
+        border-top: 1px solid #45AAFF;
+    }
+
+        .mec_popup_content .mpc-con table {
+            width: 100%;
+            margin: 10px 0 5px 0;
+            background-color: transparent;
+        }
+
+        .mec_popup_content .mpc-con td {
+            border: none;
+            height: 32px;
+            line-height: 32px;
+            text-align: left;
+            color: #5d5d5d;
+            font-size: 13px;
+        }
+
+            .mec_popup_content .mpc-con td.tit {
+                width: 85px;
+                text-align: right;
+                vertical-align:top;
+            }
+
+            .mec_popup_content .mpc-con td a {
+                color: #45AAFF;
+                cursor: pointer;
+            }
+
+.mec_popup_bottom {
+    width: 100%;
+    height: 31px;
+    float: left;
+    background: url(img/iw_tail_new.png) no-repeat left center;
+    margin-top: -1px;
+}

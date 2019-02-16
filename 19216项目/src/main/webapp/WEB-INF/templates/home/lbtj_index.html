@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+<meta charset="UTF-8">
+<title>事件类别列表</title>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css"	/>
+<style type="text/css">
+
+.text-overflow{
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	overflow:hidden;
+}
+</style>
+
+</head>
+<body  style="margin: 25px;margin-right: 20px; width: 96%">
+	<div class="function-box">
+		<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+						<input type="text" class="form-control" id="title" placeholder="标题" value="${title ! ''}">
+							<div class='input-group date form_datetime' id='start'>
+						<input type="text" class="form-control" id="rxrq1" placeholder="开始日期" value="${firstTime}" readonly="readonly">
+						<span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+			                <span class="fa fa-calendar" aria-hidden="true"></span>
+			            </span>
+			            </div>至&nbsp;&nbsp;
+			            <div class='input-group date form_datetime' id='end'>
+							<input type="text" class="form-control" id="rxrq2" placeholder="结束日期" value="${lastTime}" readonly="readonly">
+							<span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+				                <span class="fa fa-calendar" aria-hidden="true"></span>
+				             </span>
+						</div>
+						<input type="hidden" class="form-control" id="sjName" value="${sjName !''}" />
+						<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+		</div>
+		
+	</div>
+	<div id="table-container" class="warpper">
+			@#ajax table:{
+			<div  class="table-box">
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+						<tr class="table-secondary">
+							
+							<th class="text-center">事件标题</th>
+					        <th width="12%" class="text-center">上报人</th>
+					        <th width="12%" class="text-center">上报日期</th>
+					        <th width="25%" class="text-center">上报位置</th>
+					        <th width="12%" class="text-center">事件类别</th>
+					       	<th width="10%" class="text-center">操作</th>
+						</tr>
+						</thead>
+						<tbody>
+					@for(sjlb in pagenate.list ! []){
+						<tr>
+					        <td class="text-left text-overflow" title="${sjlb.title}">${sjlb.title ! ''}</td>
+					        <td class="text-center">${sjlb.applyName}</td>
+					        <td class="text-center text-overflow" title="${sjlb.applyTime}">${sjlb.applyTimeFrm} </td>
+					        <td class="text-center">${sjlb.applyAddr}</td>
+					        <td class="text-center">${sjlb.typeName}</td>
+					        <td class="text-center">
+					        	<a href="javascript:void(0);" onclick="goView('${sjlb.id}')">查看</a>
+					        </td>
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="6" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+						</tbody>
+					</table>
+					</div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	
+	<!-- 日期控件JS -->
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js" ></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js" ></script>
+	
+	<script src="${ctxPath}/assets/scripts/home/lbtj_index.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

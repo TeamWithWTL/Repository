@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>居民信息详情页面</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+	<style type="text/css">
+		.peopleType {
+			float: right;
+			width: 70%;
+			padding: 10px 15px;
+		}
+		.peopleType span {
+			display: block;
+			line-height: 2;
+		}
+	</style>
+</head>
+<body>
+	<header id="header" class="mui-bar mui-bar-nav">
+			<a class="icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">居民信息详情</h1>
+			<button class="mui-btn mui-btn-link mui-pull-right" id="toUpdate" style="display: none;">编辑</button>
+	</header>
+	<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<form class="mui-input-group jcxx-form">
+				<div class="article-content">
+				
+					<div class="mui-input-row">
+					<label>姓名：</label>
+						<input readonly="readonly" type="text" class="mui-readonly"  value="${inmateEntity.name ! ''}">
+					</div>
+					
+					<div class="mui-input-row">
+						<label>性别：</label>
+						<input readonly="readonly" type="text" class="mui-readonly"  value="${inmateEntity.sex == 'E' ? '男' : '女'}">
+					</div>
+				
+					<div class="mui-input-row">
+						<label>出生日期：</label>
+						<input readonly="readonly" type="text" class="mui-readonly"  value="${inmateEntity.birthdayFrm ! ''}">
+					</div>
+				
+					<div class="mui-input-row">
+						<label>身份证号：</label>
+						<input readonly="readonly" type="text" class="mui-readonly"  value="${inmateEntity.card_no ! ''}">
+					</div>
+				
+					<div class="mui-input-row">
+						<label>民族：</label>
+						<select class="mui-readonly" disabled="disabled">
+						@if(isNotEmpty(sysStations)){
+							@for(da in sysStations){
+							<option value="${da.itemCode}" ${inmateEntity != null && da.itemCode == inmateEntity.nation ? 'selected' : ''}>${da.itemName}</option>
+							@}
+						@}
+						</select>
+					</div>
+				
+					<div class="mui-input-row">
+						<label>联系电话：</label>
+						<input readonly="readonly" type="text" class="mui-readonly"  value="${inmateEntity.telephone ! ''}">
+					</div>
+				
+					<div class="mui-input-row">
+						<label>籍 贯：</label>
+						<input readonly="readonly" type="text" class="mui-readonly"  value="${inmateEntity.house_register ! ''}">
+					</div>
+					
+					<div class="mui-input-row">
+						<label>政治面貌：</label>
+						<select class="mui-readonly" disabled="disabled">
+						@if(isNotEmpty(zzmm)){
+							@for(da in zzmm){
+								<option value="${da.itemCode}" ${inmateEntity != null && da.itemCode == inmateEntity.political ? 'selected' : ''}>${da.itemName}</option>
+							@}
+						@}
+						</select>
+					</div>
+				
+					<div class="mui-input-row">
+						<label>婚姻状态：</label>
+						<select class="mui-readonly" disabled="disabled">
+						@if(isNotEmpty(hyzk)){
+							@for(da in hyzk){
+							<option value="${da.itemCode}" ${inmateEntity != null && da.itemCode == inmateEntity.marriage ? 'selected' : ''}>${da.itemName}</option>
+							@}
+						@}
+						</select>
+					</div>
+				
+					<div class="mui-input-row">
+						<label>工作处所：</label>
+						<input readonly="readonly" type="text" class="mui-readonly"  value="${inmateEntity.work_unit ! ''}">
+					</div>
+				
+					<div class="mui-input-row">
+						<label>车牌号：</label>
+						<input readonly="readonly" type="text" class="mui-readonly"  value="${inmateEntity.car_no ! ''}">
+					</div>
+				
+					<div class="mui-input-row">
+						<label>文化程度：</label>
+						<select class="mui-readonly" disabled="disabled">
+						@if(isNotEmpty(whcd)){
+							@for(da in whcd){
+							<option value="${da.itemCode}" ${inmateEntity != null && da.itemCode == inmateEntity.education ? 'selected' : ''}>${da.itemName}</option>
+							@}
+						@}
+						</select>
+					</div>
+				</div>
+				<div class="article-content">	
+				
+					<div class="mui-input-row">
+						<label>所属区域：</label>
+						<input readonly="readonly" type="text" class="mui-readonly" value="${inmateEntity.build.village.serviceStation.community.name ! ''}${inmateEntity.build.village.serviceStation.name ! ''}${inmateEntity.build.grid.name ! ''}">
+					</div>
+					
+					<div class="mui-input-row">
+						<label>所在小区：</label>
+						<input readonly="readonly" type="text" class="mui-readonly"  value="${inmateEntity.build.village.name ! ''}">
+					</div>
+				
+					<div class="mui-input-row">
+						<label>楼宇名称：</label>
+						<input readonly="readonly" type="text" class="mui-input" id="buildId" value="${inmateEntity.build.name ! ''}">
+						<label>单元：</label>
+						<input readonly="readonly" type="text" class="mui-input" id="unit_no" value="${inmateEntity.unit_no ! ''}">
+						<label>室号：</label>
+						<input readonly="readonly" type="text" class="mui-input" id="room_no" value="${inmateEntity.room_no ! ''}">
+					</div>
+				
+					<div class="mui-input-row">
+						<label>与户主关系：</label>
+						<input readonly="readonly" type="text" class="mui-readonly"  value="${inmateEntity.hm_relation}">
+					</div>
+				</div>
+				<div class="article-content">
+				<div class="mui-input-row">
+					<label>特殊人口：</label>
+					@if(isNotEmpty(ryfl)){
+						<div class="peopleType">
+						@if(isNotEmpty(inmateEntity.inmateTList)){
+							@for(da in ryfl){
+								@for(type in inmateEntity.inmateTList ! []){
+								<span>${da.value1 == type.category ? da.itemName : ''}</span>
+								@}
+							@}
+						@}else{
+							<span>否</span>
+						@}
+						</div>
+					@}
+					</div>
+				</div>
+				<div class="title">家庭关系</div>
+					@if(isNotEmpty(familyList)){
+						@for(person in familyList ! []){
+						<div class="article-content">
+							<div class="mui-input-row" onclick="goView('${person.id}')">
+								<label>姓名：</label>
+								<input readonly="readonly" type="text" class="mui-input" id="name" value="${person.name ! ''}">
+							</div>
+							
+							<div class="mui-input-row" onclick="goView('${person.id}')">
+								<label>性别：</label>
+								<input readonly="readonly" type="text" class="mui-input" id="sex" value="${person.sex == 'E'?'男':'女'}">
+							</div>
+							
+							<div class="mui-input-row" onclick="goView('${person.id}')">
+								<label>出生日期：</label>
+								<input readonly="readonly" type="text" class="mui-input" id="sex" value="${person.birthdayFrm ! ''}">
+							</div>
+							
+							<div class="mui-input-row" onclick="goView('${person.id}')">
+								<label>与户主关系：</label>
+								<input readonly="readonly" type="text" class="mui-input" id="hm_relation" value="${person.hm_relation ! ''}">
+							</div>
+						</div>
+						@}
+					@}
+					<div class="delimiter"></div>
+				</form>
+			</div>
+			<div class="mask-backdrop"></div>
+		</div>
+	
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<input type="hidden" id="roleCodes" value="${roleCodes}" />
+		<input type="hidden" id="lyflag" value="${lyflag}" />
+		<input type="hidden" id="lyId" value="${lyId}" />
+		<input type="hidden" id="unitNo" value="${unitNo}" />
+		<input type="hidden" id="roomNo" value="${roomNo}" />
+		<input type="hidden" id="jmxxId" value="${inmateEntity.id ! ''}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/jmxx/app/app_jmxx_view.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		
+		<script type="text/javascript">
+		var basePath = $("#basePath").val();
+		mui.init();
+		mui('.mui-scroll-wrapper').scroll({
+			indicators: false, //是否显示滚动条
+			startX: 0, //初始化时滚动至x
+			deceleration: 0.0004, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+			bounce: true //是否启用回弹
+		});  
+		
+		//跳转--修改
+		document.getElementById('toUpdate').addEventListener('tap',function(){
+			 var jmxxId = $("#jmxxId").val();
+				 mui.openWindow({
+					    url: basePath + "/app/shgl/jmxx/goAddEdit.do?id="+jmxxId+"&flag=1"
+					    		+"&lyflag="+$("#lyflag").val()
+					    		+"&lyId="+$("#lyId").val()
+					    		+"&unitNo="+$("#unitNo").val()
+								+"&roomNo="+$("#roomNo").val(),
+					    id:'goAddEdit'
+					  });
+		});
+		
+		mui("#header").on('tap','a',function(){
+			if($("#lyflag").val() == 3){
+				//返回到楼宇居民信息列表
+				window.location.href = basePath + "/app/shgl/lygl/goJmListView.do?id="+$("#lyId").val()
+						+"&unit_no="+$("#unitNo").val()
+						+"&room_no="+$("#roomNo").val();
+				return;
+			}
+			//返回到居民信息列表
+			window.location.href = basePath + "/app/shgl/jmxx/index.do";
+			return;
+		});
+		
+		//手机按键返回
+		function anGoBack(){
+			if($("#lyflag").val() == 3){
+				//返回到楼宇居民信息列表
+				window.location.href = basePath + "/app/shgl/lygl/goJmListView.do?id="+$("#lyId").val()
+						+"&unit_no="+$("#unitNo").val()
+						+"&room_no="+$("#roomNo").val();
+				return;
+			}
+			//返回到居民信息列表
+			window.location.href = basePath + "/app/shgl/jmxx/index.do";
+			return;
+		}
+		
+		</script>
+</body>
+
+</html>

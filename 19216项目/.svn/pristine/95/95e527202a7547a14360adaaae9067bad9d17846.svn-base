@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>住户详情页面</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.picker.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css" />
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav">
+		<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+		<h1 class="mui-title">添加住户详情</h1>
+	</header>
+	<nav class="mui-bar mui-bar-tab mui-bar-cogs">
+		<a class="mui-tab-item mui-active"  id="saveBtn">
+			<span class="icon ion-filing"></span>
+			<span class="mui-tab-label">提交</span>
+		</a>
+	</nav>
+	<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<form  id="addForm" action="" method="post">
+					 <div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>与户主关系</label>
+							<select class="mui-input-picker" id="relation" name="relation">
+								@for(type in Hzgx ! []){
+								<option value="${type.itemCode}" >${type.itemName}</option>
+								@}
+							</select>
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>姓名</label>
+							<input id="name" name="name" type="text" class="mui-input-clear" placeholder="姓名">
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<!-- <div class="mui-input-row">
+							<label>性别</label>
+							<input id="sex" name="sex" type="text" class="mui-input-clear" placeholder="性别">
+						</div> -->
+						<div class="mui-input-row">
+							<label>性别</label>
+							<select class="mui-input-picker" id="sex" name="sex">
+								<option value="0">男</option>
+								<option value="1">女</option>
+							</select>
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>出生时间</label>
+							<input id="birth_date" name="birth_date" type="date" class="mui-input-clear" placeholder="出生时间">
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>身份证号</label>
+							<input id="card_id" name="card_id" type="text" class="mui-input-clear" placeholder="身份证号">
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>政治面貌</label>
+							<select class="mui-input-picker" id="zzmm" name="zzmm">
+								@for(type in Zzmm ! []){
+								<option value="${type.itemCode}" >${type.itemName}</option>
+								@}
+							</select>
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>民族</label>
+							<select class="mui-input-picker" id="nation" name="nation">
+								@for(type in Mz ! []){
+								<option value="${type.itemCode}" >${type.itemName}</option>
+								@}
+							</select>
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>籍贯</label>
+							<input id="origin" name="origin" type="text" class="mui-input-clear" placeholder="籍贯">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>户口性质</label>
+							<input id="hkxz" name="hkxz" type="text" class="mui-input-clear" placeholder="户口性质">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>个人户籍状况</label>
+							<input id="grjgzk" name="grjgzk" type="text" class="mui-input-clear" placeholder="个人户籍状况">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>户口所在单位</label>
+							<input id="hkszd" name="hkszd" type="text" class="mui-input-clear" placeholder="户口所在单位">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>人员分类</label>
+							<select class="mui-input-picker" id="ry_type" name="ry_type">
+								@for(type in RyType ! []){
+								<option value="${type.itemCode}" >${type.itemName}</option>
+								@}
+							</select>
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>文化程度</label>
+							<select class="mui-input-picker" id="whcd" name="whcd">
+								@for(type in Whcd ! []){
+								<option value="${type.itemCode}" >${type.itemName}</option>
+								@}
+							</select>
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>就读或毕业学校</label>
+							<input id="school" name="school" type="text" class="mui-input-clear" placeholder="就读或毕业学校">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>入党时间</label>
+							<input id="rd_date" name="rd_date" type="date" class="mui-input-clear" placeholder="入党时间">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>婚姻状况</label>
+							<select class="mui-input-picker" id="hy_status" name="hy_status">
+								@for(type in Hyzk ! []){
+								<option value="${type.itemCode}" >${type.itemName}</option>
+								@}
+							</select>
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>结婚时间</label>
+							<input id="jh_date" name="jh_date" type="date" class="mui-input-clear" placeholder="结婚时间">
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>兵役状况</label>
+							<input id="by_status" name="by_status" type="text" class="mui-input-clear" placeholder="兵役状况">
+						</div>
+					</div>
+					
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>健康状况</label>
+							<input id="jk_status" name="jk_status" type="text" class="mui-input-clear" placeholder="健康状况">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>职业</label>
+							<input id="duty" name="duty" type="text" class="mui-input-clear" placeholder="职业">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>工作单位</label>
+							<input id="dept" name="dept" type="text" class="mui-input-clear" placeholder="工作单位">
+						</div>
+					</div>
+					
+					
+					<div id="isPubDiv" class="mui-input-row" >
+						<label>是否享受低保</label>
+						<div id="db_status" class="mui-switch mui-switch-mini">
+							<div class="mui-switch-handle"></div>
+						</div>
+					</div>
+					<div id="isPubDiv" class="mui-input-row" >
+						<label>是否优抚对象</label>
+						<div id="yfdx_status" class="mui-switch mui-switch-mini">
+							<div class="mui-switch-handle"></div>
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>失业人员类别</label>
+							<input id="syry_type" name="syry_type" type="text" class="mui-input-clear" placeholder="失业人员类别">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>失业时间</label>
+							<input id="sy_date" name="sy_date" type="date" class="mui-input-clear" placeholder="失业时间">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>计生管理单位</label>
+							<input id="jsgldw" name="jsgldw" type="text" class="mui-input-clear" placeholder="计生管理单位">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>卫生接种</label>
+							<input id="wsjz" name="wsjz" type="text" class="mui-input-clear" placeholder="卫生接种">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>个人医保类型</label>
+							<input id="yb_type" name="yb_type" type="text" class="mui-input-clear" placeholder="个人医保类型">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>家庭住房状况</label>
+							<select class="mui-input-picker" id="zf_type" name="zf_type">
+								@for(type in ZfType ! []){
+								<option value="${type.itemCode}" >${type.itemName}</option>
+								@}
+							</select>
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>家庭住房面积</label>
+							<input id="zf_size" name="zf_size" type="text" class="mui-input-clear" placeholder="家庭住房面积">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>房权所有人姓名</label>
+							<input id="zf_owner" name="zf_owner" type="text" class="mui-input-clear" placeholder="房权所有人姓名">
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>房屋使用类别</label>
+							<select class="mui-input-picker" id="zfsy_type" name="zfsy_type">
+								@for(type in ZfsyType ! []){
+								<option value="${type.itemCode}" >${type.itemName}</option>
+								@}
+							</select>
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>家庭所需服务项目</label>
+							<select class="mui-input-picker" id="jtfw_type" name="jtfw_type">
+								@for(type in Jtfwxm ! []){
+								<option value="${type.itemCode}" >${type.itemName}</option>
+								@}
+							</select>
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+					<div class="mui-input-row">
+					<label>备注</label>
+						<textarea id="remark" name="remark"  rows="8" cols="" placeholder="请输入备注"></textarea>
+					</div>
+					</div> 
+					<div class="delimiter"></div>
+				</form>
+			</div>
+			<div class="mask-backdrop"></div>
+		</div>
+
+
+
+		<input type="hidden" id="zh_id" value="${zh_id}">
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/sqmy/add_zhxq_app.js"></script>
+</body>
+</html>

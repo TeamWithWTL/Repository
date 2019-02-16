@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	</head>
+
+	<body>
+		<div class="container">
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="home-tab" data-toggle="tab" href="#dsh">待审核</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="profile-tab" data-toggle="tab" href="#shbtg">审核不通过</a>
+				</li>
+				<!-- <li class="nav-item">
+					<a class="nav-link" id="contact-tab" data-toggle="tab" href="#score">评分</a>
+				</li> -->
+			</ul>
+			<div class="tab-content" id="myTabContent">
+				<div class="tab-pane fade show active" id="dsh">
+					<div class="article-feedback" id="dshList" style="margin-top:20px;">
+						@#ajax dshTable:{
+							@if(isNotEmpty(pagenateDsh.list)){
+							@for(dsh in pagenateDsh.list ! []){
+							<ul>
+								<div class="feedback-user">
+									<dt><img src="${ctxPath}/assets/images/default-user.png"/></dt>
+									<p></p><span>${dsh.userName ! ''}</span>
+								</div>
+								<div class="feedback-msg">
+									<p>【留言】${dsh.content ! ''}</p>
+									@if(isNotEmpty(dsh.attrList)){
+										<div class="form-arraylist">
+										<h4 class="form-arraylist-title">附件列表：</h4>
+											@for(attr in dsh.attrList  ! []){	
+											@if(attr.fileType == 'img'){
+											<li class="col-9">
+												<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/showPic?fileName=${attr.newFilename}"/> ${attr.oldFilename}</a>
+												<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else if(attr.fileType  == 'pdf'){
+											<li class="col-9">
+												<a href="javascript:void(0)" onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+												<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li class="col-9">
+											@}else if(attr.fileType == 'word'){
+											<li class="col-9">
+												<a href="javascript:void(0)" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.oldFilename}</a>
+												<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else if(attr.fileType == 'txt'){
+											<li  class="col-9">
+												<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.oldFilename}</a>
+												<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else if(attr.fileType == 'exl'){
+											<li  class="col-9">
+												<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.oldFilename}</a>
+												<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else if(attr.fileType == 'video'){
+											<li  class="col-9">
+												<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.oldFilename}</a>
+												<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else{
+											<li class="col-9">
+												<a href="javascript:void(0)"  title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+												<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li class="col-9">
+											@}
+										@}
+									 </div>
+									 @}	
+									<div class="feedback-data">
+										<i class="fa fa-clock-o"> ${dsh.createTimeFmt ! ''}</i> 
+										<button type="button" class="btn btn-sm btn-success" onclick="goScore('${dsh.id}')">审核通过</button>
+										<button type="button" class="btn btn-sm btn-danger" onclick="shbtg('${dsh.id}')">审核不通过</button>
+									</div>
+								</div>
+							</ul>
+							@}
+							<!-- 自定义分页标签 -->
+							<#pagenate func="initDshData" page="${pagenateDsh}" />
+							@}else{
+							暂无相关记录
+							@}
+						@}
+					</div>
+				</div>
+				<div class="tab-pane fade" id="shbtg">
+					<div class="article-feedback" id="btgList" style="margin-top:20px;">
+						@#ajax btgTable:{
+							@if(isNotEmpty(pagenateBtg.list)){
+							@for(btg in pagenateBtg.list ! []){
+							<ul>
+								<div class="feedback-user">
+									<dt><img src="${ctxPath}/assets/images/default-user.png"/></dt>
+									<p></p><span>${btg.userName ! ''}</span>
+								</div>
+								<div class="feedback-msg">
+									<p>【留言】${btg.content ! ''}</p>
+									@if(isNotEmpty(btg.attrList)){
+										<div class="form-arraylist">
+										<h4 class="form-arraylist-title">附件列表：</h4>
+											@for(attr in btg.attrList  ! []){	
+											@if(attr.fileType == 'img'){
+											<li class="col-9">
+												<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/showPic?fileName=${attr.newFilename}"/> ${attr.oldFilename}</a>
+												<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else if(attr.fileType  == 'pdf'){
+											<li class="col-9">
+												<a href="javascript:void(0)" onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+												<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li class="col-9">
+											@}else if(attr.fileType == 'word'){
+											<li class="col-9">
+												<a href="javascript:void(0)" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.oldFilename}</a>
+												<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else if(attr.fileType == 'txt'){
+											<li  class="col-9">
+												<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.oldFilename}</a>
+												<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else if(attr.fileType == 'exl'){
+											<li  class="col-9">
+												<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.oldFilename}</a>
+												<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else if(attr.fileType == 'video'){
+											<li  class="col-9">
+												<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.oldFilename}</a>
+												<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else{
+											<li class="col-9">
+												<a href="javascript:void(0)"  title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+												<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li class="col-9">
+											@}
+										@}
+									 </div>
+									 @}	
+									<div class="feedback-data">
+										<i class="fa fa-clock-o"> ${btg.createTimeFmt ! ''}</i> 
+										<button type="button" class="btn btn-sm btn-success" onclick="shtg('${btg.id}')">审核通过</button>
+									</div>
+								</div>
+							</ul>
+							@}
+							<!-- 自定义分页标签 -->
+							<#pagenate func="initBtgData" page="${pagenateBtg}" />
+							@}else{
+							暂无相关记录
+							@}
+						@}
+					</div>
+				</div>
+				<!-- <div class="tab-pane fade" id="score">
+					<div class="article-feedback" id="wpfList" style="margin-top:20px;">
+						@#ajax wpfTable:{
+							@for(wpf in pagenateWpf.list ! []){
+							<ul>
+								<div class="feedback-user">
+									<dt><img src="${ctxPath}/assets/images/default-user.png"/></dt>
+									<p></p><span>${wpf.userName ! ''}</span>
+								</div>
+								<div class="feedback-msg">
+									<p>【留言】${wpf.content ! ''}</p>
+									<div class="feedback-data">
+										<i class="fa fa-clock-o"> ${wpf.createTimeFmt ! ''}</i> 
+										<button type="button" class="btn btn-sm btn-primary feedback-score" onclick="goScore('${wpf.id}')">评分</button>
+									</div>
+								</div>
+							</ul>
+							@}
+							自定义分页标签
+							<#pagenate func="initWpfData" page="${pagenateWpf}" />
+						@}
+					</div>
+				</div> -->
+			</div>
+		</div>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<input type="hidden" id="id" value="${id}" />
+
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/shfw/sqhd/shview.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/public.js"></script>
+	</body>
+
+</html>

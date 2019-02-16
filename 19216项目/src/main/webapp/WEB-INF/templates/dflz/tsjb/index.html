@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>党风廉政-投诉举报-首页</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<link rel="stylesheet" type="text/css"
+	href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" />
+	<style type="text/css">
+      .wrap{
+		white-space: nowrap;  
+		text-overflow: ellipsis; 
+		overflow: hidden; 
+      }
+    </style>
+</head>
+
+<body>
+	<div class="function-box">
+		 	<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+					
+						<div class='input-group date form_datetime' id='datetimepicker'>
+					<input readonly="readonly" type="text" class="form-control" id="apply_time" placeholder="发布日期">
+					 <span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+		                <span class="fa fa-calendar" aria-hidden="true"></span>
+		                </span>
+		                </div>
+					<input type="text" class="form-control" id="title" placeholder="标题" value="${title ! ''}">
+					<select id="status" class="form-control" name="status">
+						<option value="2"  ${status=='2'?'selected':''}>未处理</option>
+						<option value="1" ${status=='1'?'selected':''}>已处理</option>
+					</select>
+					<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+			</div>
+			
+			<div class="function-btn">
+				<#roleBtn btnId="tsjbDel" roleCode="${roleCode}">
+				<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goDel()"><i class="fa fa-trash"></i> 删除</button>
+				</#roleBtn>
+			</div>
+			
+		</div>
+		<div id="table-container"  class="warpper">
+			@#ajax table:{
+			<div class="table-box">
+				<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+					<thead>
+					<tr class="table-secondary">
+						<th width="5%" class="text-center">
+							<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+				        </th>
+						<th width="" class="text-center">标题</th>
+							<th width="15%" class="text-center">投诉人</th>
+							<th width="15%" class="text-center">投诉日期</th>
+							<th width="10%" class="text-center">审核状态</th>
+							<th width="10%" class="text-center">处理状态</th>
+							<th width="20%" class="text-center">操作</th>
+					</tr>
+					</thead>
+					<tbody id="dqIds">
+					@for(yw in pagenate.list ! []){
+					<tr>
+						<td class="text-center">
+				        	<input type="checkbox" class="i-checks" name="icheck" value="${yw.complainEntity.id !}*${yw.complainEntity.sh_status}" /> 
+				        </td>
+				        <td class="text-left" title="${yw.complainEntity.title ! ''}">
+				        	<div class="wrap">
+					        		${yw.complainEntity.title ! ''}
+				        	</div>
+				        </td>
+				        <td>
+				        	@if(yw.complainEntity.is_nm=='1'){
+								匿名
+							@}else{
+								${yw.complainEntity.user_name ! ''}
+							@}
+				        </td>
+				        <td>${yw.complainEntity.fmtCreate_time !}</td>
+				         @if(yw.complainEntity.sh_status=='0'){
+				        <td style="color: #ffa81f">待审核</td>
+				        @}else if(yw.complainEntity.sh_status=='1'){
+				        <td style="color: #7ebc1d">通过</td>
+				        @}else if(yw.complainEntity.sh_status=='2'){
+				        <td style="color: #fd5c1d">未通过</td>
+				        @}
+				        
+				        	@if(yw.cl_status=='2'){
+					        <td style="color: #ffa81f">待处理</td>
+					        @}else if(yw.cl_status=='1'){
+					        <td style="color: #7ebc1d">已处理</td>
+					        @}
+				        
+				        @if(yw.complainEntity.sh_status=='0'){
+				        <td>
+				        	<#roleBtn btnId="tsjbAudit" roleCode="${roleCode}">
+				        		<a href="javascript:void(0);" onclick="goAudit('${yw.complainEntity.id !}',1)">审核</a>
+				        	</#roleBtn>
+				        	<a href="javascript:void(0);" onclick="goView('${yw.complainEntity.id !}')">查看</a>
+				        </td>
+				        @}else if(yw.complainEntity.sh_status=='1'){
+				        <td>
+								@if(yw.cl_status=='2'){
+									@if(yw.pf_status=='1'){
+									<#roleBtn btnId="tsjbForward" roleCode="${roleCode}">
+										<a href="javascript:void(0);" onclick="forward('${yw.complainEntity.id !}')">转发</a>
+									</#roleBtn>
+									@}
+									<#roleBtn btnId="tsjbHandle" roleCode="${roleCode}">
+										<a href="javascript:void(0);" onclick="goHandle('${yw.complainEntity.id !}')">处理</a>
+									</#roleBtn>
+								@}else{
+									<span style="color: #7ebc1d">已处理</span>
+								@}
+				       		 <a href="javascript:void(0);" onclick="goView('${yw.complainEntity.id !}')">查看</a>
+				        </td>
+				        @}else if(yw.complainEntity.sh_status=='2'){
+				        <td style="color: red">
+				        	<#roleBtn btnId="tsjbAudit" roleCode="${roleCode}">
+				        		<a href="javascript:void(0);" onclick="goAudit('${yw.complainEntity.id !}',1)">审核</a>
+				        	</#roleBtn>
+				        	<a href="javascript:void(0);" onclick="goView('${yw.complainEntity.id !}')">查看</a>
+				        </td>
+					    @}
+					</tr>
+					@}elsefor{
+					<tr>
+				        <td colspan="7">
+				        	没有找到要查询的数据
+				        </td>
+			    	</tr>
+					@}
+				   </tbody>
+				</table>
+				</div>
+			<!-- 自定义分页标签 -->
+			<#pagenate func="initData" page="${pagenate}" />
+		@}
+	</div>
+	
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	
+	<!-- 日期控件JS -->
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="${ctxPath}/assets/scripts/dflz/tsjb/index.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

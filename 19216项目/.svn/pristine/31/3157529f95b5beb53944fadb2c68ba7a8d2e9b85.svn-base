@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>居民信息-添加、编辑</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+	<link rel="stylesheet" type="text/css"
+	href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" />
+	<style>
+	.boxwrap a {
+	    display: inline-block;
+	    margin-right: -1px;
+	    float: left;
+	    height: 34px;
+	    line-height: 20px;
+	    vertical-align: middle;
+	    color: rgb(51, 51, 51);
+	    font-size: 100%;
+	    cursor: pointer;
+	    padding: 5px 15px;
+	    border-width: 1px;
+	    border-style: solid;
+	    border-color: rgb(212, 212, 212);
+	    border-image: initial;
+	    text-decoration:none;
+	}
+	.boxwrap a.selected {
+	    background: #16a0d3;
+	    border-color: #1096c7;
+	    color: #fff;
+	}
+	.boxwrap a:hover {
+	    text-decoration: none;
+	}
+	.btn-outline-primary {
+		background: none;
+	}
+	.btn-outline-primary:HOVER {
+		color: #fff;
+	}
+</style>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<form id="addForm" class="form-horizontal">
+			<br>
+			<div class="form-group">
+				<div class="col-md-4">
+					<label class="col-sm-4 control-label">姓名</label>
+					<div class="col-sm-8">
+						<input  type="text" class="form-control" id="name" name="name" value="${inmateEntity.name ! ''}" />
+					</div>
+				</div>
+				<div class="col-md-4">
+					<label class="col-sm-4 control-label">性别</label>
+					<div class="col-sm-6">
+						<div class="boxwrap" id="sexDiv">
+							<a href="javascript:;" class="selected" onclick="choseSex(this,'E')">男</a>
+							<a href="javascript:;" class="" onclick="choseSex(this,'F')">女</a>
+							<input type="hidden" name="sex" id="sex" value="${inmateEntity.sex ! 'E'}"/>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<label class="col-sm-4 control-label">出生日期</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="birthday" name="birthdayFrm"  value="${inmateEntity.birthdayFrm ! ''}" readOnly/>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-4">
+					<label class="col-sm-4 control-label">身份证号</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="card_no" name="card_no" value="${inmateEntity.card_no ! ''}" />
+					</div>
+				</div>
+				<div class="col-md-4">
+					<label class="col-sm-4 control-label">民族</label>
+					<div class="col-sm-6">
+						<select name="nation" id="nation" class="form-control">
+							@if(isNotEmpty(sysStations)){
+								@for(da in sysStations){
+									<option value="${da.value1}" ${inmateEntity != null && da.value1 == inmateEntity.nation ? 'selected' : ''}>${da.itemName}</option>
+								@}
+							@}
+						</select>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<label class="col-sm-4 control-label">联系电话</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="telephone" name="telephone" value="${inmateEntity.telephone ! ''}" />
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-4">
+					<label class="col-sm-4 control-label">籍 贯</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="house_register" name="house_register" value="${inmateEntity.house_register ! ''}" />
+					</div>
+				</div>
+				<div class="col-md-4">
+					<label class="col-sm-4 control-label">政治面貌</label>
+					<div class="col-sm-6">
+						<select name="political" id="political" class="form-control">
+						@if(isNotEmpty(zzmm)){
+							@for(da in zzmm){
+								<option value="${da.itemCode}" ${inmateEntity != null && da.itemCode == inmateEntity.political ? 'selected' : ''}>${da.itemName}</option>
+							@}
+						@}
+						</select>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<label class="col-sm-4 control-label">婚姻状态</label>
+					<div class="col-sm-6">
+						<select name="marriage" id="marriage" class="form-control">
+						@if(isNotEmpty(hyzk)){
+							@for(da in hyzk){
+								<option value="${da.itemCode}" ${inmateEntity != null && da.itemCode == inmateEntity.marriage ? 'selected' : ''}>${da.itemName}</option>
+							@}
+						@}
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-4">
+					<label class="col-sm-4 control-label">工作处所</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="work_unit" name="work_unit" value="${inmateEntity.work_unit ! ''}" />
+					</div>
+				</div>
+				<div class="col-md-4">
+					<label class="col-sm-4 control-label">车牌号</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="car_no" name="car_no" value="${inmateEntity.car_no ! ''}" />
+					</div>
+				</div>
+				<div class="col-md-4">
+					<label class="col-sm-4 control-label">文化程度</label>
+					<div class="col-sm-6">
+						<select name="education" id="education" class="form-control">
+						@if(isNotEmpty(whcd)){
+							@for(da in whcd){
+								<option value="${da.itemCode}" ${inmateEntity != null && da.itemCode == inmateEntity.education ? 'selected' : ''}>${da.itemName}</option>
+							@}
+						@}
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-6">
+					<label class="col-sm-3 control-label" style="max-width:126.55px;">所属区域</label>
+					<div class="col-sm-3">
+						<select id="commId" name="commId" class="form-control" onchange="showSs(this,'ssId','1')">
+							<option value="">-- 所属社区 --</option>
+							@if(isNotEmpty(comList)){
+								@for(com in comList){
+									<option value="${com.id}" ${inmateEntity != null && com.id == commId ? 'selected' : ''}>${com.name}</option>
+								@}
+							@}
+					</select>
+					</div>
+					<div class="col-sm-3">
+						<select class="form-control" name="ssId" id="ssId" onchange="showData(this,'gridId')">
+							<option value="">-- 所属服务站 --</option>
+							@if(isNotEmpty(ssList)){
+								@for(ss in ssList){
+									<option value="${ss.id}" ${inmateEntity != null && ss.id == inmateEntity.ssId ? 'selected' : ''}>${ss.name}</option>
+								@}
+							@}
+						</select>
+					</div>
+					<div class="col-sm-3">
+						<select class="form-control" name="gridId" id="gridId" onchange="showBuilds(this)">
+							<option value="">-- 所属网格 --</option>
+							@if(isNotEmpty(gridList)){
+								@for(grid in gridList){
+									<option value="${grid.id}" ${inmateEntity != null && grid.id == inmateEntity.build.grid.id ? 'selected' : ''}>${grid.name}</option>
+								@}
+							@}
+						</select>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<label class="col-sm-2 control-label">房屋信息</label>
+					<div class="col-sm-3">
+						<input type="hidden"  class="form-control" id="buildId" name="buildId" value="${inmateEntity.build.id ! ''}" />
+						<div class="input-group">
+							<input type="text" readonly="readonly" class="form-control" id="buildName" value="${inmateEntity.build.name ! ''}" placeholder="所属楼宇"/>
+						  <span class="input-group-addon"  onclick="choose()">选择</span>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<input type="text" class="form-control" id="unit_no" name="unit_no" value="${inmateEntity.unit_no ! ''}" placeholder="所属单元"/>
+					</div>
+					<div class="col-sm-3">
+						<input type="text" class="form-control" id="room_no" name="room_no" value="${inmateEntity.room_no ! ''}" placeholder="所属房间"/>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-4">
+					<label class="col-sm-4 control-label">户主</label>
+					<div class="col-sm-6">
+						<div class="boxwrap" id="houseDiv">
+							<a href="javascript:;" class="" onclick="choseHz(this,'1')">是</a>
+							<a href="javascript:;" class="selected" onclick="choseHz(this,'0')">否</a>
+							<input type="hidden" name="housemaster" id="housemaster" value="${inmateEntity.housemaster ! ''}"/>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-md-4"  id="hzgx">
+					<label class="col-sm-4 control-label">与户主关系</label>
+					<div class="col-sm-4">
+						
+						<input type="text" class="form-control" id="hm_relation" name="hm_relation" value="${inmateEntity.hm_relation ! ''}" />
+					</div>
+				</div>
+				
+				
+				
+			</div>
+			@if(isNotEmpty(ryfl)){
+			<div class="form-group">
+				@for(da in ryfl){
+					<div class="col-md-4" style="padding-bottom:15px;">
+						<label class="col-sm-4 control-label">${da.itemName}</label>
+						<div class="col-sm-6">
+							<div class="boxwrap ryfl" data-val="${da.value1}">
+								<a href="javascript:;" class="" onclick="setType(this,'${da.value1}')">是</a>
+								<a href="javascript:;" class="selected" onclick="setType(this,'${da.value1}')">否</a>
+							</div>
+						</div>
+					</div>
+				@}
+			</div>
+			@}
+			<div class="form-group row">
+				<div class="col-sm-12 page-operation text-right" style="text-align: right;">
+					<button type="button" class="btn btn-primary" id="saveBtn"><i class="fa fa-save"></i> 保 存</button>
+					<button type="button" class="btn btn-outline-primary" id="cancleBtn"><i class="fa fa-reply"></i> 取 消</button>
+				</div>
+			</div>
+			<input type="hidden" name="id" value="${inmateEntity.id ! ''}" />
+			<input type="hidden" name="type" id="type" value="${types !''}"/>
+		</form>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.js"></script>
+	<!-- 日期控件JS -->
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/jmxx/addEdit.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

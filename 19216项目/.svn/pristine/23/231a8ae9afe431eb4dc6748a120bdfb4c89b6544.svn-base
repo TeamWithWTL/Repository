@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>角色管理-添加、编辑</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+	<div class="container-fluid">
+		<form id="myForm" class="form-horizontal">
+			<br>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">角色编码</label>
+					<div class="col-sm-7">
+ 							<input type="text" class="form-control" id="roleCode" name="roleCode" placeholder="角色编码" ${sysRole == null ? '' : 'disabled'} value="${sysRole.roleCode ! ''}" />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">角色名称</label>
+					<div class="col-sm-7">
+ 							<input type="text" class="form-control" id="roleName" name="roleName" placeholder="角色名称" value="${sysRole.roleName ! ''}" />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">备注</label>
+					<div class="col-sm-7">
+ 							<textarea class="form-control" name="note" placeholder="对角色的简单描述" rows="5">${sysRole.note ! ''}</textarea>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">排序</label>
+					<div class="col-sm-4">
+ 							<input type="text" class="form-control" id="orderNo" name="orderNo" placeholder="排序" value="${sysRole.orderNo ! ''}" />
+					</div>
+					<div class="col-sm-4">
+						<span style="line-height: 33px; font-size: 12px; color: #666;">（* 数字越小，排序越靠前）</span>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="page-operation text-right col-sm-12">
+ 							<button type="button" class="btn btn-primary" id="saveBtn"><i class="fa fa-save"></i> 保 存</button>
+ 							<button type="button" class="btn btn-outline-primary" id="cancleBtn"><i class="fa fa-reply"></i> 返回</button>
+					</div>
+				</div>
+				<!-- 原角色编号 -->
+				<input type="hidden" name="oldCode" value="${sysRole.roleCode ! ''}" />
+			</form>
+		</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	<script src="${ctxPath}/assets/scripts/xtgl/jsgl/addEdit.js"></script>
+</body>
+</html>

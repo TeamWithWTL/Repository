@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />>
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">在线招募</h1>
+			<button id="OpenQuery" class="mui-btn mui-btn-link icon ion-ios-search-strong mui-pull-right"></button>
+		</header>
+
+		<div class="inquery">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label>标题</label>
+					<input type="text" class="mui-input-clear" placeholder="标题名称" id="titleId">
+				</div>
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-block mui-btn-primary" onclick="initZxzmApp()"><i class="icon ion-ios-search-strong"></i> 点击查询</button>
+				</div>
+			</form>
+		</div>
+		<div class="mask-backdrop"></div>
+
+		<div class="mui-content mui-scroll-wrapper"  id="refreshContainer">
+			<div class="mui-scroll" id="">
+				<ul class="mui-table-view" id="table-container">
+				@#ajax table:{
+					@for(com in pagenate.list ! []){
+					<li class="mui-table-view-cell mui-media">
+						<a href="javascript:void(0)" name="${com.id}">
+							@if(null != com.ysPice && com.ysPice != ''){
+								<dt class="mui-pull-right"><img src="${ctxPath}/showPic?fileName=${com.ysPice ! ''}" style="width: 100px; height: 80px;"></dt>
+							@}
+							<div class="mui-media-body">
+								@if(null != com.ysPice && com.ysPice != ''){
+								<span class="mui-ellipsis-3">${com.title}</span>
+								@}else{
+								<span class="mui-ellipsis">${com.title}</span>
+								@}
+								<dt>${com.xs_create_time}</dt>
+							</div>
+						</a>
+					</li>
+					@}
+					<input type="hidden" id="pageCnts" value="${pagenate.pgCnts !'0'}" />
+					<input type="hidden" id="pageSize" value="${pagenate.pageSize !'0'}" />
+				@}
+				</ul>
+			</div>
+		</div>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script src="${ctxPath}/assets/scripts/shzz/zxzm/app_index.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$("#OpenQuery").click(function() {
+					$(".mask-backdrop").toggle();
+					$(".inquery").toggleClass("show");
+				});
+				$(".mask-backdrop").click(function() {
+					$(this).hide();
+					$(".inquery").removeClass("show");
+				});
+			});
+			
+			//手机按键返回
+			/*function anGoBack(){
+				mui.back();
+				return;
+			}*/
+			
+			mui("#header").on('tap','a',function(){
+				  window.location.href = $("#basePath").val() + "/app/home/index.do";
+			});
+			
+			//手机按键返回
+			function anGoBack(){
+				//返回首页
+				window.location.href = $("#basePath").val() + "/app/home/index.do";
+				return;
+			}
+			
+		</script>
+	</body>
+
+</html>

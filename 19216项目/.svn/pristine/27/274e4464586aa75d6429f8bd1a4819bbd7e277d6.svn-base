@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+
+<head>
+	<title></title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+	<style>
+		#header .layui-upload-button {
+			display: none;
+		}
+	</style>
+</head>
+
+<body>
+	<header id="header" class="mui-bar mui-bar-nav big-bar">
+		<a class="icon ion-android-arrow-back mui-pull-left"></a>
+		<h1 class="mui-title">个人中心</h1>
+		<form action="" method="get" class="user-avatar" id="addForm">
+			@if(isEmpty(accCount.pic_path)){
+			<img id="myImg" src="${ctxPath}/assets/img/user.png"/>
+			@}else{
+			<img id="myImg" src="${ctxPath}/showPic?fileName=${accCount.pic_path}"/>
+			@}
+		</form>
+		<input type="file" name="file" class="layui-upload-file" id="fileId" style="display: none;">
+		<span class="user-name">${session.sysAccCount.name}</span>
+	</header>
+	<div class="mui-content mui-scroll-wrapper">
+		<div class="mui-scroll">
+			<ul class="mui-table-view table-view-icon" id="fjItems">
+				<li class="mui-table-view-cell" id="updataPwd">
+					<a class="mui-navigate-right"> <i class="icon ion-android-apps"></i>修改密码</a>
+				</li>
+				<li class="mui-table-view-cell" id="updataXx" style="display: none;">
+					<a class="mui-navigate-right"> <i class="icon ion-android-apps"></i>服务热线</a>
+				</li>
+				<li class="mui-table-view-cell" id="jfId">
+					<a><i class="icon ion-android-apps"></i>积分：${jfCount}</a>
+				</li>
+				<!-- <li class="mui-table-view-cell" id="signIn">
+					<a class="mui-navigate-right"> <i class="icon ion-android-apps"></i>签到</a>
+				</li> -->
+			</ul>
+			<div style="padding: 1rem;">
+				<button type="button" class="mui-btn mui-btn-danger mui-btn-block" id="loginApp">
+					<i class="icon ion-power"></i> 退出登录
+				</button>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="lon" value=""/>
+	<input type="hidden" id="lat" value=""/>
+	<input type="hidden" id="roleCode" value="${session.sysAccCount.role_code}" />
+
+	<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+	<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+	<script src="${ctxPath}/assets/scripts/app/home/app_user.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	
+	<!-- 百度地图 -->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PEDYmms2gstug9jGEBphIGFPVxGHyhpB"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/library/AreaRestriction/1.2/src/AreaRestriction_min.js"></script>
+	<script type="text/javascript">
+	var basePath = $("#basePath").val();
+	
+		mui.init();
+		mui('.mui-scroll-wrapper').scroll({
+			indicators: false, 		//是否显示滚动条
+			startX: 0, 				//初始化时滚动至x
+			deceleration: 0.0004, 	//flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+			bounce: true 			//是否启用回弹
+		});
+		
+		//头像上传
+		mui("#addForm").on('tap','img',function(){
+			toAndroid.jsCallCamera();
+		});
+		
+		//确定所选文件后执行  根据不同的附件类型显示相应的图片
+		function getImgs(paths) {
+			   var arrs = paths.split(',');      //多个选择附件，用逗号分割
+			   msgIndex1 = top.layer.msg('数据保存中...', {			icon : 16,			shade : [ 0.5, '#999999' ]});
+				$.ajax({
+					type : "POST",
+					url : basePath+"/app/home/doUpdatePices.do",
+					data :{
+						'picePath':$("#picPath").val()
+					},
+					error : function(request) {
+						top.layer.close(msgIndex1);
+						top.layer.msg('下发失败，请联系管理员', {shade : [ 0.5, '#999999' ]});
+					},
+					success : function(data) {
+						var data = $.parseJSON(data);
+						top.layer.close(msgIndex1);
+						if(data.result == "success"){
+							var str = '{"pid":"' + data.pid + '","table":"sysAccCount"}';
+							jsUpDataFJ(str);
+							top.layer.msg('上传成功',{icon : 6,time : 2000,shade : [0.5,'#999999' ]},function(){
+								window.location.href = $("#basePath").val() + "/app/home/toUserInfo.do";
+							});
+						}else{
+							top.layer.close(msgIndex1);
+							top.layer.msg('上传失败，请联系管理员', {shade : [ 0.5, '#999999' ]});
+						}
+					}
+				});
+		}
+		
+		mui("#header").on('tap','a',function(){
+			//返回首页
+			window.location.href = $("#basePath").val() + "/app/home/index.do";
+		});
+		
+		//手机按键返回
+		function anGoBack(){
+			//返回首页
+			window.location.href = $("#basePath").val() + "/app/home/index.do";
+			return;
+		}
+		
+		/* mui("#signIn").on('tap','a',function(){
+			msgIndex1 = top.layer.msg('数据保存中...', {			icon : 16,			shade : [ 0.5, '#999999' ]});
+			$.ajax({
+				type : "POST",
+				url : basePath+"/app/signIn/doSignIn.do",
+				data :{
+					'lon':$("#lon").val(),
+					'lat':$("#lat").val()
+				},
+				error : function(request) {
+					top.layer.close(msgIndex1);
+					top.layer.msg('签到失败，请联系管理员', {shade : [ 0.5, '#999999' ]});
+				},
+				success : function(data) {
+					top.layer.close(msgIndex1);
+					if(data == "success"){
+						top.layer.msg('签到成功',{icon : 6,time : 2000,shade : [0.5,'#999999' ]},function(){
+							window.location.href = $("#basePath").val() + "/app/home/toUserInfo.do";
+						});
+					}else if(data == "noAuthority"){
+						top.layer.msg('亲，您没有权限哦！',{icon : 7,time : 2000,shade : [0.5,'#999999' ]},function(){
+							window.location.href = $("#basePath").val() + "/app/home/toUserInfo.do";
+						});
+					}else if(data == "amN"){
+						top.layer.msg('您上午已签到',{icon : 7,time : 2000,shade : [0.5,'#999999' ]},function(){
+							window.location.href = $("#basePath").val() + "/app/home/toUserInfo.do";
+						});
+					}else if(data == "pmN"){
+						top.layer.msg('您下午已签到',{icon : 7,time : 2000,shade : [0.5,'#999999' ]},function(){
+							window.location.href = $("#basePath").val() + "/app/home/toUserInfo.do";
+						});
+					}else if(data == "noScope"){
+						top.layer.msg('您不在你所负责网格范围内，无法签到',{icon : 7,time : 2000,shade : [0.5,'#999999' ]},function(){
+							window.location.href = $("#basePath").val() + "/app/home/toUserInfo.do";
+						});
+					}else{
+						top.layer.msg('签到失败，请联系管理员', {shade : [ 0.5, '#999999' ]});
+					}
+				}
+			});
+		}); */
+	</script>
+</body>
+
+</html>

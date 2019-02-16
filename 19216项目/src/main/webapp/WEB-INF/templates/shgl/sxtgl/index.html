@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>摄像头管理-首页</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/common.css"/>
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+</head>
+
+<body>
+	<div class="content-title">
+		<h4><img src="${ctxPath}/assets/img/icon-home.png" width="16"/> <a href="javascript:void(0);" onclick="goHome('${ctxPath}/home/index.do');">首页</a> <span class="fa fa-angle-right"></span> 社会管理 <span class="fa fa-angle-right"></span> 基础信息 <span class="fa fa-angle-right"></span> 摄像头管理</h4>
+	</div>
+	<div class="content-body">
+		<div class="block-content heighter">
+			<div class="content-form">
+				<form class="form-inline" action="" method="post">
+					<div class="form-group">
+						<select id="commId" class="form-control" onchange="showSs(this,'ssId')">
+				    		<option value="">-- 所属社区 --</option>
+							@for(com in comList){
+							<option value="${com.id}">${com.name}</option>
+							@}
+						</select>
+					</div>
+					<div class="form-group">
+						<select id="ssId" class="form-control" onchange="showData(this,'gridId')">
+				    		<option value="">-- 所属服务站--</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<select id="gridId" class="form-control">
+				    		<option value="">-- 所属网格--</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="name" placeholder="名称">
+					</div>
+					<div class="form-group">
+						<button type="button" class="btn btn-default" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+					</div>
+				</form>
+			</div>
+			<div class="content-function">
+				<#roleBtn btnId="sxtglAdd" roleCode="${roleCode}">
+					<a class="btn btn-default" href="javascript:void(0);" onclick="goAdd('添加界面')"><i class="fa fa-plus"></i> 添加</a>
+				</#roleBtn>
+				<#roleBtn btnId="sxtglEdit" roleCode="${roleCode}">
+					<a class="btn btn-default" href="javascript:void(0);" onclick="goUpdate('修改界面')"><i class="fa fa-pencil"></i> 修改</a>
+				</#roleBtn>
+				<#roleBtn btnId="sxtglDel" roleCode="${roleCode}">
+					<a class="btn btn-default" href="javascript:void(0);" onclick="goDel()"><i class="fa fa-trash"></i> 删除</a>
+				</#roleBtn>
+			</div>
+			<div class="clearfix"></div>
+			<div id="table-container">
+			@#ajax table:{
+				<div class="content-article">
+					<table class="table table-bordered" cellspacing="" cellpadding="">
+						<tr>
+							<th width="5%" class="text-center">
+								<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+					        </th>
+							<th>摄像头名称</th>
+							<th>所属社区</th>
+							<th>所属服务站</th>
+							<th>所属网格</th>
+					        <th>添加人</th>
+					        <th>添加日期</th>
+						</tr>
+						@for(camera in pagenate.list ! []){
+						<tr>
+							<td class="text-center">
+					        	<input type="checkbox" class="i-checks" name="icheck" value="${camera.id}" />
+					        </td>
+					        <td>${camera.name}</td>
+					        <td>${camera.grid.serviceStation.community.name}</td>
+					        <td>${camera.grid.serviceStation.name}</td>
+					        <td>${camera.grid.name}</td>
+					        <td>${camera.add_name}</td>
+					        <td>${camera.addTimeFrm}</td>
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="7" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+					</table>
+				</div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+			</div>
+		</div>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/sxtgl/index.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <title>位置标注</title>
+
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/animate.min.css" rel="stylesheet" />
+    <link href="widgets/layui/css/layui.css" rel="stylesheet" />
+    <link href="css/areadraw.css" rel="stylesheet" />
+    <link href="css/indexsearch.css" rel="stylesheet" />
+    <link href="widgets/map/theme/default/DrawingManager.css" rel="stylesheet" />
+    <link href="widgets/map/theme/default/MECPopup.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="mapDiv" class="mapdiv"></div>
+
+<!--     <div id="left-panel"> -->
+<!--         <div id="searchbox" class="searchbox"> -->
+<!--             <div id="searchbox-container" class="searchbox-container"> -->
+<!--                 <div id="sole-searchbox-content" class="sole-searchbox-content"> -->
+<!--                     <input id="sole-input" class="sole-input searchbox-content-common" type="text" name="word" maxlength="256" placeholder="请输入地点" value="" /> -->
+<!--                     <div class="input-clear" id="btnclear" title="清空" style="display: none;"></div> -->
+<!--                 </div> -->
+<!--             </div> -->
+<!--             <button id="search-button" class="search-button" data-title="搜索"></button> -->
+<!--         </div> -->
+<!--         <ul id="resultbox" class="resultbox"></ul> -->
+<!--     </div> -->
+    <div class="mapcontrol">
+        <ul>
+            <li>
+                <div class="rule-single-select" style="padding-top:3px;">
+                    <select id="ddlmaptype">
+                        <option value="1">电子地图</option>
+                        <option value="2">影像地图</option>
+                        <option value="3">混合地图</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <a href="javascript:void(0);" onclick="drawPoint();" title="绘点">
+                    <img onmouseover="this.src = 'img/point-hover.png'" onmouseout="this.src = 'img/point.png'" src="img/point.png" />
+                </a>
+            </li>
+<!--             <li> -->
+<!--                 <a href="javascript:void(0);" onclick="drawArea();" title="绘面"> -->
+<!--                     <img onmouseover="this.src = 'img/polygon-hover.png'" onmouseout="this.src = 'img/polygon.png'" src="img/polygon.png" /> -->
+<!--                 </a> -->
+<!--             </li> -->
+<!--             <li> -->
+<!--                 <a href="javascript:void(0);" onclick="modify();" title="微调"> -->
+<!--                     <img onmouseover="this.src = 'img/adjust-hover.png'" onmouseout="this.src = 'img/adjust.png'" src="img/adjust.png" /> -->
+<!--                 </a> -->
+<!--             </li> -->
+            <li>
+                <a href="javascript:void(0);" onclick="clearMap();" title="删除">
+                    <img onmouseover="this.src = 'img/recycle-hover.png'" onmouseout="this.src = 'img/recycle.png'" src="img/recycle.png" />
+                </a>
+            </li>
+<!--             <li> -->
+<!--                 <span>|</span> -->
+<!--             </li> -->
+<!--             <li> -->
+<!--                 <a href="javascript:void(0);" onclick="MecMap.map.zoomIn();" title="放大"> -->
+<!--                     <img onmouseover="this.src = 'img/zoom-hover.png'" onmouseout="this.src = 'img/zoom.png'" src="img/zoom.png" /> -->
+<!--                 </a> -->
+<!--             </li> -->
+<!--             <li> -->
+<!--                 <a href="javascript:void(0);" onclick="MecMap.map.zoomOut();" title="缩小"> -->
+<!--                     <img onmouseover="this.src = 'img/drop-hover.png'" onmouseout="this.src = 'img/drop.png'" src="img/drop.png" /> -->
+<!--                 </a> -->
+<!--             </li> -->
+<!--             <li> -->
+<!--                 <a href="javascript:void(0);" onclick="MecMeasure.begin('line');" title="测距"> -->
+<!--                     <img onmouseover="this.src = 'img/distance-hover.png'" onmouseout="this.src='img/distance.png'" src="img/distance.png" /> -->
+<!--                 </a> -->
+<!--             </li> -->
+<!--             <li> -->
+<!--                 <a href="javascript:void(0);" onclick="MecMeasure.begin('polygon');" title="测面积"> -->
+<!--                     <img onmouseover="this.src = 'img/area-hover.png'" onmouseout="this.src='img/area.png'" src="img/area.png" /> -->
+<!--                 </a> -->
+<!--             </li> -->
+<!--             <li> -->
+<!--                 <a href="javascript:void(0);" onclick="MecMeasure.clear();" title="清除"> -->
+<!--                     <img onmouseover="this.src = 'img/clear-hover.png'" onmouseout="this.src='img/clear.png'" src="img/clear.png" /> -->
+<!--                 </a> -->
+<!--             </li> -->
+        </ul>
+    </div>
+
+    <div class="stinfo">
+        <table style="width:300px;">
+            <tr>
+                <th colspan="2">
+                    <span id="lblname">站点名称</span>
+                </th>
+            </tr>
+            <tr>
+                <td style="height: 10px; line-height: 10px;" colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="tittd">坐 标</td>
+                <td>
+                    <input type="text" id="txtpoint" class="layui-input" style="width:208px;" />
+                </td>
+            </tr>
+            <tr>
+                <td style="height: 10px; line-height: 10px;" colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center; border-top: 1px solid #efefef; padding: 8px 0;">
+                    <button type="button" class="layui-btn layui-btn-normal layui-btn-danger" style="width:100px;" onclick="setP();">提 交</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <input id="hflon" type="hidden" />
+    <input id="hflat" type="hidden" />
+    <input id="typeid" type="hidden" value="9"/>
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="widgets/layui/layui.js"></script>
+
+    <script src="widgets/map/lib/OpenLayers.js"></script>
+    <script src="widgets/map/MECJS/MecMap.js"></script>
+    <script src="widgets/map/MECJS/MecMeasure.js"></script>
+    <script src="widgets/map/MECJS/DrawingManager.js"></script>
+    <script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+    <script src="js/areadraw.js"></script>
+    <script>
+    var basePath = window.top.frames[1].document.getElementById("basePath").value;
+    
+		var init = function () {
+			var obj =  window.parent.fz();
+	    	if(obj){
+	    		for(var i=0;i<obj.length;i++){
+	    			if(obj[i][0]){
+	    				MecMap.map.setCenter(calculateCenter(obj[0][0]), 17);
+	    				addPolygon(0, obj[i][0], obj[i][1], obj[i][2], obj[i][3], obj[i][4],"1");
+	    			}
+	    		}
+	    	}
+			var obj1 = window.parent.getfwzBz();
+			obj1.typeId = "9";
+			obj1.itemName = "star";
+			if(obj1.Lon && obj1.Lat){
+	    		$("#txtpoint").val(obj1.Lon + "," + obj1.Lat);
+	    		MecMap.setMapCenter(obj1.Lon, obj1.Lat, 17);
+	    		DrawMarks(obj1);
+	    	}
+		};
+		init();
+        function setP() {
+        	var id = window.top.frames[1].document.getElementById("id").value;
+            var _point = $('#txtpoint').val();
+			if(!_point){
+				top.layer.msg('请选择坐标点', {shade : [ 0.5, '#999999' ]});
+				return;
+			}
+			  $.ajax({
+		        	type: 'POST',
+		        	 url:  basePath + "/shgl/sqgl/saveBz.do",
+		        	data: {
+		        		'lon':_point.split(",")[0],
+				    	'lat':_point.split(",")[1],
+				    	'id':id
+		        	},
+		          	success: function(data){
+		          		if(data == 'success'){
+		          			top.layer.msg('数据标注成功', {
+		      					icon : 6,
+		      					time : 2000,
+		      					shade : [ 0.5, '#999999' ]
+		      				},function() {
+		      					top.layer.closeAll();
+		    				});
+		          		}else{
+		          			top.layer.closeAll();
+		          			top.layer.msg('数据标注失败，请联系管理员', {shade : [ 0.5, '#999999' ]});
+		          		}
+		          	},
+		          	error: function(data){
+		          		top.layer.closeAll();
+		          		top.layer.msg('程序出错，请联系管理员', {shade : [ 0.5, '#999999' ]});
+		          	}
+		        }); 
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<title>协同办公-添加、编辑</title>
+<meta charset="UTF-8">
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<!-- 第三方 CSS -->
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/webuploader/webuploader.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+<style type="text/css">
+#attrlist, li {
+	margin: 0;
+	padding: 0;
+}
+
+</style>
+
+</head>
+
+<body>
+	<div class="article-body">
+			<div class="row">
+				<div class="col col-12">
+					<div class="page-title">会议详情</div>
+					<div class="page-body">
+						<table class="table table-lg table-striped table-event">
+							<tr>
+								<th>标题</th>
+								<td>${meetingEntity.title ! ''}</td>
+							</tr>
+							<tr>
+								<th>开始时间</th>
+								<td>${meetingEntity.fmtStart_date ! ''}</td>
+							</tr>
+							<tr>
+								<th>结束时间</th>
+								<td>${meetingEntity.fmtEnd_date ! ''}</td>
+							</tr>
+							<tr>
+								<th>会议地点</th>
+								<td>${meetingEntity.venue ! ''}</td>
+							</tr>
+							<tr>
+								<th>发布人</th>
+								<td>${meetingEntity.user_name ! ''}</td>
+							</tr>
+							<tr>
+								<th>内容</th>
+								<td>${meetingEntity.content ! ''}</td>
+							</tr>
+							@if(isNotEmpty(departMap)){
+							<tr>
+							<th>参会人员：</th>
+							<td>
+								<div class="form-arraylist">
+								@for(dept in departMap){
+										<li>【${dept.key}】： 
+									@for(attr in dept.value  ! []){
+										${attr.name !}； 
+									@}
+										</li> 
+								@}
+								</div>
+							</td>
+							</tr>
+							@}
+							<!-- 附件 -->
+						@if(isNotEmpty(classifyMap)){
+							@for(ify in classifyMap ![]){
+							<tr>
+								<th>${ify.key}-上传</th>
+								<td>
+									<div class="form-arraylist">
+										@for(attr in ify.value  ! []){
+											@if(attr.file_type  == 'img'){
+												<li class="col-4">
+														<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.new_fileName !}')"  title="${attr.old_fileName !}" ><img src="${ctxPath}/showPic?fileName=${attr.new_fileName !}"/> ${attr.old_fileName !}</a>
+														<span title="下载" class="download" onclick="download('${attr.new_fileName !}', '${attr.old_fileName !}')"></span>
+												</li>
+											@}else if(attr.file_type  == 'pdf'){
+												<li class="col-4">
+														<a href="javascript:void(0)"  onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.new_fileName}')" title="${attr.old_fileName !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_fileName !}</a>
+									    				<span title="下载" class="download" onclick="download('${attr.new_fileName !}', '${attr.old_fileName !}')"></span>
+												</li>
+											@}else{
+												<li class="col-4">
+														<a href="javascript:void(0)"   title="${attr.old_fileName !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_fileName !}</a>
+									    				<span title="下载" class="download" onclick="download('${attr.new_fileName !}', '${attr.old_fileName !}')"></span>
+												</li>
+											@}
+										@}
+									</div>
+								</td>
+							</tr>
+							@}
+							@}
+						</table>
+					</div>
+				</div>
+
+			</div>
+		</div>
+			<form action="" id="addForm"  style="margin-top: -46px">
+				<table class="table table-lg table-striped table-event">
+				<tr>
+				<th>
+					 <label
+						style="font-size: 18px" for="" class="">上传会议记录</label>
+				</th>
+				<td>
+				<div id="picker" class=""></div>
+				
+					<!-- <label for="" class="col-sm-2 col-form-label"></label> -->
+					<div class="">
+						<div class="form-arraylist"   id="attrlist">
+						</div>
+					</div>
+					</td>
+				<input type="hidden" id="fName" name="fName" />
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div class="page-operation text-right">
+							<button id="saveBtn" type="button" class="btn btn-primary">
+								<i class="fa fa-save"></i> 保存
+							</button>
+							<button id="cancleBtn" type="button"
+								class="btn btn-outline-primary">
+								<i class="fa fa-reply"></i> 取消
+							</button>
+						</div>
+						</td>
+				</tr>
+				</table>
+				<input type="hidden" class="form-control" id="id" name="id" value="${meetingEntity.id ! ''}">
+			</form>
+	
+
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+		<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript"
+			src="${ctxPath}/assets/vendor/holder.min.js"></script>
+		<script type="text/javascript"
+			src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<!-- 日期控件JS -->
+		<script type="text/javascript"
+			src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+		<script type="text/javascript"
+			src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+		<!-- 附件 -->
+		<script type="text/javascript"
+			src="${ctxPath}/assets/vendor/webuploader/webuploader.js"></script>
+		<script type="text/javascript"
+			src="${ctxPath}/assets/scripts/subFromWithAttrs.js"></script>
+		<script
+			src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.js"></script>
+		<!-- UEditor编辑器 -->
+		<script type="text/javascript" charset="utf-8"
+			src="${ctxPath}/assets/vendor/ueditor1.4.3/ueditor.config.js"></script>
+		<script type="text/javascript" charset="utf-8"
+			src="${ctxPath}/assets/vendor/ueditor1.4.3/ueditor.all.js"></script>
+		<script type="text/javascript" charset="utf-8"
+			src="${ctxPath}/assets/vendor/ueditor1.4.3/lang/zh-cn/zh-cn.js"></script>
+		<script src="${ctxPath}/assets/scripts/xtbg/hygl/acceEdit.js"></script>
+</body>
+</html>

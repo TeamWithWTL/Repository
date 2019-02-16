@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />>
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">通知公告</h1>
+			<button id="OpenQuery" class="mui-btn mui-btn-link icon ion-ios-search-strong mui-pull-right"></button>
+		</header>
+
+		<div class="inquery">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label>标题</label>
+					<input type="text" class="mui-input-clear" placeholder="标题名称" id="titleId">
+				</div>
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-block mui-btn-primary" onclick="initTzggApp()"><i class="icon ion-ios-search-strong"></i> 点击查询</button>
+				</div>
+			</form>
+		</div>
+		<div class="mask-backdrop"></div>
+
+		<div class="mui-content mui-scroll-wrapper"  id="refreshContainer">
+			<div class="mui-scroll" id="">
+				<ul class="mui-table-view" id="table-container">
+				@#ajax table:{
+					@for(tzgg in pagenate.list ! []){
+					<li class="mui-table-view-cell mui-media">
+						<a href="javascript:void(0)" name="${tzgg.id}">
+							@if(null != tzgg.ysPice && tzgg.ysPice != ''){
+							<dt class="mui-pull-right"><img  src="${ctxPath}/showPic?fileName=${tzgg.ysPice ! ''}" style="width: 100px; height: 80px;"></dt>
+							@}
+							<div class="mui-media-body">
+							@if(null != tzgg.ysPice && tzgg.ysPice != ''){
+							<span class="mui-ellipsis-3">${tzgg.title ! ''}</span>
+							@}else{
+							<span class="mui-ellipsis">${tzgg.title ! ''}</span>
+							@}
+								<dt>${tzgg.createDates}</dt>
+							</div>
+						</a>
+					</li>
+					@}
+					<input type="hidden" id="pageCnts" value="${pagenate.pgCnts !'0'}" />
+					<input type="hidden" id="pageSize" value="${pagenate.pageSize !'0'}" />
+				@}
+				</ul>
+			</div>
+		</div>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script src="${ctxPath}/assets/scripts/xtbg/tzgg/app_index.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$("#OpenQuery").click(function() {
+					$(".mask-backdrop").toggle();
+					$(".inquery").toggleClass("show");
+				});
+				$(".mask-backdrop").click(function() {
+					$(this).hide();
+					$(".inquery").removeClass("show");
+				});
+			});
+		</script>
+	</body>
+
+</html>

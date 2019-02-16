@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>下载博昌大数据管理平台APP</title>
+		<link rel="stylesheet" type="text/css" href="http://112.35.24.239:9090/BchSqwg/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="http://112.35.24.239:9090/BchSqwg/assets/css/downapp.css" />
+
+		<body>
+			<div class="content">
+				<section class="downbtn">
+					<div class="logo">
+						<img src="http://112.35.24.239:9090/BchSqwg/assets/images/da-logo.png"/>
+					</div>
+					<a href="https://itunes.apple.com/us/app/%E5%8D%9A%E6%98%8C%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0/id1321786037?l=zh&ls=1&mt=8" id="appdown">
+						<i class="fa fa-apple"></i> AppStore 下载
+					</a>
+					<a href="http://112.35.24.239:9090/BchSqwg/apk/BchSqwg.apk" id="androiddown">
+						<i class="fa fa-android"></i> Android 下载
+					</a>
+				</section>
+			</div>
+
+			<script src="http://112.35.24.239:9090/BchSqwg/assets/template/js/jquery-1.11.3.min.js"></script>
+			<script type="text/javascript">
+				$(function() {
+					var u = navigator.userAgent;
+					var ua = navigator.userAgent.toLowerCase();
+					var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+					var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+					if(isiOS) {
+						$('#appdown').css('display', 'block');
+					} else {
+						$('#androiddown').css('display', 'block');
+					}
+				});
+			</script>
+		</body>
+
+</html>

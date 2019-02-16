@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>服务热线</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+</head>
+<body>
+	<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">服务热线</h1>
+			<button id="OpenQuery" class="mui-btn mui-btn-link icon ion-compose mui-pull-right"></button>
+	</header>
+	
+	<div class="inquery">
+		<form class="mui-input-group">
+			<div class="mui-input-row">
+				<label>所属社区</label> 
+				<select class="form-control" id="wgCode1" onchange="showSsApp(this,'ssId')">
+	   				<option value="null">--所属社区--</option>
+	   				@for(com in comList ![]){
+   					<option value="${com.id}">${com.name}</option>
+	   				@}
+  			    </select>
+			</div>
+			<div class="mui-input-row">
+				<label>所属服务站</label> 
+				<select class="form-control" id="ssId" onchange="showData(this,'gridId')">
+	   				<option value="">-- 所属服务站--</option>
+  			 	</select>
+			</div>
+			<div class="mui-input-row">
+				<label>所属网格</label> 
+				<select id="gridId" class="form-control">
+	   				<option value="">-- 所属网格--</option>
+  			 	</select>
+			</div>
+			<div class="mui-button-row">
+			<button class="mui-btn mui-btn-block mui-btn-primary" type="button" onclick="doSave()">点击保存</button>
+			</div>
+		</form>
+	</div>
+	
+	<div class="mask-backdrop"></div>
+	
+	<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<form class="mui-input-group jcxx-form">
+				@if(accMore != null){
+					@if(accMore.sqName != null){
+					<div class="article-content">
+					
+						<div class="mui-input-row">
+						<label>所属社区</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${accMore.sqName ! ''}">
+						</div>
+					
+						<div class="mui-input-row">
+							@for(sq in sqLists ![]){
+							<label>社区负责人</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${sq.manager}">
+							<label>联系电话</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${sq.phone}">
+							@}
+						</div>
+						
+					</div>
+					@}else{
+					<div class="article-content" style="text-align: center;">
+						<span>亲，请点击右上角，完善信息哦！</span>
+					</div>
+					@}
+					@if(accMore.fwzName != null){
+					<div class="article-content">
+					
+						<div class="mui-input-row">
+							<label>所属服务站</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${accMore.fwzName ! ''}">
+						</div>
+						
+						<div class="mui-input-row">
+							@for(fwz in fwzLists ![]){
+							<label>服务站负责人</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${fwz.manager}">
+							<label>联系电话</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${fwz.phone}">
+							@}
+						</div>
+					
+					</div>
+					@}
+					@if(accMore.wgName != null){
+					<div class="article-content">
+					
+						<div class="mui-input-row">
+							<label>所属网格</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${accMore.wgName ! ''}">
+						</div>
+						
+						<div class="mui-input-row">
+							@for(wg in wgLists ![]){
+							<label>网格负责人</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${wg.manager}">
+							<label>联系电话</label>
+							<input readonly="readonly" type="text" class="mui-readonly"  value="${wg.phone}">
+							@}
+						</div>
+					
+					</div>
+					@}
+					@}else{
+					<div class="article-content" style="text-align: center;">
+						<span>亲，请点击右上角，完善信息哦！</span>
+					</div>
+					@}
+				</form>
+			</div>
+		</div>
+	
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/app/home/app_updata_Xx.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		
+		<script type="text/javascript">
+		
+		mui.init();
+		mui('.mui-scroll-wrapper').scroll({
+			indicators: false, //是否显示滚动条
+			startX: 0, //初始化时滚动至x
+			deceleration: 0.0004, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+			bounce: true //是否启用回弹
+		});  
+		
+		$(function() {
+			$("#OpenQuery").click(function() {
+				$(".mask-backdrop").toggle();
+				$(".inquery").toggleClass("show");
+			});//点击放大镜显示遮罩层，滑出筛选框
+			$(".mask-backdrop").click(function() {
+				$(this).hide();
+				$(".inquery").removeClass("show");
+			});//点击遮罩层关闭筛选和遮罩
+		});	
+		
+		//手机按键返回
+		/*function anGoBack(){
+			mui.back();
+			return;
+		}*/
+		
+		mui("#header").on('tap','a',function(){
+			//返回首页
+			window.location.href = $("#basePath").val() + "/app/home/index.do";
+			return;
+		});
+		
+		//手机按键返回
+		function anGoBack(){
+			//返回首页
+			window.location.href = $("#basePath").val() + "/app/home/index.do";
+			return;
+		}
+		</script>
+</body>
+
+</html>

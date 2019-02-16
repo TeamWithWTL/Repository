@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en" class="layerpage">
+
+<head>
+	<title>小区信息-添加、编辑</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+</head>
+
+<body>
+	<form id="addForm">
+		<div class="form-group row">
+			<label for="" class="col-sm-3 col-form-label">小区名称</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" id="name" name="name" placeholder="小区名称" value="${village.name ! ''}" />
+				</div>
+			</div>
+			<div class="form-group row">
+			<label for="" class="col-sm-3 col-form-label">所属社区</label>
+				<div class="col-sm-6">
+					<div class="select-after">
+							<select id="commId" class="form-control" onchange="showSs(this,'ssId','1')">
+							@if(village != null){
+								<option value="${village.serviceStation.community.id}" selected>${village.serviceStation.community.name}</option>
+							@}else{
+								<option value="">-- 所属社区--</option>
+								@if(isNotEmpty(comList)){
+									@for(com in comList){
+										<option value="${com.id}">${com.name}</option>
+									@}
+								@}
+							@}
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+			<label for="" class="col-sm-3 col-form-label">所属服务站</label>
+				<div class="col-sm-6">
+					<div class="select-after">
+						<select class="form-control" name="ssId" id="ssId">
+						@if(village != null){
+						<option value="${village.serviceStation.id}" selected>${village.serviceStation.name}</option>
+						@}else{
+							<option value="">-- 所属服务站--</option>
+							@if(isNotEmpty(ssList)){
+								@for(ss in ssList){
+									<option value="${ss.id}" ${village != null && ss.id == village.serviceStation.id ? 'selected' : ''}>${ss.name}</option>
+								@}
+							@}
+						@}
+						</select>
+					</div>
+				</div>
+			</div>
+		<!-- 	<div class="form-group row">
+			<label for="" class="col-sm-3 col-form-label">负责人</label>
+			input文本类使用col-sm-6
+			<div class="col-sm-6">
+				<div class="input-group">
+					<button type="button" class="btn btn-outline-secondary" onClick="addOption(this)"><i class="fa fa-plus" aria-hidden="true"></i> 添加负责人</button>
+				</div>
+			</div>
+		</div> -->
+		
+		<!--固定字段-->
+		<div class="form-group row">
+			<label for="" class="col-sm-3 col-form-label">负责人</label>
+			<!--input文本类使用col-sm-6-->
+			<div class="col-sm-6">
+				<div class="input-group">
+					<input class="form-control" type="text" name="manager" placeholder="姓名" value="${vmanager.manager ! ''}"/>
+					<input class="form-control" type="text" name="phone" placeholder="电话号码" value="${vmanager.phone ! ''}"/>
+					<!-- <span class="input-group-btn">
+						<button type="button" class="btn btn-secondary"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+					</span> -->
+				</div>
+			</div>
+		</div>
+		<!--固定字段结束-->
+		<!--循环开始-->
+	<!-- 	<div id="fz_div">
+		@for(cm in vList ! []){
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label"></label>
+				<div class="col-sm-6">
+					<div class="input-group">
+						<input class="form-control" type="text" name="manager" placeholder="姓名" value="${cm.manager ! ''}"/>
+						<input class="form-control" type="text" name="phone" placeholder="电话号码" value="${cm.phone ! ''}"/>
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-danger" onClick="delOption(this)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+						</span>
+					</div>
+				</div>
+			</div>
+		@}
+		</div> -->
+		<!-- <div class="form-group row" id="fz_div">
+			<label for="" class="col-sm-3 col-form-label"></label>
+			input文本类使用col-sm-6
+			<div class="col-sm-6">
+				<div class="input-group">
+					<input class="form-control" type="text" value="" placeholder="姓名"/>
+					<input class="form-control" type="text" value="" placeholder="电话号码"/>
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+					</span>
+				</div>
+			</div>
+		</div> -->
+		<!--循环结束-->
+		<div class="form-group row">
+			<label for="" class="col-sm-3 col-form-label">小区描述</label>
+			<!--input文本类使用col-sm-6-->
+			<div class="col-sm-8">
+				<textarea class="form-control" name="description" rows="6" id="desId">${village.description ! ''}</textarea>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-3"></div>
+			<div class="col-sm-9">
+					<button type="button" class="btn btn-primary" id="saveBtn"><i class="fa fa-save"></i> 保 存</button>
+					<button type="button" class="btn btn-outline-primary" id="cancleBtn"><i class="fa fa-reply"></i> 取 消</button>
+				</div>
+			</div>
+			<input type="hidden" id="villId" value="${village.id !''}" />
+			<input type="hidden" name="managers" id="managers" />
+			<input type="hidden" name="phones" id="phones" />
+		</form>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/xqxx/addEdit.js"></script>
+</body>
+</html>

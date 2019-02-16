@@ -1,0 +1,26 @@
+# JDBC
+jdbc.username=root
+jdbc.password=root123456!
+#jdbc.password=123456
+
+#_test
+#jdbc.url=jdbc:mysql://192.168.0.143:3306/bchsq_test?characterEncoding=utf8&useSSL=false
+jdbc.url=jdbc:mysql://192.168.0.143:3306/bchsq_one?characterEncoding=utf8&useSSL=false
+#jdbc.url=jdbc:mysql://localhost:3306/bchwg_test?characterEncoding=utf8&useSSL=false
+#jdbc.url=jdbc:mysql://127.0.0.1:3306/bchsq_one?characterEncoding=utf8&useSSL=false
+jdbc.driver_class=com.mysql.jdbc.Driver
+jdbc.maxActive=50
+#jdbc.url=jdbc:mysql://127.0.0.1:3306/bchsq_test?characterEncoding=utf8&useSSL=false
+# C3P0 连接池
+c3p0.acquireIncrement=10 
+c3p0.minPoolSize=3
+c3p0.maxPoolSize=200
+c3p0.maxIdleTime=6000
+
+
+
+
+
+
+
+

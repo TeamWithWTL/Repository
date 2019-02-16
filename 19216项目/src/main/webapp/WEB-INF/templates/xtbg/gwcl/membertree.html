@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>用户管理-部门结构</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css"/>
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/zTree_v3/css/metroStyle/metroStyle.css">
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+</head>
+
+<body>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="page-block">
+			   <div class="page-head">
+					<div class="page-function">
+						<div class="btn-group" id="partyFunc">
+							<button type="button" class="btn btn-default" id="saveBtnParty">确定</button>
+							<button type="button" class="btn btn-default" id="cancleBtn">取消</button>
+						</div>
+					</div>
+				</div>
+				<ul id="myGroupTree" class="ztree"></ul>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="deptId" value="${deptId}" />
+	<input type="hidden" id="jsrIds" value="${jsrIds}" />
+	<input type="hidden" id="docId" value="${docId}" />
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/public.js"></script>
+	<script src="${ctxPath}/assets/vendor/zTree_v3/js/jquery.ztree.all-3.5.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script  type="text/javascript">
+	
+	var mygroupTreeObj;
+	$(function(){
+	$.fn.zTree.init($("#myGroupTree"), treeSetting);
+	
+	//保存
+	$("#saveBtnParty").click(function(){
+		var accCodes='';
+		var nodes = mygroupTreeObj.getCheckedNodes(true);
+		parent.layer.getChildFrame('body').find("#personlist").html("");
+		parent.layer.getChildFrame('body').find("#personlistValue").val("");
+	    for(var i=0;i<nodes.length;i++){
+			var accCode = nodes[i].id;
+			var name =nodes[i].name;
+			parent.layer.getChildFrame('body').find("#personlist").append('<li id="'+accCode+'_member" class="form-user-tag" code="'+accCode+'">'+name+'<span class="colsed" onclick=deleteMember("'+accCode+'")></span></li>');
+			accCodes +=accCode+";";
+	        }
+	    $("#personlistValue").val(accCodes);
+		parent.layer.close(parent.layer.getFrameIndex(window.name));
+	});
+	
+	$("#cancleBtn").click(function(){
+		var index = parent.layer.getFrameIndex(window.name);
+	    parent.layer.close(index);
+	});
+	
+	});
+	
+	
+	//ZTree设置
+	var treeSetting = {
+			check: {
+				enable: true,
+				chkStyle: $("#deptId").val() ==""?"checkbox":"radio"
+			},
+			view : {
+				selectedMulti : true
+				},
+		async: {
+			enable: true,
+			type: "post",
+			url: "${ctxPath}/xtbg/gwcl/loadTreeData.do?deptId="+$("#deptId").val()+"&jsrIds="+$("#jsrIds").val()+"&docId="+$("#docId").val()
+		},
+		data: {
+			simpleData: {
+				enable: true,
+				idKey: "id",
+				pIdKey: "pId",
+				rootPId: "0"
+			}
+		},
+		callback: {
+			beforeClick: zTreeBeforeClick,
+			onClick: zTreeOnClick,
+			onAsyncSuccess: zTreeOnAsyncSuccess,
+			onCheck: zTreeOnCheck
+		}
+	};
+
+	function zTreeOnCheck(event, treeId, treeNode) {
+		    
+	}
+	// 节点被点击前校验：默认所有节点都可以被点击
+	function zTreeBeforeClick(treeId, treeNode, clickFlag){
+		if(parent.zTreeBeforeClick && typeof(parent.zTreeBeforeClick)=="function"){ 
+			parent.zTreeBeforeClick(treeId, treeNode, clickFlag); 
+		}else{
+			return true;
+		}
+	}
+
+	// 节点被点击时触发
+	function zTreeOnClick(event, treeId, treeNode){
+		if(parent.zTreeOnClick && typeof(parent.zTreeOnClick)=="function"){ 
+			parent.zTreeOnClick(event, treeId, treeNode); 
+		}
+	}
+
+	// ZTree加载成功后触发
+	function zTreeOnAsyncSuccess(event, treeId, treeNode, msg){
+		var treeObj = $.fn.zTree.getZTreeObj(treeId);		
+		mygroupTreeObj = treeObj;
+		if(parent.zTreeOnAsyncSuccess && typeof(parent.zTreeOnAsyncSuccess)=="function"){ 
+			parent.zTreeOnAsyncSuccess(event, treeId, treeNode, msg); 
+		}
+	}
+
+	</script>
+</body>
+</html>

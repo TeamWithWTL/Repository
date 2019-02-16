@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${@com.jcwx.utils.ProjectUtils.getSysCfg("projectName")}</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+</head>
+
+<body>
+	<div class="header-block">
+		<li><a href="#">首页</a></li>
+	</div>
+	<div class="content-block">
+		<div class="container-fluid warpper">
+			<div class="row">
+				<div class="col col-4">
+					<!--事件统计-->
+					<div class="section-block">
+						<div class="section-block-title">
+							<i class="index-icon index-icon-sjtj"></i> 事件统计
+							<div class="section-block-after">
+								<a href="javascript:void(0)" class="section-more" onclick="sjtjMore(1)">更多..</a>
+							</div>
+						</div>
+						<div class="section-body">
+							<div id="charts-sjtj" class="charts-block"></div>
+							<input type="hidden" id="basePath" value="${ctxPath}" />
+						</div>
+					</div>
+				</div>
+				<div class="col col-4">
+					<!--特殊人口统计-->
+					<div class="section-block" >
+							<div class="section-block-title">
+								<i class="index-icon index-icon-sjtj"></i> 特殊人口统计
+								<div class="section-block-after">
+									<a href="#" class="section-more"  onclick="tsrkMore(1)">更多..</a>
+								</div>
+							</div>
+						<div class="section-body" id="content-Tsrk">
+							<div id="charts-tsrktjBar" class="charts-block" ></div>
+						</div>
+					</div>
+					
+					
+				</div>
+				<div class="col col-4">
+					<!--热点关注-->
+					<div class="section-block" id="rdxw">
+					<div class="section-block-title">
+						<i class="index-icon index-icon-rdxw"></i> 热点新闻
+						<div class="section-block-after">
+								<a  href="javascript:void(0)" class="section-more"  onclick="rdMore()">更多..</a>
+						</div>
+					</div>
+					<div class="section-body">
+						<div class="index-news overflow"  id="table-container">
+							@#ajax table:{ 
+								@if(listIndex != null){
+									<div class="block-recommend-news">
+										@if(isNotEmpty(listIndex.picPath)){
+											<dt class="media-img">
+												<img src="${ctxPath}/showPic?fileName=${listIndex.picPath ! ''}" alt="" />
+											</dt>
+										@}else{
+											<dt class="media-img"></dt>
+										@}
+			
+										<div class="recommend-inner">
+											<h4 class="ellipsis">
+												<a style="text-decoration: none;" href="javascript:void(0)" onclick="goViews('热点新闻','${listIndex.id !}')">${listIndex.title ! ''}</a>
+											</h4>
+											<p class="ellipsis-3">${listIndex.summary ! ''}</p>
+										</div>
+									<div class="clearfix"></div>
+								</div>
+							@}
+							<div class="block-news-list">
+								<ul>
+									@for(sy in listsSy ![]){
+										<li><a href="javascript:void(0)" onclick="goViews('热点新闻','${sy.id}')">
+										
+											@if(sy.types=='1'){
+									        	【新闻快讯】
+									        @}else if(sy.types=='2'){
+									        	【动态播报】
+									        @}else if(sy.types=='3'){
+									        	 【精彩活动】
+									        @}else  {
+									        	【其他】
+									        @}
+										${sy.title ! ''}</a><span>${sy.createDateFrm ! ''}</span></li>
+									@}
+									<!-- <li><a href="#">【廉政要闻】我院隆重召开庆祝建党95周年表彰大会祝建党95周年表彰大会</a><span>2017/10/09</span></li>
+									<li><a href="#">【廉政要闻】我院隆重召开庆祝建党95周年表彰大会祝建党95周年表彰大会</a><span>2017/10/09</span></li>
+									<li><a href="#">【廉政要闻】我院隆重召开庆祝建党95周年表彰大会祝建党95周年表彰大会</a><span>2017/10/09</span></li>
+									<li><a href="#">【廉政要闻】我院隆重召开庆祝建党95周年表彰大会祝建党95周年表彰大会</a><span>2017/10/09</span></li>
+									<li><a href="#">【廉政要闻】我院隆重召开庆祝建党95周年表彰大会祝建党95周年表彰大会</a><span>2017/10/09</span></li> -->
+								</ul>
+							</div>
+						@}
+					</div>
+				</div>
+				</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col col-4">
+					<!--社区人口统计-->
+					<div class="section-block">
+						<div class="section-block-title">
+							<i class="index-icon index-icon-rksl"></i> 社区人口统计
+							<div class="section-block-after">
+								<a href="javascript:void(0)" class="section-more"  onclick="sqrkMore(1)">更多..</a>
+							</div>
+						</div>
+						<div class="section-body">
+							<div id="charts-rksl" class="charts-block"></div>
+							<input type="hidden" id="basePath" value="${ctxPath}" />
+						</div>
+					</div>
+				</div>
+				<div class="col col-4">
+					<!--社区人口统计-->
+					<div class="section-block">
+						<div class="section-block-title">
+							<i class="index-icon index-icon-lbtj"></i>事件类别统计
+							<div class="section-block-after">
+								<a href="#" class="section-more" onclick="sjlbMore(1)">更多..</a>
+							</div>
+						</div>
+						<div class="section-body">
+							<div id="charts-lbtj" class="charts-block"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col col-4">
+					<!--事件来源-->
+					<div class="section-block" id="dbsx">
+						<div class="section-block-title">
+							<i class="index-icon index-icon-sjly"></i> 事件来源
+						</div>
+						<div class="section-body">
+							<div id="charts-sjly" class="charts-block"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="roleCode" value="${session.sysAccCount.role_code}" />
+
+	<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/popper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://echarts.baidu.com/dist/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/home/home.js"></script>
+</body>
+</html>

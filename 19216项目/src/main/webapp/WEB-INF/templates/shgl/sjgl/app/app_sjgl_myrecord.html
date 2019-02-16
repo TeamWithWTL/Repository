@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a  id="backButton" class=" icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">处理记录</h1>
+		</header>
+		
+		<div class="inquery">
+			<form class="mui-input-group">
+				<div id ="treeButton" class="mui-input-row">
+							<label  id="clrLabel">处理人</label>
+							<button type="button" class="mui-btn btn-input" id="Add_User">添加 <i class="icon ion-android-person-add"></i></button>
+				</div>
+				<div id ="treeList" class="mui-input-row col-list">
+					
+				</div>
+				<div  id="contentDiv" class="content-block block-border">
+				<label id="suggest">处理意见：</label>
+					<textarea rows="5" id="content" name="content"></textarea>
+				</div>
+				<div id="isPubDiv" class="mui-input-row" hidden>
+					<label>是否公开</label>
+					<div id="isPub" class="mui-switch mui-switch-mini">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</div>
+				<div class="mui-button-row">
+					<button id="dealButton" type="button" class="mui-btn mui-btn-block mui-btn-primary" ><i class="icon ion-ios-search-strong"></i> 提交</button>
+				</div>
+			</form>
+		</div>
+		
+		
+		<div class="mask-backdrop"></div>
+<!-- 		<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted"> -->
+<!-- 			<a id="eventButton" class="mui-control-item mui-active" href="javascript:void(0)">待办事项</a> -->
+<!-- 			<a id="recordButton" class="mui-control-item" href="javascript:void(0)">处理记录</a> -->
+<!-- 		</div> -->
+		<div class="mui-content mui-scroll-wrapper" id="refreshContainer">
+			<div class="mui-scroll">
+			<div id="table-container" class="listview-block">
+				@#ajax table:{
+				@for(deal in pagenate.list ! []){
+					<div class="mui-card">
+						<div class="mui-card-header">
+							<div class="mui-checkbox">
+								<input name="checkbox1" value="Item 1" type="checkbox">
+							</div>
+							<a href="javascript:void(0)">${tagFlag=='1'?deal.event.title:deal.title}</a>
+						</div>
+						<div class="mui-card-content">
+							<div class="mui-card-content-inner">
+								<p class="mui-ellipsis-2" style="color:#666;">${tagFlag=='1'?deal.event.content:deal.content}</p>
+								<p>${tagFlag=='1'?deal.event.applyTimeFrm:deal.applyTimeFrm}</p>
+							</div>
+						</div>
+						<div class="mui-card-footer">
+							<a href="javascript:void(0)" id="${tagFlag=='1'?deal.event.id:deal.id}" name="view"><i class="icon ion-android-list"></i> 查看</a>
+							@if(tagFlag=='1'){
+								<a href="javascript:void(0)" id="${deal.id}" name="deal" curRoleId="${deal.curRoleId}" dealStatus="${deal.dealStatus}"><i class="icon ion-loop"></i> 处理</a>
+								@if(deal.curRoleId =='12'){
+									<a href="javascript:void(0)" id="${deal.id}"  curRoleId="${deal.curRoleId}" dealStatus="${deal.dealStatus}" name="report"><i class="icon ion-arrow-up-a"></i>转发</a>
+								@}else if(deal.dealStatus != '3'&&deal.dealStatus != '4'&& deal.curRoleId !='08'){
+								<a href="javascript:void(0)" id="${deal.id}"  curRoleId="${deal.curRoleId}" dealStatus="${deal.dealStatus}" name="report"><i class="icon ion-arrow-up-a"></i> 上报</a>
+								@}
+								@if(deal.curRoleId =='03'){
+								<a href="javascript:void(0)" id="${deal.id}"  curRoleId="${deal.curRoleId}" dealStatus="${deal.dealStatus}" name="toservice"><i class="icon ion-arrow-down-a"></i> 下发</a>
+			        			@}
+							@}
+						</div>
+					</div>
+					@}
+					<input type="hidden" id="pageCnts" value="${pageCnts}" />
+					<input type="hidden" id="pageSize" value="${pageSize}" />
+				@}
+					</div>
+			</div>
+		</div>
+	<div class="popup">
+			<div class="popup-header">
+				<h4 class="popup-header-title">选择菜单</h4>
+				<span id="closed-popup" class="icon ion-ios-close-empty"></span>
+			</div>
+			<div class="popup-body">
+				<div id="checkbox-list" class="checkbox-list">
+				
+				</div>
+				<!--end checkbox list 2-->
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-block" id="selectTreeButton">确定</button>
+				</div>
+			</div>
+		</div>
+		<div class="full-mask-backdrop"></div>
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+		<input type="hidden" id="jsrId" value="" />
+		
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/sjgl/app/app_sjgl_myrecord.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script>
+		//手机键返回
+		function anGoBack(){
+				window.location.href = $("#basePath").val() + "/app/sjgl/eventfunList.do";
+				return;
+	    }
+		</script>
+	</body>
+
+</html>

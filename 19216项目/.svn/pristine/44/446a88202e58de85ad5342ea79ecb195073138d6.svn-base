@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>数据中心-任务统计-首页</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css"	/>
+	<style type="text/css">
+      .wrap{
+        width: 300px; 
+		white-space: nowrap;  
+		text-overflow: ellipsis; 
+		overflow: hidden; 
+      }
+    </style>
+</head>
+
+<body>
+	<div class="function-box">
+		 	<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+					<div class='input-group date form_datetime' id='start'>
+						<input type="text" class="form-control" id="rxrq1" placeholder="开始日期" value="" readonly="readonly">
+						<span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+			                <span class="fa fa-calendar" aria-hidden="true"></span>
+			            </span>
+		            </div>至&nbsp;&nbsp;
+		            <div class='input-group date form_datetime' id='end'>
+						<input type="text" class="form-control" id="rxrq2" placeholder="结束日期" value="" readonly="readonly">
+						<span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+			                <span class="fa fa-calendar" aria-hidden="true"></span>
+			             </span>
+					</div>
+					<select class="form-control" id="sqId">
+					<option value="">--社区名称--</option>
+						@for(sq in sqList ! []){
+						<option value="${sq.id}">${sq.name}</option>
+						@}
+					</select>
+					<select class="form-control" id="fwzId">
+						<option value="">--服务站名称--</option>
+							@for(fwz in fwzList ! []){
+							<option value="fwz.id">${fwz.name}</option>
+							@}
+					</select>
+					<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form><!-- form结束 -->
+			</div>
+		</div>
+		<div id="table-container" class="warpper">
+		@#ajax table:{
+		<div  class="table-box">
+				<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+					<thead>
+					<tr class="table-secondary">
+						<th width="3%" class="text-center">
+							<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+				        </th>
+						<th>标题</th>
+						<th width="15%">创建时间</th>
+				        <th width="20%">社区名称</th>
+				        <th width="20%">服务站名称</th>
+				        <th width="10%">是否已下发</th>
+				        <th width="10%">是否已反馈</th>
+					</tr>
+					</thead>
+					<tbody>
+					@for(pg in pagenate.list ! []){
+					<tr>
+						<td class="">
+							<input type="checkbox" class="i-checks" id="icheck" value=""/>
+						</td>
+						<td class="">${pg.shglTaskEntity.title}</td>
+						<td class="">${pg.shglTaskEntity.startDate}</td>
+						<td class="">${pg.shglTaskEntity.sqName}</td>
+						<td class="">${pg.shglTaskEntity.fwzName}</td>
+						<td class="">
+						@if(pg.idDown == '1'){
+						是
+						@}else{
+						否
+						@}
+						</td>
+						<td class="">
+						@if(pg.isBack == '1'){
+						是
+						@}else{
+						否
+						@}
+						</td>
+			    	</tr>
+			    	@}elsefor{
+			    	<tr>
+				        <td colspan="7" class="text-center">
+				        	没有找到要查询的数据
+				        </td>
+			    	</tr>
+			    	@}
+					</tbody>
+				</table>
+			</div>
+			<!-- 自定义分页标签 -->
+			<#pagenate func="initData" page="${pagenate}" />
+				@}
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js" ></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	
+	<!-- 日期控件JS -->
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js" ></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js" ></script>
+	<script src="${ctxPath}/assets/scripts/sjzx/rwtj/index_rwtj.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

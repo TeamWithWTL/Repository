@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>事件管理-首页</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/common.css"/>
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+	<link rel="stylesheet" type="text/css"
+	href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" />
+</head>
+
+<body>
+	<div class="content-title">
+		<h4><img src="${ctxPath}/assets/img/icon-home.png" width="16"/> <a href="javascript:void(0);" onclick="goHome('${ctxPath}/home/index.do');">首页</a> <span class="fa fa-angle-right"></span> 社会管理 <span class="fa fa-angle-right"></span> 事件管理 </h4>
+	</div>
+	<div class="content-body">
+		<div class="block-content heighter">
+			<div class="content-form">
+				<form class="form-inline" action="" method="post">
+					<div class="form-group">
+						<input type="text" class="form-control" id="apply_time" placeholder="上报时间">
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="title" placeholder="标题/上报人">
+					</div>
+					<div class="form-group">
+						<button type="button" class="btn btn-default" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+					</div>
+				</form>
+			</div>
+			<div class="content-function"></div>
+			<div class="clearfix"></div>
+			<div id="table-container">
+			@#ajax table:{
+				<div class="content-article">
+					<table class="table table-bordered" cellspacing="" cellpadding="">
+						<tr>
+							<th width="5%" class="text-center">序号</th>
+							<th>事件标题</th>
+							<th width="15%">上报人</th>
+							<th width="15%">上报时间</th>
+							<th>上报位置</th>
+							<th>状态</th>
+							<th width="15%" class="text-center">操作</th>
+						</tr>
+						@for(event in pagenate.list ! []){
+						<tr>
+							<td class="text-center">${eventLP.index} </td>
+					        <td>${event.title}</td>
+					        <td>${event.apply_name}</td>
+					        <td>${event.applyTimeFrm}</td>
+					        <td>${event.apply_addr}</td>
+					        <td>${event.eventStastus.status == "1" ? "进行中" : "已结束"}</td>
+					        <td class="text-center">
+						        @if(event.eventStastus.status == "1"){
+						        	<a href="javascript:void(0);" onclick="goView('${event.id}')">查看</a>
+						        @}else{
+						        	<a href="javascript:void(0);" onclick="goViewDeal('${event.id}')">查看</a>
+						        @}
+						        @if(roleCode != "99" && event.eventStastus.status == "1"){
+					        		@if(roleCode != "04"){
+					        		<a href="javascript:void(0);" onclick="goDeal('${event.id}')">处理</a>
+					        		@}
+					        		@if(roleCode != "05"){
+					        		<a href="javascript:void(0);" onclick="report('${event.id}')">上报</a>
+					        		@}
+					        	@}
+					        </td>
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="7" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+					</table>
+				</div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+			</div>
+		</div>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<!-- 日期控件JS -->
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/sjgl/index.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

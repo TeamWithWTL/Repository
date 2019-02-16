@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />>
+</head>
+
+<body>
+	<header id="header" class="mui-bar mui-bar-nav">
+		<a class="icon ion-android-arrow-back mui-pull-left"></a>
+		<h1 class="mui-title" id="title">社区服务</h1>
+		<button id="OpenQuery" class="mui-btn mui-btn-link icon ion-ios-search-strong mui-pull-right"></button>
+	</header>
+	<div class="inquery">
+		<form class="mui-input-group">
+			<div class="mui-input-row">
+				<label>标题</label> <input type="text" class="mui-input-clear" placeholder="标题名称" id="titleId">
+			</div>
+			<div class="mui-button-row">
+				<button type="button" class="mui-btn mui-btn-block mui-btn-primary" onclick="initSqfwApp()">
+					<i class="icon ion-ios-search-strong"></i> 点击查询
+				</button>
+			</div>
+		</form>
+	</div>
+	<div class="mask-backdrop"></div>
+
+	<div class="mui-content mui-scroll-wrapper" id="refreshContainer">
+		<div class="mui-scroll" id="">
+			<div class="listview-block" id="table-container">
+			@#ajax table:{ 
+				@for(content in pagenate.list ! []){
+				<div class="mui-card" id="sqfwXqId" name="${content.id}">
+					<!--页眉，放置标题-->
+					<div class="mui-card-header">
+						<a href="javascript:void(0)">${content.title}</a>
+					</div>
+					<!--内容区-->
+					<div class="mui-card-content">
+						<div class="mui-card-content-inner">
+							<p>${content.createTimeFmt}</p>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" id="pageCnts" value="${pageCnts}" /> 
+				<input type="hidden" id="pageSize" value="${pageSize}" /> 
+				@} 
+			@}
+			</div>
+		</div>
+	</div>
+
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+	<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+	
+	<script src="${ctxPath}/assets/scripts/shfw/sqfw/app_index_sqfw.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$("#OpenQuery").click(function() {
+				$(".mask-backdrop").toggle();
+				$(".inquery").toggleClass("show");
+			});
+			$(".mask-backdrop").click(function() {
+				$(this).hide();
+				$(".inquery").removeClass("show");
+			});
+		});
+		
+		//手机按键返回
+		/* function anGoBack(){
+			mui.back();
+			return;
+		} */
+		
+		mui("#header").on('tap','a',function(){
+			window.location.href = $("#basePath").val() + "/app/home/index.do";
+		});
+		
+		//手机按键返回
+		function anGoBack(){
+			//返回首页
+			window.location.href = $("#basePath").val() + "/app/home/index.do";
+			return;
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>热点新闻--内容详情页 </title>
+<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/webuploader/webuploader.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+
+</head>
+<body>
+	<div class="container">
+		   <div class="article-header text-center">
+				<h2>${dcInfo.title ! ''}</h2>
+				<p>
+				<span>创建时间：${dcInfo.createDateFom}</span>
+			</p>
+			</div>
+			<div class="article-body">
+				<div class="article-content">
+					<p>${dcInfo.content ! ''}</p>
+				</div>
+				@if(isNotEmpty(dcInfo.attrList)){
+				<div class="form-arraylist">
+					<dt>附件下载:</dt>
+					<ul>
+						@for(attr in dcInfo.attrList  ! []){	
+							@if(attr.file_type == 'img'){
+								<li class="col-9">
+									<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.new_filename}')" title="${attr.old_filename}"><img src="${ctxPath}/showPic?fileName=${attr.new_filename}"/>${attr.old_filename}</a>
+									<span title="下载" onclick="download('${attr.new_filename}', '${attr.old_filename}')" class="download"></span>
+								</li>
+							@}else if(attr.file_type == 'pdf'){
+								<li class="col-9">
+									<a href="javascript:void(0)" onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.new_filename}')" title="${attr.old_filename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_filename}</a>
+									<span title="下载" onclick="download('${attr.new_filename}', '${attr.old_filename}')" class="download"></span>
+								</li>
+								@}else{
+								<li class="col-9">
+									<a href="javascript:void(0)" title="${attr.old_filename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_filename}</a>
+									<span title="下载" onclick="download('${attr.new_filename}', '${attr.old_filename}')" class="download"></span>
+								</li>
+								@}
+						@}
+					</ul>
+				</div>
+				@}
+		</div>
+	</div>
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+		<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js" ></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+		<script src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script type="text/javascript">
+			var basePath = $("#basePath").val();
+			//附件下载
+			function download(new_filename, old_filename){
+				window.location.href = basePath + '/pub/downloadbystream.do?fileName=' + new_filename + '&oldFileName=' + old_filename;
+			}
+		</script>
+</body>
+</html>

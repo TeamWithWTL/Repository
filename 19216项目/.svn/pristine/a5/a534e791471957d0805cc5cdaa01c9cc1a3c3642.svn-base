@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>社会服务-社区服务</title>
+		<!-- 第三方 CSS -->
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	</head>
+	<body>
+		<div class="container">
+		   <div class="article-header text-center">
+				<h2>${zwxx.title ! ''}</h2>
+				<p>
+					<span>发布时间：${zwxx.createTimeFmt ! ''}</span>
+					<!-- <span>文章类型：政务信息</span> -->
+					<span>发布人：${zwxx.userName ! ''}</span>
+				</p>
+			</div>
+			<div class="article-body">
+				<div class="article-content">
+				  	<p>${zwxx.content ! ''}</p>
+				</div>
+				  @if(isNotEmpty(zwxx.attrList)){
+				<div class="form-arraylist form-arraylist-border">
+					<h4 class="form-arraylist-title">附件列表：</h4>
+					@for(attr in zwxx.attrList  ! []){	
+						@if(attr.fileType == 'img'){
+						<li class="col-9">
+							<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/showPic?fileName=${attr.newFilename}"/> ${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'pdf'){
+						<li class="col-9">
+							<a href="javascript:void(0)" onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'word'){
+						<li class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'txt'){
+						<li  class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'exl'){
+						<li  class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'video'){
+						<li  class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else{
+						<li class="col-9">
+							<a href="javascript:void(0)"  title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}
+					@}
+				</div>
+				 @}	
+			</div>
+		</div>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+		<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/shfw/zwxx/view.js"></script>
+	</body>
+</html>

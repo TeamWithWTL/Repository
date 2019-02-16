@@ -1,0 +1,349 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/Linearicons/css/Linearicons.css" />
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+			<!--<a class="mui-action-back icon ion-android-arrow-back mui-pull-left" id="backId"></a>-->
+			<h1 class="mui-title" id="title">活动管理</h1>
+		</header>
+		<div class="inquery"  id="divhd">
+			<div class="mui-scroll">
+				<!-- 反馈 -->
+				<div id="fankui" class="mui-scroll-wrapper" style="min-height: 500px;">
+					<div class="mui-scroll">
+						<form  id="addForm" action="" method="post"  class="mui-input-group">
+						<div class="content-block block-border " >
+						<label>反馈：</label>
+						<textarea rows="5" id="contentFk" name="content" placeholder="请输入反馈的内容"></textarea>
+						</div>
+						<!-- <div class="delimiter"></div> -->
+						<div class="mui-input-group">
+							<div class="content-block block-border  array-list">
+								<label>附件上传</label>
+								<div class="col-sm-6"></div>
+									<ul id="fjItems">
+										<li class="array-funciton array-photograph" onclick="openCamera()"><span class="icon ion-camera"></span><p>拍摄照片</p>
+										</li>
+										<li class="array-funciton array-upfile" onclick="openFile()"><span class="icon ion-filing"></span><p>上传文件</p>
+										</li>
+									</ul>
+							</div>
+						</div>
+						<div class="mui-button-row">
+							<button type="button" class="mui-btn mui-btn-block mui-btn-primary" onclick="doSav('${detailEntity.id !''}')">保存</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<!-- 留言 -->
+			<div id="liuyan">
+				<form class="mui-input-group">
+					<div class="content-block block-border">
+					<label>留言：</label>
+						<textarea rows="5" id="contentLy" name="content" placeholder="请输入留言的内容"></textarea>
+					</div>
+					<div class="mui-button-row">
+						<button type="button" class="mui-btn mui-btn-block mui-btn-primary" onclick="doSave('${detailEntity.id !''}')">保存</button>
+					</div>
+				</form>
+			</div>
+			</div>
+		</div>
+		<div class="mask-backdrop" id="zhezhao1"></div>
+		<nav class="mui-bar mui-bar-tab mui-bar-cogs">
+			@if(detailEntity.hdStatus == '0'){
+			<a class="mui-tab-item">
+			 <span class="icon mui-icon mui-icon-chat"></span>
+			  <span class="mui-tab-label">活动未开始</span>
+			</a>
+			@}else if(detailEntity.hdStatus == '1'){
+			<a class="mui-tab-item mui-active" id="OpenQuery">
+			 <span class="icon mui-icon mui-icon-chat"></span>
+			  <span class="mui-tab-label">留言</span>
+			</a>
+			
+			<!-- 只有法人，才能反馈 -->
+			@if(zh_type=='3' && zz!=null){
+			<a class="mui-tab-item" id="OpenAdd">
+				<div >
+					<span class="icon mui-icon mui-icon-chat"></span>
+					<span class="mui-tab-label">反馈</span>
+				</div>
+			</a>
+			@}
+			@}else if(detailEntity.hdStatus == '2'){
+			<a class="mui-tab-item">
+			 <span class="icon mui-icon mui-icon-chat"></span>
+			  <span class="mui-tab-label">活动已结束</span>
+			</a>
+			@}
+		</nav>
+		<div class="mui-content mui-scroll-wrapper" id="refreshContainer">
+			<div class="mui-scroll">
+				<div class="article-content">
+					<div class="article-header">
+						<h4 class="article-header-title">${detailEntity.title !}</h4>
+						<input type="hidden"  id="id" value="${detailEntity.id !}">
+					</div>
+					<div class="article-body">
+						<p>${detailEntity.content !}</p>
+					</div>
+					
+					@if(isNotEmpty(detailEntity.attrList)){
+						<div class="article-content">
+							<div class="block-title">附件下载</div>
+							<div class="article-array" id="article-container">
+								@for(attr in detailEntity.attrList  ! []){
+								<div>
+								@if(attr.fileType == 'img'){
+									<li>
+										<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/showPic?fileName=${attr.new_filename}"/></dt>${attr.old_filename}</a>
+										<a href="javascript:;" class="downarray icon ion-archive outside" name="${path}${attr.new_filename}"></a>
+									</li>
+								@}else if(attr.fileType == 'word'){
+								<li>
+									<a href="javascript:;" name="${path}${attr.new_filename}">
+										<dt>
+											<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> 
+										</dt>${attr.old_filename}
+									 </a><a href="javascript:;" class="downarray icon ion-archive outside" name="${path}${attr.new_filename}"></a></li>
+								@}else if(attr.fileType == 'txt'){
+								<li>
+									<a href="javascript:;" name="${path}${attr.new_filename}">
+										<dt>
+											 <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>
+										</dt>${attr.old_filename}
+									</a><a href="javascript:;" class="downarray icon ion-archive outside" name="${path}${attr.new_filename}"></a></li>
+								@}else if(attr.fileType == 'exl'){
+								<li>
+									<a href="javascript:;" name="${path}${attr.new_filename}">
+										<dt>
+											<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>
+										</dt>${attr.old_filename}
+									</a><a href="javascript:;" class="downarray icon ion-archive outside" name="${path}${attr.new_filename}"></a></li>
+								@}else if(attr.fileType == 'video'){
+								<li>
+									<a href="javascript:;" name="${path}${attr.new_filename}">
+										<dt>
+											<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>
+										</dt>${attr.old_filename}
+									</a><a href="javascript:;" class="downarray icon ion-archive outside" name="${path}${attr.new_filename}"></a></li>
+								@}else{
+									<li>
+										<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/assets/images/default-file.png"/></dt>${attr.old_filename}</a>
+										<a href="javascript:;" class="downarray icon ion-archive outside" name="${path}${attr.new_filename}"></a>
+									</li>
+									@}
+								</div>	
+								@}
+							</div>
+						</div>
+					@}
+					<div class="article-form">
+						<div class="mui-input-group">
+							<div class="mui-input-row">
+								<label>发布人：</label>
+								<input readonly="readonly" type="text" class="mui-input" value="${detailEntity.userName !}">
+							</div>
+							<div class="mui-input-row">
+								<label>发布时间：</label>
+								<input readonly="readonly" type="text" class="mui-input" value="${detailEntity.createTimes !}">
+							</div>
+							<div class="mui-input-row">
+								<label>开始时间：</label> 
+								<input readonly="readonly" type="text" class="mui-input" value="${detailEntity.startDateFmt ! ''}">
+							</div>
+							<div class="mui-input-row">
+								<label>结束时间：</label> 
+								<input readonly="readonly" type="text" class="mui-input" value="${detailEntity.endDateFmt ! ''}">
+							</div>
+							<div class="mui-input-row">
+								<label>需要反馈：</label>
+								@if( detailEntity.type_two == "2"){
+								<input readonly="readonly" type="text" class="mui-input" value="是">
+								@}else{
+								<input readonly="readonly" type="text" class="mui-input" value="否">
+								@}
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 法人反馈 -->
+				<!-- 只有法人和社会组织管理员才能看到 -->
+			 	@if(zh_type=='3'||isManager=='yes'){
+				<div class="article-comment"  id="insideClick">
+					<ul class="mui-table-view" >
+					@for(fk in fkList ! []){
+					<li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <div class="mui-media-body">
+					                <span style="color: #ff881e">${fk.zzxxEntity.name !''} ${fk.zzxxEntity.fr_name !''}</span>
+					                <p>${fk.content !''}</p>
+					                <small><i class="icon ion-clock"></i>  ${fk.fmtBackTime !''}</small>
+					            </div>
+					        </a>
+					     	<!-- 法人反馈附件 -->
+					       	<div class="article-array">
+						        <ul>
+						        	@for(att in fk.fkAttrList ! []){
+						        		@if(att.fileType == 'img'){
+										<li>
+											<a href="javascript:;" name="${path}${att.newFilename}"><dt><img src="${ctxPath}/showPic?fileName=${att.newFilename}" class="adaption"   /></dt>${att.oldFilename}</a>
+											<a href="javascript:;" class="downarray icon ion-archive inside"  name="${path}${att.newFilename}"></a>
+										</li>
+										@}else if(attr.fileType == 'word'){
+										<li>
+											<a href="javascript:;" name="${path}${attr.newFilename}">
+												<dt>
+													<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> 
+												</dt>${attr.oldFilename}
+											 </a><a href="javascript:;" class="downarray icon ion-archive outside" name="${path}${attr.newFilename}"></a></li>
+										@}else if(attr.fileType == 'txt'){
+										<li>
+											<a href="javascript:;" name="${path}${attr.newFilename}">
+												<dt>
+													 <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>
+												</dt>${attr.oldFilename}
+											</a><a href="javascript:;" class="downarray icon ion-archive outside" name="${path}${attr.newFilename}"></a></li>
+										@}else if(attr.fileType == 'exl'){
+										<li>
+											<a href="javascript:;" name="${path}${attr.newFilename}">
+												<dt>
+													<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>
+												</dt>${attr.oldFilename}
+											</a><a href="javascript:;" class="downarray icon ion-archive outside" name="${path}${attr.newFilename}"></a></li>
+										@}else if(attr.fileType == 'video'){
+										<li>
+											<a href="javascript:;" name="${path}${attr.newFilename}">
+												<dt>
+													<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>
+												</dt>${attr.oldFilename}
+											</a><a href="javascript:;" class="downarray icon ion-archive outside" name="${path}${attr.newFilename}"></a></li>
+										@}else{
+										<li>
+											<a href="javascript:;" name="${path}${att.newFilename}"><dt><img src="${ctxPath}/assets/images/default-file.png" class="adaption"  /></dt>${att.oldFilename}</a>
+											<a href="javascript:;" class="downarray icon ion-archive inside" name="${path}${att.newFilename}"></a>
+										</li>
+										@}
+					        		@}
+								</ul>
+							</div>	
+					    </li>
+					@}
+				</ul>
+				</div>
+				@}
+				<!-- 留言 -->
+				<div class="article-comment" >
+					<ul class="mui-table-view"  id="table-container">
+					@#ajax table:{
+					@for(ly in pagenate.list ! []){
+					<li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					             <!-- <img class="mui-media-object mui-pull-left" src="${ly.picpath !'../images/muwu.jpg'}"> -->
+					            <div class="mui-media-body">
+					                <span>${ly.userName !''}</span>
+					                <p>${ly.content !''}</p>
+					                <small><i class="icon ion-clock"></i>  ${ly.createTimeF !''}</small>
+					            </div>
+					        </a>
+					    </li>
+					@}
+						<input type="hidden" id="pageCnts" value="${pagenate.pgCnts !'0'}" />
+						<input type="hidden" id="pageSize" value="${pagenate.pageSize !'0'}" />
+				@}
+				</ul>
+				</div>
+			
+			</div>
+		</div>
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/shzz/hdgl/app/detail.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		
+		<script type="text/javascript">
+				$(function (){
+					jsCleanFJ();
+					
+					$(".mask-backdrop").click(function() {
+						$(this).hide();
+						$(".inquery").removeClass("show");
+					});
+				});
+				
+				mui('.mui-scroll-wrapper').scroll({
+					scrollY: true, //是否竖向滚动
+					indicators: true, //是否显示滚动条
+					startX: 0, //初始化时滚动至x
+					deceleration: 0.0006, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+					bounce: true //是否启用回弹
+				}); 
+				
+				 mui('#fankui').scroll({
+						scrollY: true, //是否竖向滚动
+						indicators: true, //是否显示滚动条
+						startY: 0, //初始化时滚动至x
+						deceleration: 0.0006, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+						bounce: true //是否启用回弹
+					}); 
+				// mui('#fankui').scroll().scrollTo(0,50);
+				
+				//留言
+			 	document.getElementById('OpenQuery').addEventListener('tap',function(){
+					$(".mask-backdrop").toggle();
+					$(".inquery").toggleClass("show");
+					//$("#OpenQuery").removeClass("mui-active");
+					$("#fankui").hide();
+					$("#liuyan").show();
+					$("#backId").toggle();
+				});
+				
+				//反馈
+			 	document.getElementById('OpenAdd').addEventListener('tap',function(){
+					$(".mask-backdrop").toggle();
+					$(".inquery").toggleClass("show");
+					//$("#OpenAdd").removeClass("mui-active");
+					$("#fankui").show();
+					$("#liuyan").hide();
+					$("#backId").toggle();
+				});
+				
+				/*document.getElementById('zhezhao1').addEventListener('tap',function(){
+					$(this).hide();
+					$(".inquery").removeClass("show");
+				}); */
+				
+				//手机按键返回
+				/*function anGoBack(){
+					mui.back();
+					return;
+				}*/
+				
+			//手机按键返回
+			function anGoBack(){
+				//返回首页
+				window.location.href = $("#basePath").val() + "/app/shzz/appHdgl/toHdgl.do";
+				return;
+			}
+		</script>
+	</body>
+
+</html>

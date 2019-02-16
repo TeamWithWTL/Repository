@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">详情</h1>
+		</header>
+		<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<div class="article-content">
+					<div class="article-header noborder">
+						<h4 class="article-header-title" style="color:red">${doc.title}</h4>
+					</div>
+					<div class="article-body">
+						<div class="article-label-group">
+						    <div class="article-label-row">
+						        <label>文号:</label>
+						       <span>${doc.num}</span>
+						    </div>
+						     <div class="article-label-row">
+						        <label>密级:</label>
+						        <span>${doc.level}</span>
+						    </div>
+						     <div class="article-label-row">
+						        <label>发文部门:</label>
+						        <span>${doc.dept}</span>
+						    </div>
+						     <div class="article-label-row">
+						        <label>发文日期:</label>
+						        <span>${doc.createDatesh}</span>
+						    </div>
+					    	@if(doc.type=='2'){
+						     <div class="article-label-row">
+						        <label>紧急程度:</label>
+						        <span>${doc.jkStatus=='1'?'普通':'加急'}</span>
+						    </div>
+						     <div class="article-label-row">
+						        <label>完成时间:</label>
+						        <span>${doc.createDatesh}</span>
+						    </div>
+						    @}
+						    <div class="article-label-row">
+						        <label>	
+						        @if(doc.type=='1'){ 
+										拟文人意见:
+									@}
+									@if(doc.type=='2'){ 
+										批办意见:
+									@}
+								</label>
+								<p>${doc.nwrSuggest}</p>
+						    </div>
+						    @if(doc.type=='1'){
+						    <div class="article-label-row">
+						        <label>领导意见:</label>
+						        <p>${doc.ldSuggest}</p>
+						    </div>
+						    @}
+					    	@if(doc.type=='2'){
+						    <div class="article-label-row">
+						        <label>党政办意见:</label>
+						        <p>${doc.dzbSuggest}</p>
+						    </div>
+						     <div class="article-label-row">
+						        <label>街道办意见:</label>
+						        <p>${doc.jdbSuggest}</p>
+						    </div>
+						    @}
+						</div>
+					</div>
+				</div>
+				@if(isNotEmpty(doc.attrs)){
+					<div class="article-content">
+						<div class="block-title">附件下载</div>
+						<div class="article-array" id="article-container">
+							@for(attr in doc.attrs ! []){
+							<div>
+								@if(attr.fileType == 'img'){
+								<li>
+									<a href="javascript:;"><dt><img src="${ctxPath}/showPic?fileName=${attr.newFilename}" class="adaption"/></dt>${attr.oldFilename}</a>
+									<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.newFilename}"></a>
+								</li>
+								@}else{
+								<li>
+									<a href="javascript:;"><dt><img src="${ctxPath}/assets/images/default-file.png" class="adaption"/></dt>${attr.oldFilename}</a>
+									<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.newFilename}"></a>
+								</li>
+								@}
+							</div>	
+							@}
+						</div>
+					</div>
+					@}
+				<div class="article-comment">
+					<ul class="mui-table-view">
+						@for(deal in doc.deals ! []){
+						@if(isNotEmpty(deal.content)){
+						<li class="mui-table-view-cell mui-media">
+							<a href="javascript:;">
+								<img class="mui-media-object mui-pull-left" src="../images/muwu.jpg">
+								<div class="mui-media-body">
+									<span>${deal.clrName}</span>
+									<p>${deal.content}</p>
+									<small><i class="icon ion-clock"></i>${deal.dealDate}</small>
+								</div>
+							</a>
+						</li>
+						@}
+							@}elsefor{
+						@}
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui('.mui-scroll-wrapper').scroll({
+				indicators: false, //是否显示滚动条
+				startX: 0, //初始化时滚动至x
+				deceleration: 0.0004, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+				bounce: true //是否启用回弹
+			});
+			
+			mui("#article-container").on('tap','a',function(){
+				var path = this.getAttribute("name");
+				downloadFile(path);
+			});
+		</script>
+	</body>
+
+</html>

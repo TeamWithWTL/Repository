@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+		<title>社会服务-社区活动</title>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="article-header text-center">
+				<h2>${sqhd.title ! ''}</h2>
+				<input type="hidden" id="id" value="${id !''}" />
+				<p>
+					<span>发布时间：${sqhd.createDateFmt ! ''}</span>
+					<!-- <span>文章类型：社区活动</span> -->
+					<span>发布人：${sqhd.userName ! ''}</span>
+				</p>
+			</div>
+			<div class="article-body">
+				<div class="well">
+					<span>积分：<b>${sqhd.integral ! ''}</b> 分</span>
+					<span>开始时间：<b>${sqhd.startDateFmt ! ''}</b></span>
+					<span>结束时间：<b>${sqhd.endDateFmt ! ''}</b></span>
+				</div>
+				<div class="article-content">
+					<p>${sqhd.content ! ''}</p>
+				</div>
+				@if(isNotEmpty(sqhd.attrList)){
+				<div class="form-arraylist  form-arraylist-border">
+					<h4 class="form-arraylist-title">附件列表：</h4>
+					@for(attr in sqhd.attrList  ! []){	
+						@if(attr.fileType == 'img'){
+						<li class="col-9">
+							<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/showPic?fileName=${attr.newFilename}"/> ${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType  == 'pdf'){
+						<li class="col-9">
+							<a href="javascript:void(0)" onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'word'){
+						<li class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'txt'){
+						<li  class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'exl'){
+						<li  class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'video'){
+						<li  class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else{
+						<li class="col-9">
+							<a href="javascript:void(0)"  title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}
+					@}
+				</div>
+				@}
+			</div>
+			<div class="article-feedback">
+				@#ajax table:{
+				@for(yjly in pagenate.list ! []){
+				<ul>
+					<div class="feedback-user">
+						<dt><img src="${ctxPath}/assets/images/default-user.png"/></dt>
+						<p></p><span>${yjly.userName ! ''}</span>
+					</div>
+					<div class="feedback-msg">
+						<p>【留言】${yjly.content ! ''}</p>
+						<p class="audit-status">
+						@if(yjly.shStatus=="1"){
+						【 审核通过，获得${yjly.integral ! ''}积分】
+						@}
+						</p>
+						@if(isNotEmpty(yjly.attrList)){
+						<div class="form-arraylist">
+							<h4 class="form-arraylist-title">附件列表：</h4>
+								@for(attr in yjly.attrList  ! []){	
+								@if(attr.fileType == 'img'){
+								<li class="col-9">
+									<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/showPic?fileName=${attr.newFilename}"/> ${attr.oldFilename}</a>
+									<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+								</li>
+								@}else if(attr.fileType  == 'pdf'){
+								<li class="col-9">
+									<a href="javascript:void(0)" onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+									<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+								</li class="col-9">
+								@}else if(attr.fileType == 'word'){
+								<li class="col-9">
+									<a href="javascript:void(0)" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.oldFilename}</a>
+									<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+								</li>
+								@}else if(attr.fileType == 'txt'){
+								<li  class="col-9">
+									<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.oldFilename}</a>
+									<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+								</li>
+								@}else if(attr.fileType == 'exl'){
+								<li  class="col-9">
+									<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.oldFilename}</a>
+									<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+								</li>
+								@}else if(attr.fileType == 'video'){
+								<li  class="col-9">
+									<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.oldFilename}</a>
+									<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+								</li>
+								@}else{
+								<li class="col-9">
+									<a href="javascript:void(0)"  title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+									<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+								</li class="col-9">
+								@}
+							@}
+						 </div>
+						 @}	
+						<div class="feedback-data">
+							<i class="fa fa-clock-o"> ${yjly.createTimeFmt}</i> 
+							<!-- <button type="button" class="btn btn-sm btn-success">审核通过</button> -->
+						</div>
+					</div>
+				</ul>
+				@}
+				<div class="article-feedback-function">
+					<#roleBtn btnId="lyAuditing" roleCode="${roleCode}">
+					<a href="javascript:void(0);" id="feedback-examine" class="btn btn-white" onclick="goShView('${sqhd.id}');"><i class="fa fa-comments-o"></i> 留言审核</a>
+					</#roleBtn>
+				</div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+			 @}
+			</div>
+		</div>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/jquery/jquery.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/public.js" charset="utf-8"></script>
+		
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/shfw/sqhd/view.js" charset="utf-8"></script>
+	</body>
+
+</html>

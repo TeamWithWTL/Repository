@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />>
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">动态播报详情</h1>
+		</header>
+		<div class="inquery">
+			<form class="mui-input-group">
+				<div class="content-block block-border">
+				<label>留言：</label>
+					<textarea rows="5" id="content" name="content"></textarea>
+				</div>
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-block mui-btn-primary" onclick="doLy('${dtbb.id !''}')">保存</button>
+				</div>
+			</form>
+		</div>
+		<div class="mask-backdrop" id="zhezhaoId"></div>
+		<nav class="mui-bar mui-bar-tab mui-bar-cogs">
+			<a class="mui-tab-item" id="OpenQuery">
+				<div>
+					<span class="icon ion-arrow-up-a"></span>
+					<span class="mui-tab-label">留言</span>
+				</div>
+			</a>
+		</nav>
+		<div class="mui-content mui-scroll-wrapper" id="refreshContainer">
+			<div class="mui-scroll">
+				<div class="article-content">
+					<div class="article-header">
+						<h4 class="article-header-title">${dtbb.title ! ''}</h4>
+						<input type="hidden"  id="dtbbId" value="${dtbb.id! ''}"/>
+					</div>
+					<div class="article-body">
+						<p>${dtbb.content ! ''}</p>
+					</div>
+					
+												@if(isNotEmpty(dtbb.attrList)){
+							<div class="article-content">
+								<div class="block-title">附件下载</div>
+								<div class="article-array" id="article-container">
+									@for(attr in dtbb.attrList  ! []){
+									<div>
+										@if(attr.fileType == 'img'){
+										<li>
+											<a href="javascript:;"><dt><img src="${ctxPath}/showPic?fileName=${attr.new_filename}" class="adaption"/></dt>${attr.old_filename}</a>
+											<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a>
+										</li>
+										@}else{
+										<li>
+											<a href="javascript:;"><dt><img src="${ctxPath}/assets/images/default-file.png" class="adaption"/></dt>${attr.old_filename}</a>
+											<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a>
+										</li>
+										@}
+									</div>	
+									@}
+								</div>
+							</div>
+							@}
+					
+					<div class="article-form">
+						<div class="mui-input-group">
+							<div class="mui-input-row">
+								<label>发布人：</label>
+								<input readonly="readonly" type="text" class="mui-input" value="${dtbb.userName ! ''}">
+							</div>
+							<div class="mui-input-row">
+								<label>发布日期：</label>
+								<input readonly="readonly" type="text" class="mui-input" value="${dtbb.createTimes ! ''}">
+							</div>
+							<!-- <div class="mui-input-row">
+								<label>文章类型：</label>
+								<input readonly="readonly" type="text" class="mui-input" value="活动管理">
+								
+							</div> -->
+
+						</div>
+					</div>
+				</div>
+				<div class="article-comment">
+					<ul class="mui-table-view" id="table-container">
+						@#ajax table:{
+							@for(ly in pagenate.list ! []){	
+								<li class="mui-table-view-cell mui-media">
+							        <a href="javascript:;">
+							         <!--   <img class="mui-media-object mui-pull-left" src="${ly.picpath !'../images/muwu.jpg'}">
+							            --> 
+							             <div class="mui-media-body">
+							                <span>
+							                @if(null != ly.duty && ly.duty != ""){
+							                ${ly.duty !''}-
+							                @}
+							                ${ly.userName !''}</span>
+							                <p>${ly.content !''}</p>
+							                <small><i class="icon ion-clock"></i> ${ly.createTimeF !''}</small>
+							            </div>
+							        </a>
+							    </li>
+							@}
+							<input type="hidden" id="pageCnts" value="${pagenate.pgCnts !'0'}" />
+							<input type="hidden" id="pageSize" value="${pagenate.pageSize !'0'}" />
+						@}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script src="${ctxPath}/assets/scripts/shzz/dtbb/app_view.js"></script>
+		<script type="text/javascript">
+			mui('.mui-scroll-wrapper').scroll({
+				scrollY: true, //是否竖向滚动
+				indicators: true, //是否显示滚动条
+				startX: 0, //初始化时滚动至x
+				deceleration: 0.0006, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+				bounce: true //是否启用回弹
+			});
+			document.getElementById('OpenQuery').addEventListener('tap',function(){
+				$(".mask-backdrop").toggle();
+				$(".inquery").toggleClass("show");
+				$("#OpenQuery").removeClass("mui-active");
+			});
+			document.getElementById('zhezhaoId').addEventListener('tap',function(){
+				$(this).hide();
+				$(".inquery").removeClass("show");
+				$("#OpenQuery").addClass("mui-active");
+			}); 
+			
+			
+		</script>
+	</body>
+
+</html>

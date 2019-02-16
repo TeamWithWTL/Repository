@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<title>${@com.jcwx.utils.ProjectUtils.getSysCfg("projectName")}</title>
+<meta charset="UTF-8">
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="${ctxPath}/assets/vendor/layui/layui.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+<link rel="stylesheet" type="text/css"
+	href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/skin.css">
+<style>
+
+.course-right {
+	height: 100%;
+}
+
+.course-video {
+	float: left;
+	width: calc(100% - 0px);
+    height: calc(100% - 20px);
+	border: 1px solid #DDDDDD;
+	border-radius: 4px;
+	overflow: hidden;
+	margin-bottom: 15px;
+}
+
+</style>
+</head>
+
+<body>
+	<div class="course-right">
+		<br>
+		<div class="course-video" style="height: 400px;">
+			<iframe
+				src="${ctxPath}/assets/vendor/pdfjs-1.6.210-dist/web/viewer.html?basePath=${ctxPath}&pdfName=${url}"
+				style="width: 100%; height: 100%;"></iframe>
+		</div>
+	</div>
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.js"></script>
+	<script src="${ctxPath}/assets/scripts/kcgl/preview.js"></script>
+	<script src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

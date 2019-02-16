@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+<meta charset="UTF-8">
+<title>社会管理--任务管理--任务汇总</title>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css"	/>
+<style type="text/css">
+
+.text-overflow{
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	overflow:hidden;
+}
+</style>
+
+</head>
+<body>
+	<div class="function-box">
+		<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+						<div class='input-group date form_datetime' id='start'>
+						<input type="text" class="form-control" id="rxrq1" placeholder="下发日期" value="" readonly="readonly">
+						<span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+			                <span class="fa fa-calendar" aria-hidden="true"></span>
+			            </span>
+			            </div>
+						<input type="text" class="form-control" id="title" placeholder="标题/下发人" value="">
+						<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+		</div>
+		<!-- <div class="function-btn">
+					<button class="btn btn-light" href="javascript:void(0);" onclick="goAdd('添加界面')"><i class="fa fa-plus"></i> 添加</button>
+					<button class="btn btn-light" href="javascript:void(0);" onclick="goDel()"><i class="fa fa-trash"></i> 删除</button>
+		</div> -->
+	</div>
+	<div id="table-container" class="warpper">
+			@#ajax table:{
+			<div class="table-box">
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+						<tr class="table-secondary">
+							<!-- <th width="5%" class="text-center">
+								<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+					        </th> -->
+							<th class="text-center">标题</th>
+							<th width="20%" class="text-center">下发人</th>
+					        <th width="20%" class="text-center">下发日期</th>
+					        <th width="15%" class="text-center">操作</th>
+						</tr>
+						</thead>
+						<tbody  id="dqIds">
+					@for(rwgl in pagenate.list ! []){
+						<tr>
+							<!-- <td class="text-center">
+					        	<input type="checkbox" class="i-checks" name="icheck" value="${rwgl.id}" />
+					        </td> -->
+					        <td class="text-left text-overflow" title="${rwgl.title}">${rwgl.title ! ''}</td>
+					        <td class="text-center text-overflow">${rwgl.fbr_name}</td>
+					        <td class="text-center text-overflow">${rwgl.create_dates}</td>
+					        <td class="text-center">
+					        	<a href="javascript:void(0);" onclick="goView('${rwgl.id}')">查看</a>&nbsp;
+					        </td>
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="4" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+						</tbody>
+					</table>
+					</div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="personlistValue" value="" />
+		
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	
+	<!-- 日期控件JS -->
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js" ></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js" ></script>
+	
+	<script src="${ctxPath}/assets/scripts/shgl/rwgl/index_rwhz.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

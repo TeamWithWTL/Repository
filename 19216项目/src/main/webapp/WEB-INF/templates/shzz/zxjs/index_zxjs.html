@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>社会组织--中心介绍-首页</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<link rel="stylesheet" type="text/css"
+	href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" />
+<style type="text/css">
+.text-overflow{
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	overflow:hidden;
+}
+</style>
+</head>
+
+<body>
+	<div class="function-box">
+		<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+						<input type="text" class="form-control" id="title" placeholder="标题" value="${title ! ''}">
+						<div class='input-group date form_datetime' id='datetimepicker'>
+						<input type="text" class="form-control" id="apply_time" placeholder="发布日期" readonly="readonly">
+						 <span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+		                <span class="fa fa-calendar" aria-hidden="true"></span>
+		                </span>
+		                </div>
+						<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+		</div>
+		<div class="function-btn">
+				<#roleBtn btnId="zxjsAdd" roleCode="${roleCode}">
+					<button class="btn btn-light" href="javascript:void(0);" onclick="goAdd('添加界面')"><i class="fa fa-plus"></i> 添加</button>
+				</#roleBtn>
+				<#roleBtn btnId="zxjsUpdate" roleCode="${roleCode}">
+					<button class="btn btn-light" href="javascript:void(0);" onclick="goUpdate('修改界面')"><i class="fa fa-pencil"></i> 修改</button>
+				</#roleBtn>
+				<#roleBtn btnId="zxjsDel" roleCode="${roleCode}">
+					<button class="btn btn-light" href="javascript:void(0);" onclick="goDel()"><i class="fa fa-trash"></i> 删除</button>
+				</#roleBtn>
+				<#roleBtn btnId="zxjsAuditing" roleCode="${roleCode}">
+					<!-- <button class="btn btn-light" href="javascript:void(0);" onclick="goAuditing()"><i class="fa fa-location-arrow"></i> 审核</button> -->
+				</#roleBtn>
+		</div>
+		</div>
+		<div id="table-container" class="warpper">
+			@#ajax table:{
+			<div  class="table-box">
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+						<tr class="table-secondary">
+							<th width="5%" class="text-center">
+								<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+					        </th>
+							<th class="text-center">标题</th>
+							<th width="15%" class="text-center">发布人</th>
+					        <th width="15%" class="text-center">发布日期</th>
+					        <th width="15%" class="text-center">审核状态</th>
+					        <th width="20%" class="text-center">操作</th>
+						</tr>
+						</thead>
+						<tbody>
+					@for(zxjs in pagenate.list ! []){
+					
+						<tr>
+							<td class="text-center">
+					        	<input type="checkbox" class="i-checks" name="icheck" value="${zxjs.id},${zxjs.shStatus}" />
+					        </td>
+					        <td class="text-left text-overflow" title="${zxjs.title}">
+					        	<!-- <a href="javascript:void(0);" onclick="goView('${ctxPath}/shzz/zxjs/goView.do?id=${zxjs.id}')"> -->
+					        		${zxjs.title ! ''}
+					        	<!-- </a> -->
+					        </td>
+					        <td class="text-left">${zxjs.userName}</td>
+					        <td class="text-center">${zxjs.createTimes}</td>
+					        @if(zxjs.shStatus=='1'){
+					        <td class="text-center" style="color: #7ebc1d">通过</td>
+					        @}else if(zxjs.shStatus=='0'){
+					        <td class="text-center" style="color: #ffa81f">待审核</td>
+					        @}else if(zxjs.shStatus=='2'){
+					        <td class="text-center" style="color: #fd5c1d">未通过</td>
+					        @}
+					         @if(zxjs.shStatus=='0'){
+					        <td class="text-center">   
+					        <#roleBtn btnId="zxjsUpdate" roleCode="${roleCode}">
+					        	<a href="javascript:void(0);" onclick="goModify('${ctxPath}/shzz/zxjs/goAddEdit.do?id=${zxjs.id}')">修改</a>&nbsp;
+					        </#roleBtn>
+					        <#roleBtn btnId="zxjsAuditing" roleCode="${roleCode}">                  
+					        	<a href="javascript:void(0);" onclick="goSh('${zxjs.id}')">审核</a>&nbsp;
+					        </#roleBtn>
+					        <a href="javascript:void(0);" onclick="goView('${ctxPath}/shzz/zxjs/goView.do?id=${zxjs.id}')">查看</a>
+					        <!-- <#roleBtn btnId="zxjsDel" roleCode="${roleCode}">
+					        	<a href="javascript:void(0);" onclick="goDell('${zxjs.id}')">删除</a>&nbsp;
+					        </#roleBtn> -->
+					        </td>
+					        @}else if(zxjs.shStatus=='1'){
+					        <td class="text-center">
+					        <#roleBtn btnId="zxjsAuditing" roleCode="${roleCode}">  
+					        	<a href="javascript:void(0);" onclick="goSh('${zxjs.id}')">审核</a>
+					     	</#roleBtn>
+					     	<a href="javascript:void(0);" onclick="goView('${ctxPath}/shzz/zxjs/goView.do?id=${zxjs.id}')">查看</a>
+					        </td>
+					        @}else if(zxjs.shStatus=='2'){
+				        	<!-- <td style="color: red">未通过</td> -->
+				        	 <td class="text-center">
+					         <#roleBtn btnId="zxjsUpdate" roleCode="${roleCode}">
+					        	<a href="javascript:void(0);" onclick="goModify('${ctxPath}/shzz/zxjs/goAddEdit.do?id=${zxjs.id}')">修改</a>&nbsp;
+					        </#roleBtn>
+				        	 <#roleBtn btnId="zxjsAuditing" roleCode="${roleCode}">  
+					        	<a href="javascript:void(0);" onclick="goSh('${zxjs.id}')">审核</a>&nbsp;
+					         </#roleBtn>
+					         <a href="javascript:void(0);" onclick="goView('${ctxPath}/shzz/zxjs/goView.do?id=${zxjs.id}')">查看</a>
+					        <!-- <#roleBtn btnId="zxjsDel" roleCode="${roleCode}">
+					        	<a href="javascript:void(0);" onclick="goDell('${zxjs.id}')">删除</a>&nbsp;
+					        </#roleBtn> -->
+					        </td>
+					    @}
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="6" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+						</tbody>
+					</table>
+					</div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+		</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	
+	<!-- 日期控件JS -->
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+
+	<script src="${ctxPath}/assets/scripts/shzz/zxjs/index_zxjs.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

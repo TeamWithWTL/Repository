@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>社会管理-社情民意--查看网格员调查住户详情</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+	<style>
+		.control-label{
+			font-size:14px;
+		}
+		.normal{
+			font-weight:normal;
+		}
+		.content-tab {
+		    z-index: 3;
+		    left: 15px;
+		    right: 15px;
+		    height: 41px;
+		    background: #fff;
+		    border-bottom: 1px solid #e2e2e5;
+		}
+		.content-tab-ul-wrap {
+		    position: relative;
+		    top: 0px;
+		    left: 0px;
+		}
+		.content-tab ul {
+		    position: absolute;
+		    left: 0;
+		    top: 10px;
+		}
+		.content-tab ul li {
+		    position: relative;
+		    display: block;
+		    float: left;
+		    margin-right: -1px;
+		}
+		.content-tab ul li a.selected {
+		    color: #222;
+		    background: #fff;
+		    height: 31px;
+		}
+		.content-tab ul li a {
+		    float: left;
+		    padding: 0 25px;
+		    border-top: 1px solid #e1e1e1;
+		    border-right: 1px solid #e1e1e1;
+		    border-left: 1px solid #e1e1e1;
+		    height: 30px;
+		    line-height: 31px;
+		    font-size: 12px;
+		    color: #333;
+		    text-align: center;
+		    background: #f9f9f9;
+		}
+		a:link, a:visited {
+		    text-decoration: none;
+		}
+		.tab-content {
+		    color: #666;
+		}
+		.table-event th {
+			width: 12rem
+		}
+		.kd{
+		   width:130px; 
+		   white-space: nowrap;  
+		   text-overflow: ellipsis; 
+		   overflow: hidden; 
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="content-tab-wrap">
+            <div id="floatHead" class="content-tab">
+                <div class="content-tab-ul-wrap"><b>住户信息：</b></div>
+            </div>
+        </div>
+        <div class="tab-content" style="display: block;" id="pInfo">
+        	<table class="table table-bordered table-striped table-event">
+        		<tr>
+        			<th>姓 名：</th><td>${zhdc.name ! ''}</td>
+        			<th>性别：</th><td>${zhdc.sex == '0' ? '男' : '女'}</td>
+        			<th>出生日期：</th><td>${zhdc.birth_date ! ''}</td>
+        		</tr>
+        		<tr>
+        			<th>身份证号：</th><td>${zhdc.card_id ! ''}</td>
+        			<th>民族：</th>
+	        		    <td>
+	        			   @if(isNotEmpty(sysStations)){
+								@for(da in sysStations){
+									${da.itemCode == zhdc.nation ? da.itemName : ''}
+								@}
+							@} 
+	        			</td>
+        			<th>籍 贯：</th>
+        				<td title="${zhdc.origin ! ''}"><div class="kd">${zhdc.origin ! ''}</div></td>
+        		</tr>
+        		<tr>
+        		    <th>与户主关系：</th>
+        		    	<td>
+        		    	   @if(isNotEmpty(hzgx)){
+								@for(hz in hzgx){
+									${hz.itemCode == zhdc.relation ? hz.itemName : ''}
+								@}
+							@}
+        		    	</td>
+        			<th>计生管理单位：</th>
+        				<td title="${zhdc.jsgldw ! ''}"><div class="kd">${zhdc.jsgldw ! ''}</div></td>
+        			<th>就读或毕业学校：</th>
+        				<td title="${zhdc.school ! ''}"><div class="kd">${zhdc.school ! ''}</div></td>
+        		</tr>
+        		<tr>
+        			<th>个人户籍状况：</th>
+        				<td title="${zhdc.grjgzk ! ''}"><div class="kd">${zhdc.grjgzk ! ''}</div></td>
+        			<th>户口性质：</th>
+        				<td title="${zhdc.hkxz ! ''}"><div class="kd">${zhdc.hkxz ! ''}</div></td>
+        			<th>户口所在单位：</th>
+        				<td title="${zhdc.hkszd ! ''}"><div class="kd">${zhdc.hkszd ! ''}</div></td>
+        		</tr>
+        		<tr>
+        		    <th>政治面貌：</th>
+        		    	<td>
+        		    	   @if(isNotEmpty(zzmm)){
+								@for(da in zzmm){
+									${da.itemCode == zhdc.zzmm ? da.itemName : ''}
+								@}
+							@}
+        		    	</td>
+        			<th>文化程度：</th>
+        				<td>
+        				   @if(isNotEmpty(whcd)){
+								@for(da in whcd){
+									${da.itemCode == zhdc.whcd ? da.itemName : ''}
+								@}
+							@}
+        				</td>
+        			<th>人员类别：</th>
+        				<td>
+        				   @if(isNotEmpty(ryfl)){
+								@for(ry in ryfl){
+									${ry.itemCode == zhdc.ry_type ? ry.itemName : ''}
+								@}
+							@}
+        				</td>
+        		</tr>
+        		<tr>
+        		    <th>婚姻状况：</th>
+        		    	<td>
+        		    	   @if(isNotEmpty(hyzk)){
+								@for(da in hyzk){
+									${da.itemCode == zhdc.hy_status ? da.itemName : ''}
+								@}
+							@}
+        		    	</td>
+        		    <th>结婚时间：</th>
+        		    	<td title="${zhdc.jh_date ! ''}"><div class="kd">${zhdc.jh_date ! ''}</div></td>
+        			<th>职业：</th>
+        				<td title="${zhdc.duty ! ''}"><div class="kd">${zhdc.duty ! ''}</div></td>
+        		</tr>
+        		<tr>
+        		   <th>工作单位：</th>
+        		   		<td title="${zhdc.dept ! ''}"><div class="kd">${zhdc.dept ! ''}</div></td>
+        		   <th>兵役状况：</th>
+        		   		<td title="${zhdc.by_status ! ''}"><div class="kd">${zhdc.by_status ! ''}</div></td>
+        		   <th>健康状况：</th>
+        		   		<td title="${zhdc.jk_status ! ''}"><div class="kd">${zhdc.jk_status ! ''}</div></td>
+        		</tr>
+        		<tr>
+        		    <th>失业人员类别：</th>
+        		    	<td title="${zhdc.syry_type ! ''}"><div class="kd">${zhdc.syry_type ! ''}</div></td>
+        		    <th>失业时间：</th>
+        		    	<td title="${zhdc.sy_date ! ''}"><div class="kd">${zhdc.sy_date ! ''}</div></td>
+        		    <th>是否享受低保：</th>
+        		    	<td title="${zhdc.db_status ! ''}"><div class="kd">${zhdc.db_status ! ''}</div></td>
+        		</tr>
+        		<tr>
+        		    <th>是否优抚对象：</th>
+        		    	<td title="${zhdc.yfdx_status ! ''}"><div class="kd">${zhdc.yfdx_status ! ''}</div></td>
+        		    <th>住房状况：</th>
+        		    	<td title="${zhdc.zf_type ! ''}"><div class="kd">${zhdc.zf_type ! ''}</div></td>
+        		    <th>房权所有人姓名：</th>
+        		    	<td title="${zhdc.zf_owner ! ''}"><div class="kd">${zhdc.zf_owner ! ''}</div></td>
+        		</tr>
+        		<tr>
+        		    <th>面积：</th>
+        		    	<td title="${zhdc.zf_size ! ''}"><div class="kd">${zhdc.zf_size ! ''}</div></td>   
+        		    <th>房屋使用类别：</th>
+        		    	<td title="${zhdc.zfsy_type ! ''}"><div class="kd">${zhdc.zfsy_type ! ''}</div></td>
+        		    <th>家庭所需服务项目：</th>
+        		    	<td title="${zhdc.jtfw_type ! ''}"><div class="kd">${zhdc.jtfw_type ! ''}</div></td>
+        		</tr>
+        		<tr>
+        			<th>备注：</th>
+        				<td colspan="5">${zhdc.remark ! ''}</td>   
+        		</tr>
+        	</table>
+		</div>
+		<br/>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

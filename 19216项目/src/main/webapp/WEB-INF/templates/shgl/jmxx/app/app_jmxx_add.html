@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>居民信息详情页面</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.picker.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+</head>
+<body>
+	<header id="header" class="mui-bar mui-bar-nav">
+			<a class="icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">居民信息详情修改</h1>
+			<button class="mui-btn mui-btn-link mui-pull-right" onclick="saveDo()">保存</button>
+	</header>
+	<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<form class="mui-input-group jcxx-form">
+				
+				<div class="article-content">
+				
+					<div class="mui-input-row">
+						<label>姓名：</label>
+						<input type="text" id="name" name="name" class="mui-input" value="${inmateEntity.name ! ''}">
+					</div>
+					
+					<div class="mui-input-row">
+						<label>性别：</label>
+						<select class="form-control" name="sex" id="sex">
+						@if(inmateEntity.sex != null){
+							@if(inmateEntity.sex == 'E'){
+							<option value="E" selected="selected">男</option>
+							<option value="F">女</option>
+							@}else{
+							<option value="F" selected="selected">女</option>
+							<option value="E">男</option>
+							@}
+						@}else{
+  			   				<option value="">-- 性别--</option>
+  			   				<option value="E">男</option>
+  			   				<option value="F">女</option>
+						@}
+		  			 	</select>
+					</div>
+					
+					<div class="mui-input-row">
+						<label>出生日期</label>
+						<input id="birthdayFrm" name="birthdayFrm" type="date" class="mui-input-clear" placeholder="出生时间" value="${inmateEntity.birthdayFrm ! ''}">
+					</div>
+					
+					<div class="mui-input-row">
+						<label>身份证号：</label>
+						<input type="text" id="card_no" name="card_no" class="mui-input" value="${inmateEntity.card_no ! ''}">
+					</div>
+					
+					<div class="mui-input-row">
+						<label>民族：</label>
+						<select class="form-control" name="nation" id="nation">
+						@if(isNotEmpty(sysStations)){
+							@for(da in sysStations){
+							<option value="${da.value1}" ${inmateEntity != null && da.value1 == inmateEntity.nation ? 'selected' : ''}>${da.itemName}</option>
+							@}
+						@}
+						</select>
+					</div>
+					
+					<div class="mui-input-row">
+						<label>联系电话：</label>
+						<input type="text" id="telephone" name="telephone" class="mui-input" value="${inmateEntity.telephone ! ''}">
+					</div>
+					
+					<div class="mui-input-row">
+						<label>籍 贯：</label>
+						<input type="text" id="house_register" name="house_register" class="mui-input" value="${inmateEntity.house_register ! ''}">
+					</div>
+					
+					<div class="mui-input-row">
+						<label>政治面貌：</label>
+						<select class="form-control" name="political" id="political">
+						@if(isNotEmpty(zzmm)){
+							@for(da in zzmm){
+								<option value="${da.itemCode}" ${inmateEntity != null && da.itemCode == inmateEntity.nation ? 'selected' : ''}>${da.itemName}</option>
+							@}
+						@}
+						</select>
+					</div>
+					
+					<div class="mui-input-row">
+						<label>婚姻状态：</label>
+						<select class="form-control" name="marriage" id="marriage">
+						@if(isNotEmpty(hyzk)){
+							@for(da in hyzk){
+							<option value="${da.itemCode}" ${inmateEntity != null && da.itemCode == inmateEntity.marriage ? 'selected' : ''}>${da.itemName}</option>
+							@}
+						@}
+						</select>
+					</div>
+					
+					<div class="mui-input-row">
+						<label>工作处所：</label>
+						<input type="text" id="work_unit" name="work_unit" class="mui-input" value="${inmateEntity.work_unit ! ''}">
+					</div>
+					
+					<div class="mui-input-row">
+						<label>车牌号：</label>
+						<input type="text" id="car_no" name="car_no" class="mui-input" value="${inmateEntity.car_no ! ''}">
+					</div>
+					
+					<div class="mui-input-row">
+						<label>文化程度：</label>
+						<select class="form-control" name="education" id="education">
+						@if(isNotEmpty(whcd)){
+							@for(da in whcd){
+							<option value="${da.itemCode}" ${inmateEntity != null && da.itemCode == inmateEntity.education ? 'selected' : ''}>${da.itemName}</option>
+							@}
+						@}
+						</select>
+					</div>
+				</div>
+				<div class="article-content">
+					<div class="mui-input-row">
+						<label>所属社区：</label>
+						<select id="commId" name="commId" class="form-control" onchange="showSs(this,'ssId','1')" disabled="disabled">
+						<option value="">-- 所属社区 --</option>
+						@if(isNotEmpty(comList)){
+							@for(com in comList){
+								<option value="${com.id}" ${inmateEntity != null && com.id == commId ? 'selected' : ''}>${com.name}</option>
+							@}
+						@}
+						</select>
+						<label>所属服务站：</label>
+						<select class="form-control" name="ssId" id="ssId" onchange="showData(this,'gridId')" disabled="disabled">
+						<option value="">-- 所属服务站 --</option>
+						@if(isNotEmpty(ssList)){
+							@for(ss in ssList){
+								<option value="${ss.id}" ${inmateEntity != null && ss.id == inmateEntity.ssId ? 'selected' : ''}>${ss.name}</option>
+							@}
+						@}
+						</select>
+						<label>所属网格：</label>
+						<select class="form-control" name="gridId" id="gridId" onchange="showBuilds(this)" disabled="disabled">
+						<option value="">-- 所属网格 --</option>
+						@if(isNotEmpty(gridList)){
+							@for(grid in gridList){
+								<option value="${grid.id}" ${inmateEntity != null && grid.id == inmateEntity.build.grid.id ? 'selected' : ''}>${grid.name}</option>
+							@}
+						@}
+						</select>
+					</div>
+				</div>
+				<div class="article-content">	
+					<div class="mui-input-row">
+						<label>楼宇名称：</label>
+						<input readonly="readonly" type="text" class="mui-input" id="buildId" name="${inmateEntity.build.id ! ''}" value="${inmateEntity.build.name ! ''}">
+						<label>单元：</label>
+						<input readonly="readonly" type="text" class="mui-input" id="unit_no" value="${inmateEntity.unit_no ! ''}">
+						<label>室号：</label>
+						<input readonly="readonly" type="text" class="mui-input" id="room_no" value="${inmateEntity.room_no ! ''}">
+					</div>
+					
+					<div id="isPubDiv" class="mui-input-row" >
+						<label>是否户主</label>
+						<div id="housemaster" name="housemaster" class="mui-switch mui-switch-mini housemaster" data-val="${inmateEntity.housemaster ! ''}">
+							<div class="mui-switch-handle"></div>
+						</div>
+					</div>
+					
+					<div class="mui-input-row">
+						<label>与户主关系：</label>
+						<input type="text" class="mui-input"  id="hm_relation" name="hm_relation" value="${inmateEntity.hm_relation}">
+					</div>
+				</div>
+				<div class="article-content" id="ryflId">	
+				@if(isNotEmpty(ryfl)){
+					@for(da in ryfl){
+					<div id="isPubDiv" class="mui-input-row" >
+						<label>${da.itemName}</label>
+						<div class="mui-switch mui-switch-mini ryfl" data-val="${da.value1}">
+							<div class="mui-switch-handle"></div>
+						</div>
+					</div>
+					@}
+				@}
+				</div>
+					
+					<div class="delimiter"></div>
+					<input type="hidden" name="id" id="id" value="${inmateEntity.id ! ''}" />
+					<input type="hidden" name="type" id="type" value="${types !''}"/>
+				</form>
+			</div>
+			<div class="mask-backdrop"></div>
+		</div>
+	
+		<input type="hidden" id="flag" value="${flag}" />
+		<input type="hidden" id="agoId" value="${agoId}" />
+		<input type="hidden" id="lyflag" value="${lyflag}" />
+		<input type="hidden" id="lyId" value="${lyId}" />
+		<input type="hidden" id="unitNo" value="${unitNo}" />
+		<input type="hidden" id="roomNo" value="${roomNo}" />
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/jmxx/app/app_jmxx_add.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script type="text/javascript">
+		
+		mui.init();
+		mui('.mui-scroll-wrapper').scroll({
+			indicators: false, //是否显示滚动条
+			startX: 0, //初始化时滚动至x
+			deceleration: 0.0004, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+			bounce: true //是否启用回弹
+		});  
+		
+		//点击遮罩事件
+		$(".mask-backdrop").click(function() {
+			$(this).hide();
+			$("#isPubDiv").hide();
+		});
+		
+		</script>
+</body>
+
+</html>

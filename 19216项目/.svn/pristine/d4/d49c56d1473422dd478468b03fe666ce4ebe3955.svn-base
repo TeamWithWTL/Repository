@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>角色管理-首页</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+	<style type="text/css">
+	   .bz{
+	        width: 350px; 
+		    white-space: nowrap;  
+		    text-overflow: ellipsis; 
+		    overflow: hidden; 
+	   }
+	</style>
+</head>
+
+<body>
+	<div class="function-box">
+		 	<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+						<input type="text" class="form-control" id="roleCode" placeholder="编码">
+						<input type="text" class="form-control" id="roleName" placeholder="名称">
+						<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+			</div>
+			<div class="function-btn">
+			 <#roleBtn btnId="jsglAdd" roleCode="${roleCode}">
+				<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="showAddEdit('add')"><i class="fa fa-plus"></i> 添加</button>
+			 </#roleBtn>
+			 <#roleBtn btnId="jsglUpdate" roleCode="${roleCode}">	
+				<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="showAddEdit('edit')"><i class="fa fa-pencil"></i> 修改</button>
+			 </#roleBtn>
+			 <#roleBtn btnId="jsglDel" roleCode="${roleCode}">		
+				<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="delRole()"><i class="fa fa-trash"></i> 删除</a>
+			 </#roleBtn>
+			 <#roleBtn btnId="jsglQxfp" roleCode="${roleCode}">		
+				<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="assignRights()"><i class="fa fa-fire"></i> 权限分配</button>
+			 </#roleBtn>
+			 <#roleBtn btnId="jsglQxql" roleCode="${roleCode}">		
+				<button type="button" class="btn btn-light" href="javascript:void(0);" onClick="clrRights()"><i class="fa fa-exclamation"></i> 权限清理</abutton>
+			 </#roleBtn>
+			</div>
+			</div>
+			<div id="table-container" class="warpper">
+			@#ajax table:{
+			<div class="table-box">
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+					<thead>
+						<tr class="table-secondary">
+				        	<th width="5%" class="text-center">
+								<!-- <input type="radio" class="i-checks" id="checkAll" /> -->
+				        	</th>
+				        	<th width="10%">编码</th>
+					        <th width="15%">名称</th>
+					        <th width="10%">添加人</th>
+					        <th width="20%">添加日期</th>
+					        <th>备注</th>
+					        <th width="6%">排序</th>
+			        	</tr>
+			        	</thead>
+			        	<tbody id="dqIds">
+				    	@for(role in pagenate.list ! []){
+				    	<tr>
+					        <td class="text-center">
+					        	<input type="radio" class="i-checks" name="icheck" value="${role.roleCode}" />
+					        </td>
+					        <td>${role.roleCode}</td>
+					        <td>${role.roleName}</td>
+					        <td>${role.addName}</td>
+					        <td>${role.addTimeFmt}</td>
+					        <td title="${role.note}"> 
+					        	<div class="bz">
+					        		${role.note}
+					        	</div>
+					         </td>
+					        <td>${role.orderNo}</td>
+				    	</tr>
+				    	@}elsefor{
+				    	<tr>
+					        <td colspan="7" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+				    	@}
+				    	</tbody>
+					</table>
+				</div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+			</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<!-- END MAIN CONTENT -->
+		<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/scripts/xtgl/jsgl/index.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

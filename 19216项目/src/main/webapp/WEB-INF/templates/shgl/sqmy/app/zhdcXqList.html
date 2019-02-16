@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>住户调查详情页面</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+</head>
+<body>
+	<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">住户调查详情</h1>
+	</header>
+	<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<form  id="addForm" action="" method="post">
+					 <div class="mui-input-group">
+						<div class="mui-input-row">
+						<label>与户主关系</label>
+							<input readonly="readonly" type="text" class="mui-input"  value=" ${hzgxMap[zhdc.relation]}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>姓名</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.name ! ''}">
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>性别</label>
+							@if(zhdc == null){
+							   <input readonly="readonly" type="text" class="mui-input"  value="${zhdc.sex ! ''}">
+							@}else{
+							    @if(zhdc.sex == '0'){
+							       <input readonly="readonly" type="text" class="mui-input"  value="男">
+							    @}else if(zhdc.sex == '1'){
+							       <input readonly="readonly" type="text" class="mui-input"  value="女">
+							    @}
+							@}
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>出生时间</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.birth_date ! ''}">
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>身份证号 </label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.card_id ! ''}">
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>政治面貌</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${ZzmmMap[zhdc.zzmm]}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>民族</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${mzMap[zhdc.nation]}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>籍贯</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.origin ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>户口性质</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.hkxz ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>个人户籍状况</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.grjgzk ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>户口所在单位</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.hkszd ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>人员分类</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${RyTypeMap[zhdc.ry_type]}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>文化程度</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${WhcdMap[zhdc.whcd]}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>就读或毕业学校</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.school ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>入党时间</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.rd_date ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>婚姻状况</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${HyzkMap[zhdc.hy_status ]}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>结婚时间</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.jh_date ! ''}">
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>兵役状况</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.by_status ! ''}">
+						</div>
+					</div>
+					
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>健康状况</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.jk_status ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>职业</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.duty ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>工作单位</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.dept ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>是否享受低保</label>
+							@if(zhdc.db_status == '2'){
+							<input readonly="readonly" type="text" class="mui-input"  value="否">
+							@}else{
+							<input readonly="readonly" type="text" class="mui-input"  value="是">
+							@}
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>是否优抚对象</label>
+							@if(zhdc.yfdx_status == '2'){
+							<input readonly="readonly" type="text" class="mui-input"  value="否">
+							@}else{
+							<input readonly="readonly" type="text" class="mui-input"  value="是">
+							@}
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>失业人员类别</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.syry_type ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>失业时间</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.sy_date ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>计生管理单位</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.jsgldw ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>卫生接种</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.wsjz ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>个人医保类型</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.yb_type ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>家庭住房状况</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${ZfTypeMap[zhdc.zf_type]}">
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>家庭住房面积</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.zf_size ! ''}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>房权所有人姓名</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.zf_owner ! ''}">
+						</div>
+					</div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>房屋使用类别</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${ZfsyTypeMap[zhdc.zfsy_type ]}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>家庭所需服务项目</label>
+							<input readonly="readonly" type="text" class="mui-input"  value="${JtfwxmMap[zhdc.jtfw_type]}">
+						</div>
+					</div>
+					
+					<div class="mui-input-group">
+					<div class="mui-input-row">
+					<label>备注</label>
+					<input readonly="readonly" type="text" class="mui-input"  value="${zhdc.remark ! ''}">
+					</div>
+					</div> 
+					<div class="delimiter"></div>
+				</form>
+			</div>
+			<div class="mask-backdrop"></div>
+		</div>
+	
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		
+		<script type="text/javascript">
+		
+		mui.init();
+		mui('.mui-scroll-wrapper').scroll({
+			indicators: false, //是否显示滚动条
+			startX: 0, //初始化时滚动至x
+			deceleration: 0.0004, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+			bounce: true //是否启用回弹
+		});  
+		
+		//手机按键返回
+		function anGoBack(){
+			mui.back();
+			return;
+		}
+		
+		</script>
+</body>
+
+</html>

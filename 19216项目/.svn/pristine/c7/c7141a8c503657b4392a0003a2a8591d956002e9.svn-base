@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>社会服务-积分兑换</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+</head>
+
+<body>
+	<div class="container-fluid">
+		<form id="addForm" class="form-horizontal">
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">兑换积分</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="integral" name="integral" placeholder="兑换积分"  value="${jf.integral ! ''}">
+					<input type="hidden" class="form-control" id="accCode" name="accCode" placeholder="用户编号"  value="${accCode ! ''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">描述</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="content" name="content" placeholder="描述"  value="${jf.content ! ''}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="page-operation text-right col-sm-11">
+					<button type="button" class="btn btn-primary" id="saveBtn" onclick="subMyForm()"><i class="fa fa-save"></i> 保存</button>
+					<button type="button" class="btn btn-outline-primary" id="cancleBtn"><i class="fa fa-reply"></i> 返回</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	
+	<script src="${ctxPath}/assets/scripts/shfw/jftj/jfdh.js"></script>
+</body>
+</html>

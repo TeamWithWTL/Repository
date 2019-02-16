@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>组织结构树</title>
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+<link rel="stylesheet" href="${ctxPath}/assets/vendor/zTree_v3/css/metroStyle/metroStyle.css">
+<style type="text/css">
+::-webkit-scrollbar {
+	width: 0px;
+}
+html,body {
+width: 100%;}
+</style>
+</head>
+<body>
+	<!-- 本页面的Tree只能嵌套在iFrame中使用，否则Tree的callback函数无法使用 -->
+	<div id="orgTree" class="ztree"></div>
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/vendor/zTree_v3/js/jquery.ztree.all-3.5.min.js"></script>
+	<script type="text/javascript">
+	var orgTreeObj;	// 全局Tree对象，方便父页面获取
+	// ZTree设置
+	var treeSetting = {
+		view: {
+			selectedMulti: false	// 不允许同时选中多个节点
+		},
+		edit: {
+			enable: true,
+			drag: {
+				isCopy: false,
+				isMove: true
+			},
+			showRemoveBtn:false,
+			showRenameBtn:false
+		},
+		async: {
+			enable: true,
+			type: "post",
+			url: "${ctxPath}/pub/orgTree/loadTreeData.do",
+			otherParam: {"orgCode": "${orgCode}"}
+		},
+		data: {
+			simpleData: {
+				enable: true,
+				idKey: "id",
+				pIdKey: "pId",
+				rootPId: "0"
+			}
+		},
+		callback: {
+			beforeClick: zTreeBeforeClick,
+			onClick: zTreeOnClick,
+			onAsyncSuccess: zTreeOnAsyncSuccess,
+			beforeDrag: zTreeBeforeDrag,
+	        beforeDrop: zTreeBeforeDrop,
+		}
+	};
+	var msgIndex_tree;
+	$(document).ready(function(){
+		msgIndex_tree = layer.msg('数据加载中...', {icon:16, shade:[ 0.5, '#999999' ], time:0});
+		// 加载ZTree
+		$.fn.zTree.init($("#orgTree"), treeSetting);
+	});
+	
+	// 节点被点击前校验：默认所有节点都可以被点击
+	function zTreeBeforeClick(treeId, treeNode, clickFlag){
+		if(parent.zTreeBeforeClick && typeof(parent.zTreeBeforeClick)=="function"){ 
+			parent.zTreeBeforeClick(treeId, treeNode, clickFlag); 
+		}else{
+			return true;
+		}
+	}
+	
+	// 节点被点击时触发
+	function zTreeOnClick(event, treeId, treeNode){
+		if(parent.zTreeOnClick && typeof(parent.zTreeOnClick)=="function"){ 
+			parent.zTreeOnClick(event, treeId, treeNode); 
+		}
+	}
+	
+	// ZTree加载成功后触发
+	function zTreeOnAsyncSuccess(event, treeId, treeNode, msg){
+		layer.close(msgIndex_tree);
+		var treeObj = $.fn.zTree.getZTreeObj(treeId);
+		orgTreeObj = treeObj;
+		
+		if(parent.zTreeOnAsyncSuccess && typeof(parent.zTreeOnAsyncSuccess)=="function"){ 
+			parent.zTreeOnAsyncSuccess(event, treeId, treeNode, msg); 
+		}else{
+			
+		}
+	}
+	
+	// 移动节点前处理
+	function zTreeBeforeDrag(treeId, treeNodes){
+		if(parent.zTreeBeforeDrag && typeof(parent.zTreeBeforeDrag)=="function"){ 
+			parent.zTreeBeforeDrag(treeId, treeNodes); 
+		}
+	}
+	
+	// 拖拽释放之后结束前执行
+	function zTreeBeforeDrop(treeId, treeNodes, targetNode, moveType){
+		if(parent.zTreeBeforeDrop && typeof(parent.zTreeBeforeDrop)=="function"){ 
+			parent.zTreeBeforeDrop(treeId, treeNodes, targetNode, moveType); 
+		}
+	}
+	
+	</script>
+</body>
+</html>

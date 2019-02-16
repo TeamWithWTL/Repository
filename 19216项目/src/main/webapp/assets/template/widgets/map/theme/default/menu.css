@@ -1,0 +1,50 @@
+﻿ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #008000;
+    }
+
+.map_menu {
+    width: 60px;
+    position: absolute;
+    top: 60px;
+    right: 16px;
+    padding: 5px;
+    z-index: 100;
+}
+
+    .map_menu ul {
+        background: #FFF;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+        .map_menu ul li {
+            line-height: 30px;
+            border-bottom: 1px solid #F2F2F2;
+            text-align: center;
+            background-color: #5CA6E7;
+        }
+
+            .map_menu ul li a {
+                display: block;
+                font-size: 12px;
+                font-family: 微软雅黑;
+            }
+
+                .map_menu ul li a:hover {
+                    background: #2279B5;
+                    color: #fff;
+                }

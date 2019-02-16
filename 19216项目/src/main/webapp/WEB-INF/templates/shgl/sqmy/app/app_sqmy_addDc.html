@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+
+	<head>
+		<title></title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.picker.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css" />
+	    <style type="text/css">
+			body, html {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+			#allmap{width:100%;height:500px;}
+			p{margin-left:5px; font-size:14px;}
+	   </style>
+	</head>
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class=" icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title">添加调查</h1>
+		</header>
+		<nav class="mui-bar mui-bar-tab mui-bar-cogs">
+			<a class="mui-tab-item mui-active"  id="saveBtn">
+				<span class="icon ion-filing"></span>
+				<span class="mui-tab-label">提交</span>
+			</a>
+		</nav>
+		<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<form  id="addForm" action="" method="post">
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>标题</label>
+							<input id="title" name="title" type="text" class="mui-input-clear" placeholder="请输入标题">
+						</div>
+					</div>
+					<div class="mui-input-row">
+						<textarea id="content" name="content"  rows="8" cols="" placeholder="请输入调查详情"></textarea>
+					</div>
+					<div class="delimiter"></div>
+					<div class="mui-input-group">
+						<div class="mui-input-row array-list">
+							<label>附件上传</label>
+							 <ul id="fjItems">
+							 	<li class="array-funciton array-photograph" onclick="openCamera()"><span class="icon ion-camera"></span><p>拍摄照片</p>
+								</li>
+								<!-- <li class="array-funciton array-upfile" onclick="openFile()"><span class="icon ion-filing"></span><p>上传文件</p>
+								</li> -->
+							</ul>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		</body>
+		
+  	 	 <input type="hidden" id="fName" value=""/>
+	 	 <input type="hidden" id="sqmyWgyId" value="${sqmyWgyId}" />
+ 		<input type="hidden" id="basePath" value="${ctxPath}" />
+ 		
+		<script type="text/javascript" src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/shgl/sqmy/app_sqmy_add.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script>
+		mui.init({
+			pullRefresh: {
+				container: "#refreshContainer", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+				up: {
+					height:50,//可选.默认50.触发上拉加载拖动距离
+					range:'50px', //可选 默认100px,控件可下拉拖拽的范围
+					contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
+					contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
+					callback: pullupRefresh
+				}
+			}
+		});
+		function pullupRefresh() {
+			mui('#refreshContainer').pullRefresh().endPullupToRefresh(true); 
+		}
+		//返回界面
+		mui("#header").on('tap','a',function(){
+			  var sqmyWgyId =$("#sqmyWgyId").val();
+			  window.location.href =$("#basePath").val()+ '/app/shgl/sqmy/wgyDcList.do?sqmyWgyId='+sqmyWgyId;
+		});
+		
+		//手机键返回
+		function anGoBack(){
+			 var sqmyWgyId =$("#sqmyWgyId").val();
+			  window.location.href =$("#basePath").val()+ '/app/shgl/sqmy/wgyDcList.do?sqmyWgyId='+sqmyWgyId;
+			  return;
+		}
+		
+		</script>
+</html>

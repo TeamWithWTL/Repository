@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html class="main" >
+<head>
+	<title>协同办公-会议管理-首页</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+		<link rel="stylesheet" type="text/css"
+			href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+	<style type="text/css">
+      .wrap{
+        width: 180px; 
+		white-space: nowrap;  
+		text-overflow: ellipsis; 
+		overflow: hidden; 
+      }
+    </style>
+</head>
+
+<body>
+	<div class="function-box">
+		 	<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+				
+					<!-- <div class='input-group date form_datetime' id='datetimepicker'>
+					<input readonly="readonly" type="text" class="form-control" id="apply_time" placeholder="发布时间">
+					 <span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+		                <span class="fa fa-calendar" aria-hidden="true"></span>
+		                </span>
+		                </div> -->
+					<input type="text" class="form-control" id="title" placeholder="标题/发布人" value="${title ! ''}">
+					<select id="stamp" class="form-control" name="stamp">
+						<option value="1" ${stamp=='1'?'selected':''}>未结束</option>
+						<option value="2" ${stamp=='2'?'selected':''}>已结束</option>
+					
+					</select>
+					<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+			</div>
+			
+			<div class="function-btn">
+				
+				<#roleBtn btnId="hyglAdd" roleCode="${roleCode}">
+				<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goAdd('添加')"><i class="fa fa-plus"></i> 添加</button>
+				</#roleBtn>
+				<#roleBtn btnId="hyglUpdate" roleCode="${roleCode}">
+				<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goUpdate('修改')"><i class="fa fa-pencil"></i> 修改</button>
+				</#roleBtn>
+				<#roleBtn btnId="hyglDel" roleCode="${roleCode}">
+				<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goDel()"><i class="fa fa-trash"></i> 删除</button>
+				</#roleBtn>
+			
+			</div>
+			
+		</div>
+		<div id="table-container"  class="warpper">
+			@#ajax table:{
+			<div class="table-box">
+				<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+					<thead>
+					<tr class="table-secondary">
+						<th width="5%" class="text-center">
+							<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+				        </th>
+						<th width="20%" class="text-center">会议标题</th>
+							<th width="20%" class="text-center">发布人</th>
+							<th width="20%" class="text-center">开始时间</th>
+							<th width="20%" class="text-center">结束日期</th>
+							<th width="20%" class="text-center">发布状态</th>
+							<th width="20%" class="text-center">操作</th>
+					</tr>
+					</thead>
+					<tbody id="dqIds">
+					@for(yw in pagenate.list ! []){
+					<tr>
+						<td class="text-center">
+				        	<input type="checkbox" class="i-checks" name="icheck" value="${yw.id}*${yw.tj_status}" />
+				        </td>
+				        <td class="text-left" title="${yw.title ! ''}">
+				        	<div class="wrap">
+					        	<a href="javascript:void(0);" onclick="goView('${yw.id}')">
+					        		${yw.title ! ''}
+					        	</a>
+				        	</div>
+				        </td>
+				        <td>${yw.user_name}</td>
+				       	<td>${yw.fmtStart_date}</td>
+				        <td>${yw.fmtEnd_date}</td>
+				        @if(yw.tj_status=='1'){
+				        	<td style="color: #7ebc1d"> 已发布</td>
+				        @}else if(yw.tj_status=='2'){
+				        	<td style="color: #fd5c1d"> 未发布</td>
+				        @}
+				       <td>
+				       		@if(yw.tj_status=='1'){
+				       		<#roleBtn btnId="hyglUpload" roleCode="${roleCode}">
+				        	<a href="javascript:void(0);" onclick="accessory('${yw.id}')">
+					        		上传会议纪要
+					        </a>
+					        </#roleBtn>
+				       		 @}else if(yw.tj_status=='2'){
+				       		 <#roleBtn btnId="hyglUpdate" roleCode="${roleCode}">
+				        	<a href="javascript:void(0);" onclick="update('${yw.id}')">
+					        		修改
+					        </a>
+					        </#roleBtn>
+					         <#roleBtn btnId="hyglIssue" roleCode="${roleCode}">
+					        <a href="javascript:void(0);" onclick="issue('${yw.id}')">
+					        		发布
+					        </a>
+					        </#roleBtn>
+				      		  @}
+				       </td>
+					</tr>
+					@}elsefor{
+					<tr>
+				        <td colspan="7">
+				        	没有找到要查询的数据
+				        </td>
+			    	</tr>
+					@}
+				   </tbody>
+				</table>
+				</div>
+			<!-- 自定义分页标签 -->
+			<#pagenate func="initData" page="${pagenate}" />
+		@}
+	</div>
+	
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+		<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<!-- 日期控件JS -->
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="${ctxPath}/assets/scripts/xtbg/hygl/index.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

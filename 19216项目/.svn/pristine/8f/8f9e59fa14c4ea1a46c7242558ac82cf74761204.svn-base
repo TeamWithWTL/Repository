@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <title>位置标注</title>
+
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/animate.min.css" rel="stylesheet" />
+    <link href="widgets/layui/css/layui.css" rel="stylesheet" />
+    <link href="css/areadraw.css" rel="stylesheet" />
+    <link href="css/indexsearch.css" rel="stylesheet" />
+    <link href="widgets/map/theme/default/DrawingManager.css" rel="stylesheet" />
+    <link href="widgets/map/theme/default/MECPopup.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="mapDiv" class="mapdiv"></div>
+    <div class="mapcontrol" style="right: 18px;">
+        <ul>
+            <li>
+                <div class="rule-single-select" style="padding-top:3px;">
+                    <select id="ddlmaptype">
+                        <option value="1">电子地图</option>
+                        <option value="2">影像地图</option>
+                        <option value="3">混合地图</option>
+                    </select>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <input type="hidden" id="txtpoint" class="layui-input" style="width:208px;" value="aaa"/>
+
+    <input id="hflon" type="hidden" />
+    <input id="hflat" type="hidden" />
+
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="widgets/layui/layui.js"></script>
+
+    <script src="widgets/map/lib/OpenLayers.js"></script>
+    <script src="widgets/map/MECJS/MecMap.js"></script>
+    <script src="widgets/map/MECJS/MecMeasure.js"></script>
+    <script src="widgets/map/MECJS/DrawingManager.js"></script>
+    <script src="js/areadraw.js"></script>
+    <script>
+    
+    $(function(){
+    	setTimeout(function(){
+    	initMap();
+    	}, 1000);
+    });
+    function initMap(){
+    	var type = window.parent.$("#type").val();
+    	if(type && type == "sj"){
+    		var obj1 =  window.parent.getLon();
+    		if(obj1.Lon && obj1.Lat){
+	    		$("#txtpoint").val(obj1.Lon + "," + obj1.Lat);
+	    		MecMap.setMapCenter(obj1.Lon, obj1.Lat, 16);
+	    		DrawMarks(obj1);
+	    	}
+    	}
+    }
+    
+    function init (obj1) {
+    	if(obj1.Lon && obj1.Lat){
+    		$("#txtpoint").val(obj1.Lon + "," + obj1.Lat);
+    		MecMap.setMapCenter(obj1.Lon, obj1.Lat, 16);
+    		DrawMarks(obj1);
+    	}
+	}
+    </script>
+</body>
+</html>

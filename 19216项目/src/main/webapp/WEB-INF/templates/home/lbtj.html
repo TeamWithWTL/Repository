@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${@com.jcwx.utils.ProjectUtils.getSysCfg("projectName")}</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+</head>
+
+<body>
+	
+	<div class="content-block">
+		<div class="container-fluid warpper">
+			<!-- <div class="row"> -->
+				<div class="col col-12">
+					<!--社区人口统计-->
+					<div class="section-block">
+					
+						<div class="section-body">
+							<div id="charts-lbtj" class="charts-block" style="height:380px;"></div>
+						</div>
+					</div>
+				</div>
+			<!-- </div> -->
+		</div>
+	</div>
+	<input type="hidden" id="all" value="${all}">
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/popper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://echarts.baidu.com/dist/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	var basePath = $("#basePath").val();
+	
+	$(document).ready(function(){
+		initLbtj($("#all").val());//特殊人口统计
+	});
+	
+	/**
+	 * 事件类别统计-begin=========================================================================
+	 */
+	function initLbtj(all) {
+		var msgIndex = top.layer.msg('数据加载中', {icon:16, shade:[ 0.5, '#999999' ], time:0});
+
+		$.ajax({
+			type: "POST",
+			url: basePath + "/home/initLbtj.do?all="+all,
+			dataType: 'json',
+			error: function(request) {
+				layer.msg('程序出错，请联系管理员', {shade : [ 0.5, '#999999' ]});
+			},
+			success : function(data) {
+				top.layer.close(msgIndex);
+				if(JSON.stringify(data) != "{}" && data.code == 200){
+					initLbtjBar(data.result);
+				}
+			}
+		});
+	}
+
+	function initLbtjBar(data){
+		// 初始化图表数据
+		var myChart = echarts.init(document.getElementById('charts-lbtj'));
+		window.onresize = myChart.resize;
+		var dataX = [];
+		var dataValue = [];
+		var zdyDate = [];
+		for(var i = 0; i<data.length; i++){
+			dataX[i] = data[i].name;
+			dataValue[i] = data[i].count;
+			zdyDate[i] = data[i].id;//事件类别ID
+		}
+		// 指定图表的配置项和数据
+		option = {
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: { // 坐标轴指示器，坐标轴触发有效
+					type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+				}
+			},
+			grid: {
+				top: '10%',
+				left: '0',
+				right: '2%',
+				bottom: '2%',
+				containLabel: true,
+				y2: 140
+			},
+			xAxis: [{
+				type: 'category',
+				data:dataX,
+				axisTick: {
+					alignWithLabel: true
+				},
+				axisLabel: {
+					interval: 0,
+				}
+			}],
+			yAxis: [{
+				type: 'value'
+			}],
+			series: [{
+				name: '事件数量',
+				type: 'bar',
+				barWidth: '30%',
+				zdyDate:zdyDate,
+				itemStyle: {
+		            normal: {
+		                // 随机显示
+		                color:function(d){return "#"+Math.floor(Math.random()*(256*256*256-1)).toString(16);}
+		                // 定制显示（按顺序）
+//		                color: function(params) {
+//		                    var colorList = ['#C33531','#EFE42A','#64BD3D','#EE9201','#29AAE3', '#B74AE5','#0AAF9F','#E89589','#16A085','#4A235A','#C39BD3 ','#F9E79F','#BA4A00','#ECF0F1','#616A6B','#EAF2F8','#4A235A','#3498DB' ]; 
+//		                    return colorList[params.dataIndex];
+//		                }
+		            }
+		        },
+				data:dataValue,
+				label: {
+					normal: {
+						fontSize: '10px',
+					}
+				},
+			}]
+		};
+		// 使用刚指定的配置项和数据显示图表。
+		myChart.setOption(option);
+		myChart.on("click", eConsole);
+		function eConsole(param){
+			// 跳转到事件列表
+			var sjName = zdyDate[param.dataIndex];
+			sjlbMores(sjName);
+		}
+	}
+	//统计图专用
+	function sjlbMores(sjName){
+		
+	/* 	$.ajax({
+			url : basePath + '/home/sjlbJson.do',
+			type : 'POST',
+			dataType : 'json',
+			data : {
+				"sjlbName" : sjName
+			},
+			success : function(data){
+				if(data.code == 200){
+					var sjlbId = data.sjlbId; */
+					top.layer.open({
+						type : 2,
+						title : "<div class='layerTitleDiv'></div><span class='layerTitleSpan'>事件类别</span>",
+						fix : false,
+						// shadeClose: true,
+						area : ['80%', '80%'],
+						content : basePath + "/home/sjlbList.do?sjName="+sjName
+					})
+/* 				}
+			}
+		}); */
+	}
+	</script>
+</body>
+</html>

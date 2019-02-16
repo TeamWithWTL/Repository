@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>社会服务-积分统计-首页</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<style type="text/css">
+      .wrap{
+        width: 300px; 
+		white-space: nowrap;  
+		text-overflow: ellipsis; 
+		overflow: hidden; 
+      }
+    </style>
+</head>
+
+<body>
+	<div class="function-box">
+		 	<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+					<input type="text" class="form-control" id="name" placeholder="姓名" value="${name ! ''}">
+					<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+			</div>
+			<div class="function-btn">
+				<!-- <button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goAdd('添加')"><i class="fa fa-plus"></i> 添加</button>
+				<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goUpdate('修改')"><i class="fa fa-pencil"></i> 修改</button> 
+				<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goDel()"><i class="fa fa-trash"></i> 删除</button> -->
+			</div>
+		</div>
+		<!-- class="table-box" -->
+		<div id="table-container" class="warpper">
+			@#ajax table:{
+			<div class="table-box">
+				<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+					<thead>
+					<tr class="table-secondary">
+						<!-- <th width="5%" class="text-center">
+							<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+				        </th> -->
+						<th width="15%">姓名</th>
+						<th width="20%">总积分</th>
+						<th width="15%">操作</th>
+					</tr>
+					</thead>
+					<tbody id="dqIds">
+					@for(acc in pagenate.list ! []){
+					<tr>
+						<!-- <td class="text-center">
+				        	<input type="checkbox" class="i-checks" name="icheck" value="${acc.accCode}" />
+				        </td> -->
+				        <td class="text-left" title="${acc.name ! ''}">
+				        	<div class="wrap">
+					        	<!-- <a href="javascript:void(0);" onclick="goJfls('${acc.accCode}')"> -->
+					        	${acc.name ! ''}
+					        	<!-- </a> -->
+				        	</div>
+				        </td>
+				        <td style="color: #fd5c1d">${acc.integral}</td>
+				        <td>
+				        	<a href="javascript:void(0);" onclick="goJfdh('${acc.accCode}')">积分兑换</a>
+				        	<a href="javascript:void(0);" onclick="goJfls('${acc.accCode}')">积分流水</a>
+				        </td>
+					</tr>
+					@}elsefor{
+					<tr>
+				        <td colspan="3">
+				        	没有找到要查询的数据
+				        </td>
+			    	</tr>
+					@}
+				   </tbody>
+				</table>
+			</div>	
+			<!-- 自定义分页标签 -->
+			<#pagenate func="initData" page="${pagenate}" />
+		@}
+	</div>
+	
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/shfw/jftj/index.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

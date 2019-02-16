@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	</head>
+
+	<body>
+		<div class="container">
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="tab1" data-toggle="tab" href="#dsh">待审核</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="tab2" data-toggle="tab" href="#shtg">审核通过</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="tab3" data-toggle="tab" href="#shbtg">审核不通过</a>
+				</li>
+			</ul>
+			<div class="tab-content" id="myTabContent">
+				<div class="tab-pane fade show active" id="dsh">
+					<div class="article-feedback" id="dshList" style="margin-top:20px;">
+						@#ajax dshTable:{
+							@if(isNotEmpty(pagenateDsh.list)){
+							@for(dsh in pagenateDsh.list ! []){
+							<ul>
+								<div class="feedback-user">
+									<!-- <dt><img src="${yjly.picpath ! ''}"/></dt> -->
+									<p></p><span>${dsh.zzName ! ''}</span>
+								</div>
+								<div class="feedback-msg">
+									<p>【反馈】${dsh.content ! ''}</p>
+									<p class="audit-status"></p>
+									@if(isNotEmpty(dsh.fkAttrList)){
+									<div class="form-arraylist">
+										<h4 class="form-arraylist-title">附件列表：</h4>
+										@for(att in dsh.fkAttrList ![]){
+											@if(att.fileType  == 'img'){
+												<li class="col-9">
+													<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${att.newFilename !}')"  title="${att.oldFilename !}" ><img src="${ctxPath}/showPic?fileName=${att.newFilename !}"/> ${att.oldFilename !}</a>
+													<span title="下载" class="download"  onclick="download('${att.newFilename !}', '${att.oldFilename !}')"></span>
+												</li>
+											@}else if(att.fileType  == 'pdf'){
+												<li  class="col-9">
+													<a href="javascript:void(0)"  onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${att.newFilename}')" title="${att.oldFilename !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${att.oldFilename !}</a>
+										   			 <span title="下载" class="download" onclick="download('${att.newFilename !}', '${att.oldFilename !}')"></span>
+												</li>
+											@}else{
+												<li  class="col-9">
+													<a href="javascript:void(0)"   title="${att.oldFilename !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${att.oldFilename !}</a>
+										 		   <span title="下载" class="download" onclick="download('${att.newFilename !}', '${att.oldFilename !}')"></span>
+											</li>
+											@}
+										@}
+									</div>
+									@}
+									<div class="feedback-data">
+										<i class="fa fa-clock-o"> ${dsh.fmtBackTime ! ''}</i> 
+										<button type="button" class="btn btn-sm btn-success" onclick="shtg('${dsh.id}')">审核通过</button>
+										<button type="button" class="btn btn-sm btn-danger" onclick="shbtg('${dsh.id}')">审核不通过</button>
+									</div>
+								</div>
+							</ul>
+							@}
+							<!-- 自定义分页标签 -->
+							<#pagenate func="initDshData" page="${pagenateDsh}" />
+							@}else{
+							暂无相关记录	
+							@}
+						@}
+					</div>
+				</div>
+				<div class="tab-pane fade" id="shtg">
+					<div class="article-feedback" id="tgList" style="margin-top:20px;">
+						@#ajax tgTable:{
+							@if(isNotEmpty(pagenateTg.list)){
+							@for(tg in pagenateTg.list ! []){
+							<ul>
+								<div class="feedback-user">
+									<!-- <dt><img src="${yjly.picpath ! ''}"/></dt> -->
+									<p></p><span>${tg.zzName ! ''}</span>
+								</div>
+								<div class="feedback-msg">
+									<p>【反馈】${tg.content ! ''}</p>
+									<p class="audit-status"></p>
+									@if(isNotEmpty(tg.fkAttrList)){
+									<div class="form-arraylist">
+										<h4 class="form-arraylist-title">附件列表：</h4>
+										@for(att in tg.fkAttrList ![]){
+											@if(att.fileType  == 'img'){
+												<li class="col-9">
+													<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${att.newFilename !}')"  title="${att.oldFilename !}" ><img src="${ctxPath}/showPic?fileName=${att.newFilename !}"/> ${att.oldFilename !}</a>
+													<span title="下载" class="download"  onclick="download('${att.newFilename !}', '${att.oldFilename !}')"></span>
+												</li>
+											@}else if(att.fileType  == 'pdf'){
+												<li  class="col-9">
+													<a href="javascript:void(0)"  onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${att.newFilename}')" title="${att.oldFilename !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${att.oldFilename !}</a>
+										   			 <span title="下载" class="download" onclick="download('${att.newFilename !}', '${att.oldFilename !}')"></span>
+												</li>
+											@}else{
+												<li  class="col-9">
+													<a href="javascript:void(0)"   title="${att.oldFilename !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${att.oldFilename !}</a>
+										 		   <span title="下载" class="download" onclick="download('${att.newFilename !}', '${att.oldFilename !}')"></span>
+											</li>
+											@}
+										@}
+									</div>
+									@}
+									<div class="feedback-data">
+										<i class="fa fa-clock-o"> ${tg.fmtBackTime ! ''}</i> 
+										<!-- <button type="button" class="btn btn-sm btn-success">审核通过</button> -->
+									</div>
+								</div>
+							</ul>
+							@}
+							<!-- 自定义分页标签 -->
+							<#pagenate func="initTgData" page="${pagenateTg}" />
+							@}else{
+							暂无相关记录
+							@}
+						@}
+					</div>
+				</div>
+				<div class="tab-pane fade" id="shbtg">
+					<div class="article-feedback" id="btgList" style="margin-top:20px;">
+						@#ajax btgTable:{
+							@if(isNotEmpty(pagenateBtg.list)){
+							@for(btg in pagenateBtg.list ! []){
+							<ul>
+								<div class="feedback-user">
+									<!-- <dt><img src="${yjly.picpath ! ''}"/></dt> -->
+									<p></p><span>${btg.zzName ! ''}</span>
+								</div>
+								<div class="feedback-msg">
+									<p>【反馈】${btg.content ! ''}</p>
+									<p class="audit-status"></p>
+									@if(isNotEmpty(btg.fkAttrList)){
+									<div class="form-arraylist">
+										<h4 class="form-arraylist-title">附件列表：</h4>
+										@for(att in btg.fkAttrList ![]){
+											@if(att.fileType  == 'img'){
+												<li class="col-9">
+													<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${att.newFilename !}')"  title="${att.oldFilename !}" ><img src="${ctxPath}/showPic?fileName=${att.newFilename !}"/> ${att.oldFilename !}</a>
+													<span title="下载" class="download"  onclick="download('${att.newFilename !}', '${att.oldFilename !}')"></span>
+												</li>
+											@}else if(att.fileType  == 'pdf'){
+												<li  class="col-9">
+													<a href="javascript:void(0)"  onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${att.newFilename}')" title="${att.oldFilename !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${att.oldFilename !}</a>
+										   			 <span title="下载" class="download" onclick="download('${att.newFilename !}', '${att.oldFilename !}')"></span>
+												</li>
+											@}else{
+												<li  class="col-9">
+													<a href="javascript:void(0)"   title="${att.oldFilename !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${att.oldFilename !}</a>
+										 		   <span title="下载" class="download" onclick="download('${att.newFilename !}', '${att.oldFilename !}')"></span>
+											</li>
+											@}
+										@}
+									</div>
+									@}
+									<div class="feedback-data">
+										<i class="fa fa-clock-o"> ${btg.fmtBackTime ! ''}</i> 
+										<button type="button" class="btn btn-sm btn-success" onclick="shtg('${btg.id}')">审核通过</button>
+									</div>
+								</div>
+							</ul>
+							@}
+							<!-- 自定义分页标签 -->
+							<#pagenate func="initBtgData" page="${pagenateBtg}" />
+							@}else{
+							暂无相关记录	
+							@}
+						@}
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<input type="hidden" id="id" value="${id}" />
+
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/shzz/hdgl/shfkview.js" charset="utf-8"></script>
+	</body>
+
+</html>

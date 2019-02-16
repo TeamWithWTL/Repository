@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/Linearicons/css/Linearicons.css" />
+</head>
+
+<body>
+	<header id="header" class="mui-bar mui-bar-nav">
+		<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+		<h1 class="mui-title" id="title">任务详情</h1>
+	</header>
+	
+	<div class="mui-content mui-scroll-wrapper">
+		<div class="mui-scroll">
+			<div class="article-content">
+				<div class="article-header">
+					<h4 class="article-header-title">${taskDealEntity.rwglEntity.title !}</h4>
+			
+				</div>
+				<div class="article-body">
+					<p>${taskDealEntity.rwglEntity.content !}</p>
+				</div>
+			</div>
+			@if(isNotEmpty(taskDealEntity.rwglEntity.attrList)){
+			<div class="article-content">
+				<div class="block-title">附件下载</div>
+				<div class="article-array" id="article-container">
+					@for(attr in taskDealEntity.rwglEntity.attrList  ! []){
+					<div>
+						@if(attr.file_type == 'img'){
+						<li>
+							<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/jpg.svg"/></dt>${attr.old_filename}</a>
+							<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a>
+						</li>
+						@}else if(attr.file_type == 'word'){
+						<li>
+							<a href="javascript:;" name="${path}${attr.new_filename}">
+								<dt>
+									<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> 
+								</dt>${attr.old_filename}
+							 </a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+						@}else if(attr.file_type == 'txt'){
+						<li>
+							<a href="javascript:;" name="${path}${attr.new_filename}">
+								<dt>
+									 <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>
+								</dt>${attr.old_filename}
+							</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+						@}else if(attr.file_type == 'exl'){
+						<li>
+							<a href="javascript:;" name="${path}${attr.new_filename}">
+								<dt>
+									<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>
+								</dt>${attr.old_filename}
+							</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+						@}else if(attr.file_type == 'video'){
+						<li>
+							<a href="javascript:;" name="${path}${attr.new_filename}">
+								<dt>
+									<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>
+								</dt>${attr.old_filename}
+							</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+						@}else{
+						<li>
+							<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/assets/images/default-file.png"/></dt>${attr.old_filename}</a>
+							<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a>
+						</li>
+						@}
+					</div>	
+					@}
+				</div>
+			</div>
+			@}
+			<div class="article-form">
+				<div class="mui-input-group">
+					<div class="mui-input-row">
+						<label>发布人：</label>
+						<input readonly="readonly" type="text" class="mui-input" value="${taskDealEntity.rwglEntity.fbr_name !}">
+					</div>
+					<div class="mui-input-row">
+						<label>发布日期：</label>
+						<input readonly="readonly" type="text" class="mui-input" value="${taskDealEntity.rwglEntity.create_dates !}">
+					</div>
+					<div class="mui-input-row">
+						<label>结束日期：</label>
+						<input readonly="readonly" type="text" class="mui-input" value="${taskDealEntity.rwglEntity.finish_dates !}">
+					</div>
+				</div>
+			</div>
+			@if(taskDealEntity.content != null){
+			<div class="content-mission" id="fjxzCode">
+				<div class="block-title">处理详情</div>
+				<div class="mission">
+						<div class="mission-header">
+							<li><label>下发人：</label>${taskDealEntity.preName ! ''}</li>
+							<li><label>下发时间：</label>${taskDealEntity.starte_dates ! ''}</li>
+						</div>
+						<div class="mission-content">
+						<ul>
+							<li>
+								<figure>
+									<span>处理人：${taskDealEntity.curName ! ''}</span>
+									<span>处理时间：${taskDealEntity.end_dates ! ''}</span>
+								</figure>
+								@if(taskDealEntity.is_back == '1'){
+								<p><span style="color: #7ebc1d">已反馈</span>：${taskDealEntity.content ! ''}</p>
+								@}else{
+								<p style="color: #ffa81f">未反馈：暂未处理</p>
+								@}
+								<ul class="article-array">
+								@if(isNotEmpty(taskDealEntity.attrList)){
+								@for(attr in taskDealEntity.attrList  ! []){
+									@if(attr.file_type == 'img'){
+										<li>
+											<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/jpg.svg"/></dt>${attr.old_filename}</a>
+											<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a>
+										</li>
+									@}else if(attr.file_type == 'word'){
+									<li>
+										<a href="javascript:;" name="${path}${attr.new_filename}">
+											<dt>
+												<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> 
+											</dt>${attr.old_filename}
+										 </a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a>
+									</li>
+									@}else if(attr.file_type == 'txt'){
+									<li>
+										<a href="javascript:;" name="${path}${attr.new_filename}">
+											<dt>
+												 <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>
+											</dt>${attr.old_filename}
+										</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a>
+									</li>
+									@}else if(attr.file_type == 'exl'){
+									<li>
+										<a href="javascript:;" name="${path}${attr.new_filename}">
+											<dt>
+												<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>
+											</dt>${attr.old_filename}
+										</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a>
+									</li>
+									@}else if(attr.file_type == 'video'){
+									<li>
+										<a href="javascript:;" name="${path}${attr.new_filename}">
+											<dt>
+												<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>
+											</dt>${attr.old_filename}
+										</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a>
+									</li>
+									@}else{
+										<li>
+											<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/assets/images/default-file.png"/></dt>${attr.old_filename}</a>
+											<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a>
+										</li>
+										@}
+									    @}
+									  @}
+								</ul>
+							</li>
+						</ul>
+					 </div>
+				</div>
+	 	 </div>
+		@}
+	  </div>
+	</div>
+
+	<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+	<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+	<script src="${ctxPath}/assets/scripts/app/pub/param.js"></script>
+	<script src="${ctxPath}/assets/scripts/app/home/app_module.js"></script>
+	<script src="${ctxPath}/assets/scripts/app/home/home.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+	
+	<script type="text/javascript">
+		mui.init();
+		mui('.mui-scroll-wrapper').scroll({
+			indicators: false, //是否显示滚动条
+			startX: 0, //初始化时滚动至x
+			deceleration: 0.0004, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+			bounce: true //是否启用回弹
+		});
+		
+		//下载
+		function downloadFile(path){
+			toAndroid.jsSeeFJ(path);
+			//window.location.href=path;
+		}
+		//点击下载跳转
+		mui("#article-container").on('tap','a',function(){
+			var path = this.getAttribute("name");
+			downloadFile(path);
+		});
+		mui("#fjxzCode").on('tap','a',function(){
+			var path = this.getAttribute("name");
+			downloadFile(path);
+		});
+		
+		//手机按键返回
+		function anGoBack(){
+			mui.back();
+			return;
+		}
+		
+	</script>
+</body>
+
+</html>

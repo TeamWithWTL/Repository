@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">公文处理</h1>
+		</header>
+		
+		<div class="inquery">
+			<form class="mui-input-group">
+				<div  id="contentDiv" class="content-block block-border">
+				<label id="suggest">处理意见：</label>
+					<textarea rows="5" id="content" name="content"></textarea>
+				</div>
+				<div class="mui-button-row">
+					<button id="dealButton" type="button" class="mui-btn mui-btn-block mui-btn-primary" ><i class="icon ion-ios-search-strong"></i> 提交</button>
+				</div>
+			</form>
+		</div>
+		
+		
+		<div class="mask-backdrop"></div>
+		<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+			<a id="eventButton" class="mui-control-item mui-active" href="javascript:void(0)">我的接收</a>
+		<!-- 	<a id="recordButton" class="mui-control-item" href="javascript:void(0)">处理历史</a> -->
+		</div>
+		<div class="mui-content mui-scroll-wrapper" id="refreshContainer">
+			<div class="mui-scroll">
+			<div id="table-container" class="listview-block">
+				@#ajax table:{
+				@for(deal in pagenate.list ! []){
+					<div class="mui-card">
+						<div class="mui-card-header">
+							<div class="mui-checkbox">
+								<input name="checkbox1" value="Item 1" type="checkbox">
+							</div>
+							<a href="javascript:void(0)">${deal.document.title}</a>
+						</div>
+						<div class="mui-card-content">
+							<div class="mui-card-content-inner">
+								<p class="card-label-row"><label>文件类型：</label><span>
+									@if(deal.document.type == '1'){
+										发文
+										@}
+										@if(deal.document.type == '2'){
+										收文
+										@}
+							</span>
+							</p>
+							<p><label>流转状态：</label>
+							<span>	@if(deal.document.type == '1'){
+										@if(deal.document.fwStep=='1'){
+											党政办审批中
+										@}
+										@if(deal.document.fwStep=='2'){
+											党政办审批结束
+										@}
+									@}
+									@if(deal.document.type == '2'){
+										@if(deal.document.swStep=='1'){
+											党政办审批中
+										@}
+										@if(deal.document.swStep=='2'){
+											党政办审批结束
+										@}
+										@if(deal.document.swStep=='3'){
+											街道办审批中
+										@}
+										@if(deal.document.swStep=='4'){
+											街道办审批结束
+										@}
+									@}
+									</span></p>
+								<p>${deal.document.createDatesh}</p>
+							</div>
+						</div>
+						<div class="mui-card-footer">
+							<a href="javascript:void(0)" id="${deal.document.id}" name="view"><i class="icon ion-android-list"></i> 查看</a>
+							@if(deal.status=='0'){
+							<a href="javascript:void(0)" id="${deal.id}" name="deal"><i class="icon ion-loop"></i> 处理</a>
+							@}
+		
+						</div>
+					</div>
+					@}
+					<input type="hidden" id="pageCnts" value="${pageCnts}" />
+					<input type="hidden" id="pageSize" value="${pageSize}" />
+				@}
+					</div>
+			</div>
+		</div>
+
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/xtbg/gwcl/app_gwcl_myreceive.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>	
+		<script type="text/javascript">
+		
+		</script>
+	</body>
+
+</html>

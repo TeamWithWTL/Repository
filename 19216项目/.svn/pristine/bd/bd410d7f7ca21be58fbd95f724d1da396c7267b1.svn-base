@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>操作按钮管理-添加、编辑</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+	<div class="container-fluid">
+		<form id="myForm" class="form-horizontal">
+			<br>
+			<div class="form-group">
+				<label for="roleCode" class="col-sm-2 control-label">按钮编码</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" id="methodCode" name="methodCode" placeholder="按钮编码" ${sysMethod == null ? '' : 'disabled'} value="${sysMethod.methodCode ! ''}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="roleCode" class="col-sm-2 control-label">按钮名称</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" id="methodName" name="methodName" placeholder="按钮名称" value="${sysMethod.methodName ! ''}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="roleCode" class="col-sm-2 control-label">按钮图标</label>
+				<div class="col-sm-5">
+					<div class="input-group">
+					    <input type="text" class="form-control" name="icoUrl" id="icoUrl" placeholder="按钮图标" value="${sysMethod.icoUrl ! ''}" readonly />
+					    <span class="input-group-btn">
+				        <button id="icons" class="btn btn-default" 
+				        	data-iconset="fontawesome" 
+				        	data-rows="4" 
+				        	data-cols="6" 
+				        	data-search-text="搜索..." 
+				        	data-placement="right" 
+				        	data-arrow-prev-icon-class="fa fa-chevron-left"
+				        	data-arrow-next-icon-class="fa fa-chevron-right"
+							data-icon="${icons}"
+				        	role="iconpicker"></button>
+			    		</span>    
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="roleCode" class="col-sm-2 control-label">所属菜单</label>
+				<div class="col-sm-3">
+					<select class="form-control" name="menuCode">
+					@for(menu in allMenu){
+					<option value="${menu.menuCode}" ${sysMethod != null && menu.menuCode == sysMethod.menuCode ? 'selected' : ''}>${menu.menuName}</option>
+					@}
+				</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="roleCode" class="col-sm-2 control-label">URL</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" id="methodUrl" name="methodUrl" placeholder="URL" value="${sysMethod.methodUrl ! ''}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="roleCode" class="col-sm-2 control-label">排序</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" id="orderNo" name="orderNo" placeholder="排序" value="${sysMethod.orderNo ! ''}" />
+				</div>
+				<div class="col-sm-4">
+					<span style="line-height: 33px; font-size: 12px; color: #666;">（* 数字越小，排序越靠前）</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="button" class="btn btn-default" id="saveBtn">保 存</button>
+					<button type="button" class="btn btn-default" id="cancleBtn">取 消</button>
+				</div>
+			</div>
+  			<input type="hidden" name="methodCodeOld" value="${sysMethod.methodCode ! ''}" />
+  						
+		</form>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"></script>
+	<script src="${ctxPath}/assets/scripts/xtgl/czangl/addEdit.js"></script>
+</body>
+</html>

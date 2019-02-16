@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	     <meta charset="UTF-8">
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>在线招募审核</title>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	</head>
+	<body>
+		<div class="container">
+			<div class="article-header text-center">
+				<h2>${zxzm.title ! ''}</h2>
+				<span>发布时间：${zxzm.xs_create_time ! ''}</span>
+				<span>发布人：${zxzm.user_name ! ''}</span>
+				<span>文章类型：在线招募</span>
+				<span>审核人：${zxzm.sh_user_name ! ''}</span>
+				<span>
+					审核状态：
+					@if(zxzm.sh_status == '0'){
+					<span style="color: #ffa81f;margin-left:-4px;">待审核</span>
+					@}else if(zxzm.sh_status == '1'){
+					<span style="color: #7ebc1d;margin-left:-4px;">通过</span>
+					@}else{
+					<span style="color: #fd5c1d;margin-left:-4px;">未通过</span>
+					@}
+				</span>
+			</div>
+			<div class="article-body">
+				<div class="article-content">
+					<p>${zxzm.content ! ''} </p>
+					<!-- <img src="31.jpg" alt=""/> -->
+				</div>
+			   @if(isNotEmpty(zxzm.attrList)){	
+				<div class="form-arraylist  ">
+					<h4 class="form-arraylist-title">附件列表：</h4>
+					@for(attr in zxzm.attrList  ! []){	
+						@if(attr.fileType == 'img'){
+					<li class="col-9">
+							<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/showPic?fileName=${attr.newFilename}"/>${attr.oldFilename}</a>
+						    <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'pdf'){
+						<li class="col-9">
+							<a href="javascript:void(0)" onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/>${attr.oldFilename}</a>
+						    <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'word'){
+						<li class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'txt'){
+						<li  class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'exl'){
+						<li  class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'video'){
+						<li  class="col-9">
+							<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.oldFilename}</a>
+							<span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else{
+						  <li class="col-9">
+						   <a href="javascript:void(0)" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+					       <span class="download"></span>
+					     </li>
+						@}
+					@}
+				</div>
+			   @}
+			</div>
+			<div class="page-operation text-right">
+				@if(zxzm.sh_status=='0'){
+					<button type="button" class="btn btn-primary" onclick="bc('1')"><i class="fa fa-check"></i> 通 过</button>
+					<button type="button" class="btn btn-outline-primary" onclick="bc('2')"><i class="fa fa-close"></i> 不通过</button>
+				@}else if(zxzm.sh_status=='1'){
+					<button type="button" class="btn btn-outline-primary" onclick="bc('2')"><i class="fa fa-close"></i> 不通过</button>
+				@}else if(zxzm.sh_status=='2'){
+					<button type="button" class="btn btn-primary" onclick="bc('1')"><i class="fa fa-check"></i> 通 过</button>
+				@}
+				
+			</div>
+		</div>
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<input type="hidden" id="id" value="${id}" />
+		<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js"></script>
+	    <script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+	    <script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+	    <script src="${ctxPath}/assets/scripts/public.js"></script>
+	    <script type="text/javascript">
+		var basePath = $("#basePath").val();
+		
+		//附件下载
+		function download(newFilename, oldFilename){
+			window.location.href = basePath + '/pub/downloadbystream.do?fileName=' + newFilename + '&oldFileName=' + oldFilename;
+		}
+		
+		//保存审核结果
+		function bc(sh_status){
+			var msgIndex = top.layer.msg('数据保存中', {icon:16, shade:[ 0.5, '#999999' ], time:0});
+			$.ajax({
+		      	type: 'POST',
+		      	url: basePath + '/shzz/zxzm/saveSh.do?id='+$("#id").val()+'&sh_status='+sh_status,
+		      	data: $("#addForm").serialize(),
+		      	success: function(data){
+		      		top.layer.close(msgIndex);
+		      		if(data == 'success'){
+		      			top.layer.msg('审核通过', {
+		  					icon : 6,
+		  					time : 2000,
+		  					shade : [ 0.5, '#999999' ]
+		  				},function() {
+		  					top.layer.close(top.layer.getFrameIndex(window.name));
+							});
+		      		}else if(data == 'pass'){
+		      			top.layer.msg('审核不通过', {
+		  					icon : 6,
+		  					time : 2000,
+		  					shade : [ 0.5, '#999999' ]
+		  				},function() {
+		  					top.layer.close(top.layer.getFrameIndex(window.name));
+							});
+		      		}else{
+		      			top.layer.msg('审核设置失败，请联系管理员', {shade : [ 0.5, '#999999' ]});
+		      		}
+		      	},
+		      	error: function(data){
+		      		top.layer.close(msgIndex);
+		      		top.layer.msg('程序出错，请联系管理员', {shade : [ 0.5, '#999999' ]});
+		      	}
+		      });
+		   }
+		</script>
+	</body>
+
+</html>

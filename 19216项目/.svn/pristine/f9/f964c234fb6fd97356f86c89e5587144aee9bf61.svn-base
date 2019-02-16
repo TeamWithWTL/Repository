@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>选择范围</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css"/>
+
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+	<style type="text/css">
+	html,body {height: 100%;}
+	.map-legend {
+	padding: 10px 15px;
+	background: rgba(255, 255, 255, 0.75);
+	position: absolute;
+	left: 15px;
+	top: 15px;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+	transition: all .2s ease;
+	z-index: 999;
+}
+
+.legend-title {
+	text-align: center;
+	margin-bottom: 6px;
+	font-size: 16px;
+}
+
+.legend-body p {
+	margin: 2px;
+	font-size: 13px;
+}
+
+.legend-body p i.fa {
+	color: #0069D9;
+}
+.legend-body p i.fa.text-danger {
+	color: #a94442;
+}
+
+.legend-body p i.fa-play {
+	transform: rotate(-90deg);
+}
+
+.legend-body p i.fa-star {
+	color: #EC6941;
+}
+	</style>
+</head>
+
+<body>
+	<div class="container-fluid" style="height:100%;width:100%;padding:0px; position: relative;">
+	<div class="map-legend">
+		<div class="legend-title">图 例</div>
+		<div class="legend-body">
+			<p><i class="fa fa-fw fa-star"></i> 社区服务中心</p>
+			<p><i class="fa fa-fw fa-play"></i> 社区服务站</p>
+			<p><i class="fa fa-fw fa-square-o"></i> 社区服务站服务范围</p>
+			<p><i class="fa fa-fw fa-square-o text-danger"></i> 网格服务范围</p>
+		</div>
+	</div>
+		@if(isNotEmpty(type) && type == "ly"){
+			<iframe id="mapFrame" name="mapFrame" src="${ctxPath}/assets/template/areadrawsite3.html" style="width:100%; height:100%" frameBorder=0 scrolling=no></iframe>
+		@}else if(isNotEmpty(type) && type == "sj"){
+			<iframe id="mapFrame" name="mapFrame" src="${ctxPath}/assets/template/areadrawsite4.html" style="width:100%; height:100%" frameBorder=0 scrolling=no></iframe>
+		@}else if(isNotEmpty(type) && type == "addsj"){
+			<iframe id="mapFrame" name="mapFrame" src="${ctxPath}/assets/template/areadrawsite5.html" style="width:100%; height:100%" frameBorder=0 scrolling=no></iframe>
+		@}else if(isNotEmpty(type) && type == "fwzbz"){
+		   <iframe id="mapFrame" name="mapFrame" src="${ctxPath}/assets/template/areadrawsite6.html" style="width:100%; height:100%" frameBorder=0 scrolling=no></iframe>
+		@}else if(isNotEmpty(type) && type == "sqfwzx"){
+		   <iframe id="mapFrame" name="mapFrame" src="${ctxPath}/assets/template/areadrawsite7.html" style="width:100%; height:100%" frameBorder=0 scrolling=no></iframe>
+		@}else{
+			<iframe id="mapFrame" name="mapFrame" src="${ctxPath}/assets/template/areadrawsite2.html" style="width:100%; height:100%" frameBorder=0 scrolling=no></iframe>
+		@}
+	</div>
+	<input type="hidden" id="id" value="${id ! ''}" />
+	<input type="hidden" id="url" value="${url ! ''}" />
+	<input type="hidden" id="dataurl" value="${dataurl ! ''}" />
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="type" value="${type ! ''}" />
+	<input type="hidden" id="bzType" value="${bzType ! ''}" />
+	
+	<!-- 服务站标注 -->
+	<input type="hidden" id="lon" value="${lon ! ''}" />
+	<input type="hidden" id="lat" value="${lat ! ''}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/choseArea.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	<script>
+		//获取标注类型（sq:社区标注，fwz: 服务站标注 ）
+		function getBzType(){
+			var bzType = $("#bzType").val();
+			return bzType;
+		}
+		//获取所有社区范围
+		function fz() {
+			var obj = [];
+			var url = $("#dataurl").val();
+			if(url){
+				$.ajax({
+			    	type: 'POST',
+			    	async:false,  //设置同步请求
+			    	url: basePath + url,
+			    	data:{'id':$("#id").val(),'type':"edit"},
+			    	success: function(data){
+			    		obj = JSON.parse(data);
+			    	}
+			    });
+			}
+			return obj;
+		};
+		function setLon(lon,lat){
+			window.top.frames[1].document.getElementById("lon").value=lon;
+			window.top.frames[1].document.getElementById("lat").value=lat;
+			top.layer.close(top.layer.getFrameIndex(window.name));
+		}
+		function getLon(){
+			var obj = new Object();
+			var ID = window.top.frames[1].document.getElementById("id").value;
+			var name = window.top.frames[1].document.getElementById("name").value;
+			var lon = window.top.frames[1].document.getElementById("lon").value;
+			var lat = window.top.frames[1].document.getElementById("lat").value;
+			obj.ID = ID;
+			obj.Name = name;
+			if(lon != "0"){
+				obj.Lon = lon;
+			}
+			if(lat != "0"){
+				obj.Lat = lat;
+			}
+			return obj;
+		}
+		function getfwzBz(){
+			var obj = new Object();
+			
+			var lon = $("#lon").val();
+			var lat = $("#lat").val();
+			if(lon != "0"){
+				obj.Lon = lon;
+			}
+			if(lat != "0"){
+				obj.Lat = lat;
+			}
+			return obj;
+		}
+    </script>
+</body>
+</html>

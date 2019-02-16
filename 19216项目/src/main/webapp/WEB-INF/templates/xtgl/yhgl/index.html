@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>用户管理-首页</title>
+	<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+   <style type="text/css">
+    .accCode{
+      width: 120px; 
+      white-space: nowrap;  
+      text-overflow: ellipsis; 
+      overflow: hidden; 
+    }
+    .name{
+      width: 180px; 
+      white-space: nowrap;  
+      text-overflow: ellipsis; 
+      overflow: hidden; 
+    }
+   </style>
+</head>
+
+<body>
+	<div class="function-box">
+		 	<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+					<select name="typeCode" id="typeCode" class="form-control">
+		                 <option value="1" selected="selected">系统用户</option>
+		                 <option value="3">注册用户</option>
+		                <!--  <option value="4">部门成员</option> -->
+		            </select>
+					<input type="text" class="form-control" id="accCode" placeholder="账号">
+					<input type="text" class="form-control" id="name" placeholder="名称">
+					<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+			</div>
+			<div class="function-btn">
+			   <#roleBtn btnId="yhglAdd" roleCode="${roleCode}">
+				  	<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goAdd('添加界面','')"><i class="fa fa-plus"></i> 添加</button>
+			   </#roleBtn>
+			   <#roleBtn btnId="yhglUpdate" roleCode="${roleCode}">
+				  	<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goUpdate('修改界面')"><i class="fa fa-pencil"></i> 修改</button>
+			   </#roleBtn>
+			   <#roleBtn btnId="yhglDel" roleCode="${roleCode}">
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goDel()"><i class="fa fa-trash"></i> 删除</button>
+			   </#roleBtn>
+			   <#roleBtn btnId="yhglMmcz" roleCode="${roleCode}">
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="resetKey()"><i class="fa fa-key"></i> 密码重置</button>
+			   </#roleBtn>
+			</div>
+		</div>
+		<div id="table-container" class="warpper">
+		@#ajax table:{
+		<div  class="table-box">
+				<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+					<thead>
+					<tr class="table-secondary">
+						<th width="5%" class="text-center">
+							<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+				        </th>
+						<th width="15%">账号</th>
+						<th width="15%">名称</th>
+				        <th width="18%">电话</th>
+				        <th width="10%">状态</th>
+				        <th width="15%">添加日期</th>
+				        <th>操作</th>
+					</tr>
+					</thead>
+					<tbody id="dqIds">
+					@for(acc in pagenate.list ! []){
+					<tr>
+						<td class="text-center">
+				        	<input type="checkbox" class="i-checks" name="icheck" value="${acc.accCode}" />
+				        </td>
+				        <td title="${acc.accCode}">
+				          <div class="accCode">
+				            <a href="javascript:void(0);" onclick="goView('${ctxPath}/xtgl/yhgl/goView.do?code=${acc.accCode}')">${acc.accCode}</a>
+				          </div>
+				        </td>
+				        <td title="${acc.name}">
+				            <div class="accCode">
+				                ${acc.name}
+				            </div>
+				        </td>
+				        <td>${acc.phone}</td>
+				        <td>
+				          @if(acc.validFlag == '0'){
+				              <span style="color: #fd5c1d">无效</sapn>
+				          @}else if(acc.validFlag == '1'){
+				              <span style="color: #7ebc1d">有效</span>
+				          @}
+				        </td>
+				        <td>${acc.addTimeFmt}</td>
+				         <td class="function-btn">
+				           <#roleBtn btnId="yhglUpdate" roleCode="${roleCode}">
+								<a href="javascript:void(0);" onclick="goUpdateDq('${acc.accCode}')">修改</a>
+						   </#roleBtn>
+							&nbsp;&nbsp;
+							<#roleBtn btnId="yhglMmcz" roleCode="${roleCode}">
+								<a  href="javascript:void(0);" onclick="resetKeyDq('${acc.accCode}')"> 密码重置</a>
+							</#roleBtn>
+							&nbsp;&nbsp;
+							<#roleBtn btnId="yhglYwx" roleCode="${roleCode}">
+								@if(acc.validFlag == '0'){
+								   <a  href="javascript:void(0);" onclick="Sz('${acc.accCode}','1')"> 设置有效</a>
+								@}else if(acc.validFlag == '1'){
+								   <a  href="javascript:void(0);" onclick="Sz('${acc.accCode}','0')"> 
+								      <span style="color: red;">设置无效</span>
+								   </a>
+								@}
+						   </#roleBtn>
+				         </td>
+					</tr>
+					@}elsefor{
+					<tr>
+				        <td colspan="7" class="text-center">
+				        	没有找到要查询的数据
+				        </td>
+			    	</tr>
+					@}
+					</tbody>
+				</table>
+			</div>
+			<!-- 自定义分页标签 -->
+			<#pagenate func="initData" page="${pagenate}" />
+			<input type="hidden" id="defaultPwd" value="${defaultPwd}" />
+			@}
+		</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/xtgl/yhgl/index.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

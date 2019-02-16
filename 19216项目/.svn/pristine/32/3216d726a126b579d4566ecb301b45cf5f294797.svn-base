@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>参数项</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+	<div class="container-fluid">
+		<form id="addForm" class="form-horizontal">
+		<br>
+			<div class="form-group">
+				<label for="roleCode" class="col-sm-2 control-label">参数项编号</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" id="itemCode" name="itemCode" placeholder="参数项编号" ${sysparam == null ? '' : 'disabled'} value="${sysparam.itemCode ! ''}">
+					@if(sjzdId != null){
+						<input type="hidden" class="form-control" id="code" name="code" value="${sjzdId ! ''}">
+					@}else{
+						<input type="hidden" class="form-control" id="code" name="code" value="${sysparam.code ! ''}">
+					@}
+					<input type="hidden" class="form-control" id="id" name="id" value="${sysparam.id ! ''}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="roleCode" class="col-sm-2 control-label">名称</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" id="itemName" name="itemName" placeholder="名称" value="${sysparam.itemName ! ''}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="roleCode" class="col-sm-2 control-label">值1</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" id="value1" name="value1" placeholder="值1" value="${sysparam.value1 ! ''}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="roleCode" class="col-sm-2 control-label">值2</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" id="value2" name="value2" placeholder="值2" value="${sysparam.value2 ! ''}">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="button" class="btn btn-default" id="saveBtn">保 存</button>
+					<button type="button" class="btn btn-default" id="cancleBtn">取 消</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.js"></script>
+	<script src="${ctxPath}/assets/scripts/xtgl/sjzd/descAdd.js"></script>
+</body>
+</html>

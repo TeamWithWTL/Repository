@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css"/>
+		<link rel="stylesheet" href="${ctxPath}/assets/vendor/zTree_v3/css/metroStyle/metroStyle.css">
+	
+	<style>
+		.a_click{
+				opacity: 1;
+			    text-decoration: none;
+			    background: #f99341;
+			    color: #FFFFFF;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="header-block">
+			<li><a href="${ctxPath}/home/index.do">首页</a></li>
+			<li>网格地图</li>
+			<div class="header-block-after">
+				<button type="button" id="repeatCheck" class="btn btn-light"><i class="fa fa-repeat"></i> 重置查询</button>
+			</div>
+		</div>
+		<div class="content-block no-padding">
+			<div class="map-block warpper">
+				<div class="map-silder">
+					<ul class="nav nav-tabs nav-fill" id="myTab">
+						<li class="nav-item">
+							<a class="nav-link active" data-toggle="tab" href="#home"><i class="de de-search"></i> 搜索</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" data-toggle="tab" href="#profile" href="#"><i class="de de-gps"></i> 区域</a>
+						</li>
+					</ul>
+					<div class="tab-content" id="myTabContent">
+						<a href="javascript:void(0)" class="pack-up"></a>
+						<a href="javascript:void(0)" class="pack-out"></a>
+						<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+							<form action="" method="post">
+								<select class="form-control" name="commId" id="commId" onchange="showSsData(this,'ssId')">
+									@for(com in comList ! []){
+										@if(comLP.size!=1 && comLP.index==1){
+											<option value="">社区名称</option>
+										@}
+										<option value="${com.id}">${com.name}</option>
+									@}elsefor{
+										<option value="">社区名称</option>
+									@}
+								</select>
+								<select class="form-control" name="ssId" id="ssId" onchange="showData(this,'gridId')">
+									@for(ss in ssList ! []){
+										@if(ssLP.size!=1 && ssLP.index==1){
+											<option value="">服务站名称</option>
+										@}
+										<option value="${ss.id}">${ss.name}</option>
+									@}elsefor{
+										<option value="">服务站名称</option>
+									@}
+								</select>
+								<select name="gridId" id="gridId" class="form-control" >
+									@for(grid in gridList ! []){
+										@if(gridLP.size!=1 && gridLP.index==1){
+											<option value="">网格名称</option>
+										@}
+										<option value="${grid.id}">${grid.name}</option>
+									@}elsefor{
+										<option value="">网格名称</option>
+									@}
+								</select>
+								<ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
+									<li class="nav-item">
+										<a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true" data-type="01">房查询</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false" data-type="02">事件查询</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false" data-type="03">机构查询</a>
+									</li>
+								</ul>
+								<div class="input-group">
+									<input type="text" class="form-control" name="name" id="name" placeholder="请输入关键词" />
+									<span class="input-group-btn">
+										<button class="btn btn-secondary" type="button" onclick="searchData();"><i class="fa fa-fw fa-search"></i></button>
+									</span>
+								</div>
+							</form>
+							<div class="map-silder-line">
+								<p>-----------&nbsp;&nbsp;&nbsp;&nbsp;人口查询&nbsp;&nbsp;&nbsp;&nbsp;-----------</p>
+								<div class="input-group">
+									<input type="text" class="form-control" name="name" id="inmateName" placeholder="请输入姓名" />
+									<span class="input-group-btn">
+										<button id="inmateNameButton" class="btn btn-secondary" type="button" ><i class="fa fa-fw fa-search"></i></button>
+									</span>
+								</div>
+							</div>
+							
+							<div class="map-silder-link">
+								<ul id="tsrkList">
+								@if(isNotEmpty(ryfl)){
+									@for(per in ryfl ! []){
+										@var className = '';
+										@switch(per.value1){
+											@case '01': className='obion obion-yfdx'; break; 
+											@case '02': className='obion obion-db'; break;
+											@case '03': className='obion obion-ltgb'; break;
+											@case '04': className='obion obion-cjr'; break;
+											@case '05': className='obion obion-dy'; break;
+											@case '06': className='obion obion-ts'; break;
+											@case '07': className='obion obion-yl'; break;
+											@case '08': className='obion obion-gg'; break;
+											@case '09': className='obion obion-xlq'; break;
+											@case '10': className='obion obion-60s'; break;
+											@case '11': className='obion obion-gl'; break;
+											@case '12': className='obion obion-xj'; break;
+											@case '13': className='obion obion-sqjz'; break;
+											@case '14': className='obion obion-lj'; break;
+											@case '15': className='obion obion-jsb'; break;
+											@case '16': className='obion obion-sk'; break;
+											@case '17': className='obion obion-sw'; break;
+											@case '18': className='obion obion-qk'; break;
+											@case '19': className='obion obion-sd'; break;
+											@case '20': className='obion obion-zt'; break;
+											@case '21': className='obion obion-zd'; break;
+											@default: className='';
+										@}
+										<li><a id="tsrkButton_${per.value1}" href="javascript:;" class="${className}" data-type="${per.value1}" data-name="${per.itemName}" onclick="searchInmate('${per.value1}','${per.itemName}');">${per.itemName}</a></li>
+									@}
+								@}
+								</ul>
+							</div>
+						</div>
+						<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+							<div id="ztree" class="ztree">
+								<!-- ZTree -->
+								<div class="heighter">
+									<div class="cardbox-body">
+										<ul id="menuTree" class="ztree"></ul>
+									</div>
+								</div>
+								<!-- END ZTree -->
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="map-alert">
+					<a href="javascript:void(0)" class="alert-pack-up"></a>
+					<a href="javascript:void(0)" class="alert-pack-out"></a>
+					<div class="map-alert-title">
+						<span id="typeName" inType="01">优抚对象</span>
+						<div class="map-alert-title-after">
+							<div class="map-alert-form-group">
+								<input id="tsrkName" type="input" class="map-alert-input" placeholder="搜索姓名.."/>
+								<button id="tsrkButton" type="button" class="map-alert-search-btn fa fa-search"></button>
+							</div>
+						</div>
+					</div>
+					<div class="map-alert-body" id="table-container">
+					@#ajax table:{
+						<table class="table table-condensed table-bordered table-map">
+							<tr>
+								<th width="10%">姓名</th>
+								<th width="10%">性别</th>
+								<th width="22%">身份证号</th>
+								<th width="18%">联系电话</th>
+								<th>详细地址</th>
+								<th width="50px">操作</th>
+							</tr>
+							@for(person in inmateEntities ! []){
+							<tr>
+						        <td>${person.name}</td>
+						        <td>${person.sex == 'E'?'男':'女'}</td>
+						        <td>${person.card_no}</td>
+						        <td>${person.telephone}</td>
+						        <td>${person.build.village.serviceStation.community.name}${person.build.grid.name}${person.build.name}#${person.unit_no}单元${person.room_no}</td>
+								<td>
+							        <a href="javascript:void(0);" title="查看位置" onclick="personOnlyPoin('${person.id}','${person.build.lon}','${person.build.lat}','${person.name}','${person.card_no}','${person.telephone}','${person.build.name}');">
+		                            	<i class="fa fa-dot-circle-o" style="color: #188BFF; font-size: 16px;"></i>
+	                                </a>
+								</td>
+							</tr>
+							@}elsefor{
+							<tr>
+						        <td colspan="6" class="text-center">
+						        	没有找到要查询的数据
+						        </td>
+					    	</tr>
+							@}
+						</table>
+					@}
+						<div class="no-data"></div>
+					</div>
+				</div>
+				
+				<!-- <div class="map-tabs btn-group">
+					<button type="button" class="btn btn-light active" onclick="changeMap('map1')"><i class="de de-map1"></i> 电子地图</button>
+					<button type="button" class="btn btn-light" onclick="changeMap('map2')"><i class="de de-map2"></i> 影像地图</button>
+					<button type="button" class="btn btn-light" onclick="changeMap('map3')"><i class="de de-map3"></i> 混合地图</button>
+				</div>  -->
+				
+				<div id="map1" class="map">
+					<div class="map-legend">
+						<div class="legend-title">图 例</div>
+						<div class="legend-body">
+							<p><i class="fa fa-fw fa-star"></i> 社区服务中心</p>
+							<p><i class="fa fa-fw fa-play"></i> 社区服务站</p>
+							<p><i class="fa fa-fw fa-square-o"></i> 社区服务站服务范围</p>
+							<p><i class="fa fa-fw fa-square-o text-danger"></i> 网格服务范围</p>
+						</div>
+					</div>
+				<iframe id="mapFrame" name="mapFrame" src="${ctxPath}/assets/template/areadrawsite.html" style="width:100%; height:100%" frameBorder=0 scrolling=no></iframe>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://echarts.baidu.com/dist/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${ctxPath}/assets/vendor/zTree_v3/js/jquery.ztree.all-3.5.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/wgdt/index.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$(".pack-up").click(function(){
+					$(".map-silder").css("left","-300px");
+					$(".pack-out").css("display","table");
+					$(".map-legend").css("left","20px");
+				});
+				$(".pack-out").click(function(){
+					$(".map-silder").css("left","0");
+					$(this).css("display","none");
+					$(".map-legend").css("left","310px");
+				});
+				
+				$(".alert-pack-out").click(function(){
+					$(".map-alert").css("right","20px");
+					$(this).css("display","none");
+				});
+				$(".alert-pack-up").click(function(){
+					$(".map-alert").css("right","-700px");
+					$(".alert-pack-out").css("display","table")
+				});
+				
+				$(".map-tabs .btn").click(function(){
+					$(".map-tabs .btn").removeClass("active")
+					$(this).addClass("active");
+				});
+			});
+			//点击map-tabs按钮切换地图标签
+			function changeMap(a) { $(".map").attr("id", a);};
+		</script>
+		
+		<script type="text/javascript">
+			$(function(){
+				$("#repeatCheck").click(function(){
+					window.location.reload();
+				});
+			});
+		
+			@if(isNotEmpty(hisDataErr)){
+				top.layer.msg('没有找到要查询的数据', {
+					icon : 0,
+					time : 1000,
+					shade : [ 0.5, '#999999' ]
+				});
+			@}
+		</script>
+	</body>
+
+</html>

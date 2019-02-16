@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html  class="layerpage">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>社会组织-动态播报</title>
+		<!-- 第三方 CSS -->
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+
+	
+	
+	</head>
+	<body>
+		<div class="container">
+			<div class="article-header text-center">
+				<h2>${dtbb.title ! ''}</h2>
+				<input type="hidden" id="dtbbId"  value="${dtbb.id}">
+				<p>
+					<span>发布时间：${dtbb.createTimes ! ''}&nbsp;</span>
+					<span>&nbsp;文章类型：动态播报&nbsp;</span>
+					<span>&nbsp;发布人：${dtbb.userName ! ''}</span>
+				</p>
+			</div>
+			<div class="article-body">
+				<div class="article-content">
+					<p>${dtbb.content ! ''} </p>
+				</div>
+				@if(isNotEmpty(dtbb.attrList)){
+				<div class="form-arraylist">
+					<dt>附件下载：</dt>
+					<ul>
+						@for(attr in dtbb.attrList  ! []){
+								@if(attr.fileType  == 'img'){
+									<li>
+										<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.new_filename !}')"  title="${attr.old_filename !}" ><img src="${ctxPath}/showPic?fileName=${attr.new_filename !}"/> ${attr.old_filename !}</a>
+										<span title="下载" class="download"  onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else if(attr.fileType  == 'pdf'){
+									<li >
+										<a href="javascript:void(0)"  onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.new_fileName}')" title="${attr.old_filename !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_filename !}</a>
+									    <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}else{
+										<li >
+										<a href="javascript:void(0)"   title="${attr.old_filename !}" ><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.old_filename !}</a>
+									    <span title="下载" class="download" onclick="download('${attr.new_filename !}', '${attr.old_filename !}')"></span>
+									</li>
+									@}
+								@}
+					</ul>
+				</div>
+				@}
+				
+			<div class="article-feedback"  id="lyList"  style="margin-top: 30px">
+			@#ajax lyTable:{
+				@for(yjly in pagenate.list ! []){
+				<ul>
+					<div class="feedback-user">
+						<dt><img src="${yjly.picpath ! ''}"/></dt>
+						<p></p><span>${yjly.duty ! ''} ${yjly.userName ! ''}</span>
+					</div>
+					<div class="feedback-msg">
+						<p>【留言】${yjly.content ! ''}</p>
+						
+						<p class="audit-status">
+							@if(yjly.status=="1"){
+								【 审核通过】
+							@}else{
+								【待审核】
+							@}
+						</p>
+						
+						<div class="feedback-data"   >
+							<i class="fa fa-clock-o"> ${yjly.createTimeF ! ''}</i> 
+							@if(yjly.status=="1"){
+							<#roleBtn btnId="dtbbLyDel" roleCode="${roleCode}">
+								<button type="button" class="btn btn-sm btn-danger"  onclick="del('${yjly.id !''}')">删除</button>
+				          	</#roleBtn>
+							@}else{
+							<#roleBtn btnId="dtbbLySuccess" roleCode="${roleCode}">
+								<button type="button" class="btn btn-sm btn-success"  onclick="success('${yjly.id !''}')">通过</button>
+				          	</#roleBtn>
+				          	<#roleBtn btnId="dtbbLyDel" roleCode="${roleCode}">
+								<button type="button" class="btn btn-sm btn-danger"  onclick="del('${yjly.id !''}')">删除</button>
+				          	</#roleBtn>
+							@}
+							
+						</div>
+						
+						
+					</div>
+				</ul>
+				@}
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+			@}
+			</div>
+			</div>
+		</div>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" ></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js" ></script>
+		<script src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/shzz/dtbb/view.js"></script>
+	</body>
+</html>

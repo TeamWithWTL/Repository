@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	</head>
+
+	<body>
+		<div class="article-body">
+			<div class="row">
+				<div class="col col-6">
+					<div class="page-body">
+						<table class="table table-lg table-bordered table-document">
+							<tr>
+								<td colspan="4"><h4>${doc.title}</h4></td>
+							</tr>
+							<tr>
+								<th width="20%">文号</th>
+								<td>${doc.num}</td>
+								<th>密级</th>
+								<td>${doc.level}</td>
+							</tr>
+							<tr>
+								<th width="20%">发文部门</th>
+								<td>${doc.dept}</td>
+								<th>发文日期</th>
+								<td>${doc.createDatesh}</td>
+							</tr>
+							@if(doc.type=='2'){
+							<tr>
+								<th width="20%">紧急程度</th>
+								<td>
+								@if(doc.jkStatus=='1'){
+									普通
+								@}
+								@if(doc.jkStatus=='2'){
+									加急
+								@}
+								</td>
+								<th>完成时间</th>
+								<td>${doc.createDatesh}</td>
+							</tr>
+							@}
+							<tr>
+								<th>
+								@if(doc.type=='1'){ 
+										拟文人意见
+									@}
+									@if(doc.type=='2'){ 
+										批办意见
+									@}
+								</th>
+								<td colspan="3">
+								${doc.nwrSuggest}
+								</td>
+							</tr>
+							@if(doc.type=='1'){
+							<tr>
+								<th>领导意见</th>
+								<td colspan="3">${doc.ldSuggest}</td>
+							</tr>
+							@}
+							@if(doc.type=='2'){
+							<tr>
+								<th>党政办意见</th>
+								<td colspan="3">${doc.dzbSuggest}</td>
+							</tr>
+							<tr>
+								<th>街道办意见</th>
+								<td colspan="3">${doc.jdbSuggest}</td>
+							</tr>
+							<tr>
+								<th>处理结果</th>
+								<td colspan="3">${doc.result}</td>
+							</tr>
+							@}
+						</table>
+					</div>
+				@if(isNotEmpty(doc.attrs)){
+					<div class="form-arraylist  form-arraylist-border">
+					<h4 class="form-arraylist-title">附件列表：</h4>
+					@for(attr in doc.attrs  ! []){	
+						@if(attr.fileType == 'img'){
+						<li class="col-9">
+							<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/showPic?fileName=${attr.newFilename}"/>${attr.oldFilename}</a>
+						    <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else if(attr.fileType == 'pdf'){
+						<li class="col-9">
+							<a href="javascript:void(0)" onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/>${attr.oldFilename}</a>
+						    <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+						</li>
+						@}else{
+						  <li class="col-9">
+						   <a href="javascript:void(0)"  title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+					       <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+					     </li>
+						@}
+					@}
+					</div>
+					@}	
+				</div>
+				<div class="col col-6">
+					<div class="page-body">
+						<div class="page-title page-title-center">意见</div>
+						<div class="timesline">
+					@for(deal in doc.deals ! []){
+						@if(isNotEmpty(deal.content)){
+							<li>
+								<dt>${deal.dealDate} </dt>
+								<ul><b>${deal.clrName} 【处理意见】</b>${deal.content}</ul>
+							</li>
+						@}
+							@}elsefor{
+						@}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	<script type="text/javascript">
+			var basePath = $("#basePath").val();
+			//附件下载
+			function download(newFilename, oldFilename){
+				window.location.href = basePath + '/pub/downloadbystream.do?fileName=' + newFilename + '&oldFileName=' + oldFilename;
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>修改个人信息</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+</head>
+
+<body>
+	<div class="container-fluid">
+		<form id="addForm" class="form-horizontal">
+		<br>
+		<div class="row">
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+				<div class="col-sm-11 col-lg-11 col-md-11 col-xs-11" >
+					<div class="option-img2">
+						@if(isEmpty(sysacc.sysAccdesc.picPath)){
+						<img id="myImg" style="width:100%;" src="${ctxPath}/assets/img/user.png"/>
+						@}else{
+						<img id="myImg" style="width:100%;" src="${ctxPath}/showPic?fileName=${sysacc.sysAccdesc.picPath}"/>
+						@}
+						<input type="hidden" id="picPath" name="picPath" value="${sysacc.sysAccdesc.picPath ! ''}">
+					</div>
+				</div>
+				<div class="col-sm-9" style="margin:10px;">
+					<!-- 文件上传组件 -->
+					<div class="site-demo-upload">
+					  <div class="site-demo-upbar">
+					    <input type="file" name="file" class="layui-upload-file">
+					  </div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+				<div class="form-group">
+					<label for="roleCode" class="col-sm-2 control-label">姓名</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="name" name="name" placeholder="姓名" value="${sysacc.sysAccdesc.name ! ''}">
+						<input type="hidden" class="form-control" id="accCode" value="${sysacc.sysAccdesc.accCode ! ''}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="roleCode" class="col-sm-2 control-label">性别</label>
+					<div class="col-sm-9">
+						<select id="sex" name="sex" class="form-control">
+						@if(sysacc == null){
+							<option value="">请选择性别</option>
+							<option value="0">男</option>
+							<option value="1">女</option>
+ 							@}else{
+							@if(sysacc.sysAccdesc.sex == ''){
+								<option value="">请选择性别</option>
+								<option value="0">男</option>
+								<option value="1">女</option>
+							@}else if(sysacc.sysAccdesc.sex == '0'){
+								<option value="">请选择性别</option>
+								<option value="0" selected>男</option>
+								<option value="1">女</option>
+								@}else{
+								<option value="">请选择性别</option>
+								<option value="0">男</option>
+								<option value="1" selected>女</option>
+							@}
+  						@}
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="roleCode" class="col-sm-2 control-label">所在部门</label>
+					<div class="col-sm-9">
+ 						<input type="text" class="form-control" id="addrs" name="addrs" placeholder="所在部门" value="${sysacc.sysDepartment ! ''}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="roleCode" class="col-sm-2 control-label">手机号</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="phone" name="phone" placeholder="手机号" value="${sysacc.phone ! ''}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">身份证号</label>
+					<div class="col-sm-9">
+		     			<input type="text" class="form-control" id="cardNo" name="cardNo" placeholder="身份证号" value="${sysacc.cardNo ! ''}">
+		   			</div>
+				</div>	
+				<div class="form-group">
+					<label class="col-sm-2 control-label">职务</label>
+					<div class="col-sm-9">
+	      				<input type="text" class="form-control" id="duty" name="duty" placeholder="职务" value="${sysacc.sysAccdesc.duty ! ''}">
+	    			</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+ 							<button type="button" class="btn btn-default" id="saveBtn1">保 存</button>
+ 							<button type="button" class="btn btn-default" id="cancleBtn">取 消</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	</div>
+	
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/popper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.min.js"></script>
+	<script src="${ctxPath}/assets/scripts/update_myInfo.js"></script>
+
+</body>
+</html>

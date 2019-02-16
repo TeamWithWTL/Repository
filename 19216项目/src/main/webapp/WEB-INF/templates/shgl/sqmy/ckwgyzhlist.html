@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>社会管理-社情民意--查看网格员调查住户列表</title>
+	<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+        <style type="text/css">
+	      .name{
+	        width: 300px; 
+		    white-space: nowrap;  
+		    text-overflow: ellipsis; 
+		    overflow: hidden; 
+	       }
+       </style>
+</head>
+
+<body>
+	<div class="function-box" style="margin-left: 20px; margin-top: 10px;">
+		 	<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+				  <div class="form-group">
+		            <select class="form-control" id="vId" onchange="showxq(this,'ly_id')">
+							<option value="">-- 所属小区--</option>
+							@if(isNotEmpty(vList)){
+								@for(v in vList){
+									<option value="${v.id}">${v.name}</option>
+								@}
+							@}
+						</select>
+		          </div>
+		          <div class="form-group">
+		             <select id="ly_id" class="form-control" onchange="showly(this,'unit_num')">
+				    		<option value="">-- 所属楼宇--</option>
+					 </select>
+		          </div>
+		          <!-- <div class="form-group">
+		              <select id="unit_num" class="form-control">
+				    		<option value="">-- 所属单元--</option>
+					 </select>
+		          </div>
+		           -->
+		         <div class="form-group">
+		            <button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+		         </div>
+			   </form>
+			</div>
+			<div class="function-btn">
+			</div>
+		</div>
+		<div id="table-container" class="table-box">
+			@#ajax table:{
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+						 <tr class="table-secondary">
+			                  <th width="25%" class="text-center">小区</th>
+			                  <th width="25%" class="text-center">楼宇</th>
+			                  <th width="25%" class="text-center">单元</th>
+			                  <th width="25%" class="text-center">室号</th>
+		                 </tr>  
+						</thead>
+					  <tbody id="dqIds">	
+						@for(wgyzh in pagenate.list ! []){
+						    <tr>
+						        <td class="text-center">
+				                    ${wgyzh.xqname}
+			                    </td>
+			                     <td class="text-center">
+				                    ${wgyzh.lyname}
+			                    </td>
+			                     <td class="text-center">
+				                    ${wgyzh.unit_num}单元
+			                    </td>
+						        <td class="text-center">
+				                     <a href="javascript:void(0);" onclick="goView('${wgyzh.id}')">${wgyzh.room_num}</a>
+			                    </td>
+					       </tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="4" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+						</tbody>
+					</table>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+		</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="wgyID" value="${wgyID}" />
+	<input type="hidden" id="rqmy_id" value="${rqmy_id}" />
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/sqmy/ckwgyzhlist.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

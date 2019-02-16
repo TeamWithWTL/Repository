@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${@com.jcwx.utils.ProjectUtils.getSysCfg("projectName")}</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+</head>
+
+<body>
+	
+	<div class="content-block">
+		<div class="container-fluid warpper">
+			<!-- <div class="row"> -->
+				<div class="col col-12">
+					<!--事件统计-->
+					<div class="section-block">
+						<div class="section-body">
+							<div id="charts-sjtj" class="charts-block" style="height:380px;"></div>
+						</div>
+					</div>
+				</div>
+			<!-- </div> -->
+		</div>
+	</div>
+	<input type="hidden" id="all" value="${all}">
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/popper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://echarts.baidu.com/dist/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	var basePath = $("#basePath").val();
+	
+	$(document).ready(function(){
+		initSjtj($("#all").val());//特殊人口统计
+	});
+	/**
+	 * 事件统计-begin=========================================================================
+	 */
+	function initSjtj(all){
+		var msgIndex = layer.msg('数据加载中...', {
+			icon : 16,
+			shade : [ 0.5, '#999999' ],
+			time : 0
+		});
+		
+		$.ajax({
+			url : basePath + '/home/initSjtj.do?all='+all,
+			type : 'POST',
+			dataTypae:'json',
+			error :function(request){
+				layer.close(msgIndex);
+				layer.msg('程序出错，请联系管理员', {shade : [ 0.5, '#999999' ]});
+			},
+			success : function(data){
+				layer.close(msgIndex);
+				var jsonDate = JSON.parse(data);
+				if(jsonDate.code == 200){
+					initJoinBar(jsonDate.result);
+				}
+			}
+		});
+	}
+	/**
+	 * 初始化饼状图
+	 */
+	function initJoinBar(data){
+	var myChart = echarts.init(document.getElementById('charts-sjtj'));
+	window.onresize = myChart.resize;
+	// 指定图表的配置项和数据
+	var dataX = [];
+	var dataArry =new Array();
+	var dataValue = [];
+	var zdyDate = [];
+
+	for(var i = 0; i<data.length; i++){
+		var colorRandom =  "#"+Math.floor(Math.random()*(256*256*256-1)).toString(16);
+		dataX[i] = data[i].name;
+//		   [ { value:1 , name:'蒲姑社区' , itemStyle:{normal: {color:'#60c0dd'}}} ]
+		dataArry[i]= {value: data[i].count,name:data[i].name,itemStyle:{normal: {color:colorRandom}}};
+		dataValue[i] = dataArry[i];
+		zdyDate[i] = data[i].id;
+	}
+	option = {
+		tooltip: {
+			trigger: 'item',
+			formatter: "{a} <br/>{b}: {c}",
+		},
+		legend: {
+			orient: 'vertical',
+			x: 'left',
+			y: 'center',
+			data:dataX,
+		},
+		series: [{
+			name: '访问来源',
+			type: 'pie',
+			radius: ['50%', '70%'],
+			avoidLabelOverlap: false,
+			center: ['61%', '51%'],
+			zdyDate:zdyDate,
+			label: {
+				normal: {
+					show: true,
+					position: 'outside',
+				},
+				emphasis: {
+					show: true,
+					textStyle: {
+						fontSize: '14',
+						fontWeight: 'normal'
+					}
+				}
+			},
+			labelLine: {
+				normal: {
+					show: true
+				}
+			},
+			data:dataValue
+		}]
+	};
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+	myChart.on("click", eConsole);
+	function eConsole(param){
+		var sjtjName = zdyDate[param.dataIndex];
+		sjtjMores(sjtjName);
+	}
+	}
+	function sjtjMores(sjtjName){
+/* 		$.ajax({
+			url : basePath + '/home/sjtjJson.do',
+			type : 'POST',
+			dataType : 'json',
+			data : {
+				"sjtjName" : sjtjName
+			},
+			success : function(data){
+				if(data.code == 200){
+					var sjtjId = data.sjtjId; */
+					top.layer.open({
+						type : 2,
+						title : "<div class='layerTitleDiv'></div><span class='layerTitleSpan'>事件统计列表</span>",
+						fix : false,
+						// shadeClose: true,
+						area : ['80%', '80%'],
+						content : basePath + '/home/sjtjList.do?sjtjName='+sjtjName,
+					});
+	/* 			}
+			}
+		}); */
+	}
+	</script>
+</body>
+</html>

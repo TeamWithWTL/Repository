@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/Linearicons/css/Linearicons.css" />
+</head>
+
+<body>
+	<header id="header" class="mui-bar mui-bar-nav">
+		<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+		<h1 class="mui-title" id="title">任务详情</h1>
+	</header>
+	
+	<div class="mui-content mui-scroll-wrapper" id="refreshContainer">
+		<div class="mui-scroll">
+			<div class="article-content">
+				<div class="article-header">
+					<h4 class="article-header-title">${rwgl.title !}</h4>
+			
+				</div>
+				<div class="article-body">
+					<p>${rwgl.content !}</p>
+				</div>
+			</div>
+			@if(isNotEmpty(rwgl.attrList)){
+			<div class="article-content">
+				<div class="block-title">附件下载</div>
+				<div class="article-array" id="article-container">
+					@for(attr in rwgl.attrList  ! []){
+					<div>
+						@if(attr.file_type == 'img'){
+						<li>
+							<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/jpg.svg"/></dt>${attr.old_filename}</a>
+							<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a>
+						</li>
+						@}else if(attr.file_type == 'word'){
+						<li>
+							<a href="javascript:;" name="${path}${attr.new_filename}">
+								<dt>
+									<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> 
+								</dt>${attr.old_filename}
+							 </a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+						@}else if(attr.file_type == 'txt'){
+						<li>
+							<a href="javascript:;" name="${path}${attr.new_filename}">
+								<dt>
+									 <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>
+								</dt>${attr.old_filename}
+							</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+						@}else if(attr.file_type == 'exl'){
+						<li>
+							<a href="javascript:;" name="${path}${attr.new_filename}">
+								<dt>
+									<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>
+								</dt>${attr.old_filename}
+							</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+						@}else if(attr.file_type == 'video'){
+						<li>
+							<a href="javascript:;" name="${path}${attr.new_filename}">
+								<dt>
+									<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>
+								</dt>${attr.old_filename}
+							</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+						@}else{
+						<li>
+							<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/assets/images/default-file.png"/></dt>${attr.old_filename}</a>
+							<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a>
+						</li>
+						@}
+					</div>	
+					@}
+				</div>
+			</div>
+			@}
+			<div class="article-form">
+				<div class="mui-input-group">
+					<div class="mui-input-row">
+						<label>发布人：</label>
+						<input readonly="readonly" type="text" class="mui-input" value="${rwgl.fbr_name !}">
+					</div>
+					<div class="mui-input-row">
+						<label>发布日期：</label>
+						<input readonly="readonly" type="text" class="mui-input" value="${rwgl.create_dates !}">
+					</div>
+					<div class="mui-input-row">
+						<label>结束日期：</label>
+						<input readonly="readonly" type="text" class="mui-input" value="${rwgl.finish_dates !}">
+					</div>
+				</div>
+			</div>
+			<div class="content-mission" id="fjxzCode">
+				<div class="block-title">处理详情</div>
+				@for(rws in rwLists ![]){
+				<div class="mission">
+						<div class="mission-header">
+							<li><label>下发人：</label>${rws.preName ! ''}</li>
+							<li><label>下发时间：</label>${rws.starte_dates ! ''}</li>
+						</div>
+						<div class="mission-content">
+						<ul>
+						@for(rg in rwgls ![]){
+						@if(rws.pre_emp == rg.pre_emp){
+							<li>
+								<figure>
+									<span>处理人：${rg.curName ! ''}</span>
+									<span>处理时间：${rg.end_dates ! ''}</span>
+								</figure>
+								@if(rg.is_back == '1'){
+								<p><span style="color: #7ebc1d">已反馈</span>：${rg.content ! ''}</p>
+								@}else{
+								<p style="color: #ffa81f">未反馈：暂未处理</p>
+								@}
+								<ul class="article-array">
+								@if(isNotEmpty(rg.attrList)){
+								@for(attr in rg.attrList  ! []){
+									@if(attr.file_type == 'img'){
+									<li>
+										<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/jpg.svg"/></dt>${attr.old_filename}</a>
+										<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a>
+									</li>
+									@}else if(attr.file_type == 'word'){
+									<li>
+										<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/></dt>${attr.old_filename}</a>
+										<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+									@}else if(attr.file_type == 'txt'){
+									<li>
+										<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/></dt>${attr.old_filename}</a>
+										<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+									@}else if(attr.file_type == 'exl'){
+									<li>
+										<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/></dt>${attr.old_filename}</a>
+										<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+									@}else if(attr.file_type == 'video'){
+									<li>
+										<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/></dt>${attr.old_filename}</a>
+										<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+									@}else{
+									<li>
+										<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/assets/images/default-file.png"/></dt>${attr.old_filename}</a>
+										<a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a>
+									</li>
+									@}
+								  @}
+								  @}
+								</ul>
+							</li>
+							@}
+							@}
+						</ul>
+					 </div>
+				</div>
+				@}
+	 	 </div>
+	  </div>
+	</div>
+
+	<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+	<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+	<script src="${ctxPath}/assets/scripts/app/pub/param.js"></script>
+	<script src="${ctxPath}/assets/scripts/app/home/app_module.js"></script>
+	<script src="${ctxPath}/assets/scripts/app/home/home.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+	
+	<script type="text/javascript">
+		mui.init({
+			pullRefresh: {
+				container: "#refreshContainer", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+				up: {
+					height:50,//可选.默认50.触发上拉加载拖动距离
+					range:'50px', //可选 默认100px,控件可下拉拖拽的范围
+					contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
+					contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
+					callback: pullupRefresh
+				}
+			}
+		});
+		function pullupRefresh() {
+			mui('#refreshContainer').pullRefresh().endPullupToRefresh(true); 
+		}
+		
+		//下载
+		function downloadFile(path){
+			toAndroid.jsSeeFJ(path);
+			//window.location.href=path;
+		}
+		//点击下载跳转
+		mui("#article-container").on('tap','a',function(){
+			var path = this.getAttribute("name");
+			downloadFile(path);
+		});
+		mui("#fjxzCode").on('tap','a',function(){
+			var path = this.getAttribute("name");
+			downloadFile(path);
+		});
+		
+		//手机按键返回
+		function anGoBack(){
+			mui.back();
+			return;
+		}
+		
+	</script>
+</body>
+
+</html>

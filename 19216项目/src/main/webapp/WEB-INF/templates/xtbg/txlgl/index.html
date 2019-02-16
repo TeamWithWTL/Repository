@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>协同办公--通讯录管理</title>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/vendor/zTree_v3/css/metroStyle/metroStyle.css">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	
+
+<style type="text/css">
+
+.text-overflow{
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	overflow:hidden;
+}
+/*  .ztree {
+	    height:420px; 
+	    margin: 0;
+	    padding: 10px;
+	    color: #333;
+	}   */
+</style>
+</head>
+<body>
+	<div class="row warpper">
+		<div class="col-2 warpper" style="padding-right: 0">
+			<!-- ZTree -->
+			<div class="cardbox-body warpper">
+					<div class="ztree" style="overflow: auto;">
+						<iframe id="treeFrame" name="treeFrame" src="${ctxPath}/pub/deptTree/showDeptTree.do" style="width:100%; height:100%;" frameBorder=0 ></iframe>
+					</div>
+			</div>
+			<!-- END ZTree -->
+		</div>
+	<div class="col-10 warpper" >
+	<div class="function-box">
+		<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+				<!-- 被选中的部门 -->
+					<input type="hidden" id="deptId" value="${deptId ! ''}">
+					<input type="text" class="form-control" id="name" placeholder="姓名" value="${name ! ''}">
+					<input type="text" class="form-control" id="duty" placeholder="职务" value="${duty ! ''}">
+					<input type="text" class="form-control" id="phone" placeholder="手机号" value="${phone ! ''}">
+					<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+		</div>
+	</div>
+	<div id="table-container" class="warpper">
+			@#ajax table:{
+			<div  class="table-box" style=" height: 340px;">
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+						<tr class="table-secondary">
+							<th width="8%" class="text-center">编号</th>
+							<th width="15%" class="text-center">姓名</th>
+							<th width="10%" class="text-center">性别</th>
+							<th width="20%" class="text-center">单位</th>
+					        <th width="20%" class="text-center">职务</th>
+					        <th width="15%" class="text-center">手机号</th>
+						</tr>
+						</thead>
+						<tbody>
+					@for(txlgl in pagenate.list ! []){
+						<tr>
+							<td>${txlglLP.index}</td>
+					        <td class="text-center text-overflow" title="${txlgl.name ! ''}">${txlgl.name ! ''}</td>
+					        @if(txlgl.sex=='1'){
+					        <td class="text-center">女</td>
+					        @}else if(txlgl.sex=='0'){
+					        <td class="text-center">男</td>
+					        @}
+					        <td class="text-center text-overflow" title="${txlgl.deptNames !''}">${txlgl.deptNames !''}</td>
+					        <td class="text-center text-overflow" title="${txlgl.duty !''}">${txlgl.duty !''}</td>
+					        <td class="text-center">${txlgl.phone !''}</td>
+						</tr>
+					@}elsefor{
+						<tr>
+					        <td colspan="6" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+					@}
+						</tbody>
+					</table>
+			</div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+	</div>
+	</div>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/popper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/vendor/zTree_v3/js/jquery.ztree.all-3.5.min.js"></script>
+	<script src="${ctxPath}/assets/scripts/xtbg/txlgl/index.js"></script>
+</body>
+</html>

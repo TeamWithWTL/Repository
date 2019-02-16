@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	</head>
+
+	<body>
+		<div class="container">
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="home-tab" data-toggle="tab" href="#dsh">待审核</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="profile-tab" data-toggle="tab" href="#shbtg">审核不通过</a>
+				</li>
+			</ul>
+			<div class="tab-content" id="myTabContent">
+				<div class="tab-pane fade show active" id="dsh">
+					<div class="article-feedback" id="dshList" style="margin-top:20px;">
+						@#ajax dshTable:{
+							@if(isNotEmpty(pagenateDsh.list)){
+							@for(dsh in pagenateDsh.list ! []){
+							<ul>
+								<div class="feedback-user">
+									<dt><img src="${ctxPath}/assets/images/default-user.png"/></dt>
+									<p></p><span>${dsh.userName ! ''}</span>
+								</div>
+								<div class="feedback-msg">
+									<p>【留言】${dsh.content ! ''}</p>
+									<div class="feedback-data">
+										<i class="fa fa-clock-o"> ${dsh.createTimeF ! ''}</i> 
+										<button type="button" class="btn btn-sm btn-success" onclick="shtg('${dsh.id}')">审核通过</button>
+										<button type="button" class="btn btn-sm btn-danger" onclick="shbtg('${dsh.id}')">审核不通过</button>
+									</div>
+								</div>
+							</ul>
+							@}
+							<!-- 自定义分页标签 -->
+							<#pagenate func="initDshData" page="${pagenateDsh}" />
+							@}else{
+							暂无相关记录
+							@}
+						@}
+					</div>
+				</div>
+				<div class="tab-pane fade" id="shbtg">
+					<div class="article-feedback" id="btgList" style="margin-top:20px;">
+						@#ajax btgTable:{
+							@if(isNotEmpty(pagenateBtg.list)){
+							@for(btg in pagenateBtg.list ! []){
+							<ul>
+								<div class="feedback-user">
+									<dt><img src="${ctxPath}/assets/images/default-user.png"/></dt>
+									<p></p><span>${btg.userName ! ''}</span>
+								</div>
+								<div class="feedback-msg">
+									<p>【留言】${btg.content ! ''}</p>
+									<div class="feedback-data">
+										<i class="fa fa-clock-o"> ${btg.createTimeF ! ''}</i> 
+										<button type="button" class="btn btn-sm btn-success" onclick="shtg('${btg.id}')">审核通过</button>
+									</div>
+								</div>
+							</ul>
+							@}
+							<!-- 自定义分页标签 -->
+							<#pagenate func="initBtgData" page="${pagenateBtg}" />
+							@}else{
+							暂无相关记录
+							@}
+						@}
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<input type="hidden" id="id" value="${id}" />
+
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/popper.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/shzz/hdgl/shlyview.js" charset="utf-8"></script>
+	</body>
+
+</html>

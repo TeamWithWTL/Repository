@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>社会组织-组织信息首页</title>
+	<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+        <style type="text/css">
+	      .name{
+	        width: 300px; 
+		    white-space: nowrap;  
+		    text-overflow: ellipsis; 
+		    overflow: hidden; 
+	       }
+       </style>
+</head>
+
+<body>
+	<div class="function-box">
+		 	<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+				  <div class="form-group">
+		            <input type="text" class="form-control" id="name" placeholder="组织名称">
+		          </div>
+		          <div class="form-group">
+		            <input type="text" class="form-control" id="fr_name" placeholder="法人名称">
+		          </div>
+		          <div class="form-group">
+		            <select name="zzxz" id="zzxz" class="form-control" style="width:180px;">
+		              @if(zzlx != null){
+		                 <option value="">-- 组织性质--</option>
+		                @for(lx in zzlx){
+		                  <option value="${lx.value1}">${lx.itemName}</option>
+		                @}
+		              @}
+		            </select>
+		         </div>
+		         <div class="form-group">
+		            <button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+		         </div>
+			   </form>
+			</div>
+			<div class="function-btn">
+				<#roleBtn btnId="zzxxAdd" roleCode="${roleCode}">
+		            <button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goAdd('添加界面')"><i class="fa fa-plus"></i> 添加</button>
+		        </#roleBtn>
+		        <#roleBtn btnId="zzxxDel" roleCode="${roleCode}">
+		           <button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goDel()"><i class="fa fa-trash"></i> 删除</button>
+		       </#roleBtn>
+			</div>
+		</div>
+		<div id="table-container" class="warpper">
+			@#ajax table:{
+			<div class="table-box">
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+						 <tr class="table-secondary">
+							  <th width="5%" class="text-center">
+			                     <input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+			                  </th>
+			                  <th width="" class="text-center">名称</th>
+			                  <th width="15%" class="text-center">组织性质</th>
+			                  <th width="10%" class="text-center">法人账号</th>
+			                  <th width="10%" class="text-center">法人</th>
+			                  <th width="10%" class="text-center">入驻时间</th>
+			                  <#roleBtn btnId="zzxxUpdate" roleCode="${roleCode}">
+			                  <th width="15%" class="text-center">操作</th>
+			                  </#roleBtn>
+		                 </tr>  
+						</thead>
+					  <tbody id="dqIds">	
+						@for(zzxx in pagenate.list ! []){
+						<tr>
+							<td class="text-center">
+					        	<input type="checkbox" class="i-checks" name="icheck" value="${zzxx.id}" />
+					        </td>
+					        <td class="text-left" title="${zzxx.name}">
+			                    <div class="name">
+			                    	<!-- <a href="javascript:void(0);" onclick="goView('${zzxx.id}')"> -->
+			                    		${zzxx.name}
+			                    	<!-- </a> -->
+			                    </div>
+		                    </td>
+		                    <td class="text-center">${zzxx.zzxzName}</td>
+		                    <td class="text-center">
+		                      @if(zzxx.fr_id == '' || zzxx.fr_id == null){
+                                  <span style="color: #ffa81f">待绑定</span>
+		                      @}else{
+		                         ${zzxx.fr_id}
+		                      @}
+		                    </td>
+		                    <td class="text-center">
+		                      @if(zzxx.fr_name == '' || zzxx.fr_name == null){
+                          		 <span style="color: #ffa81f">待绑定</span>
+		                      @}else{
+		                         ${zzxx.fr_name}
+		                      @}
+		                    </td>
+		                    <td class="text-center">${zzxx.xs_enter_date}</td>
+		                    <#roleBtn btnId="zzxxUpdate" roleCode="${roleCode}">
+		                    <td class="text-center">
+		                       <a  href="javascript:void(0);" onclick="goUpdate('${zzxx.id}')">修改</a>
+		                       <a href="javascript:void(0);" onclick="goView('${zzxx.id}')">查看</a>
+		                    </td>
+		                    </#roleBtn>
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="7" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+						</tbody>
+					</table>
+				</div>	
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+		</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/shzz/zzxx/index.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

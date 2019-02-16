@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en" class="layerpage">
+
+<head>
+	<title>社区管理-添加、编辑</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+</head>
+
+<body>
+	<form id="addForm">
+		<div class="form-group row">
+			<label for="" class="col-sm-3 col-form-label">社区名称</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" id="name" name="name" placeholder="社区名称" value="${community.name ! ''}" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="" class="col-sm-3 col-form-label">行政区划</label>
+			<div class="col-sm-6">
+				<div class="select-after">
+					<!--所有的select需要增加select-after类-->
+					<select class="form-control" name="strative_id">
+					@if(community != null){
+					<option value="${community.strative_id}" selected>${community.strative_name}</option>
+					@}else{
+						@for(str in strList){
+						<option value="${str.itemCode}">${str.itemName}</option>
+						@}
+					@}
+					</select>
+				</div>
+			</div>
+		</div>
+<!-- 		<div class="form-group row">
+			<label for="" class="col-sm-3 col-form-label">负责人</label>
+			input文本类使用col-sm-6
+			<div class="col-sm-6">
+				<div class="input-group">
+					<button type="button" class="btn btn-outline-secondary" onClick="addOption(this)"><i class="fa fa-plus" aria-hidden="true"></i> 添加负责人</button>
+				</div>
+			</div>
+		</div> -->
+		
+		<!--固定字段-->
+		<div class="form-group row">
+			<label for="" class="col-sm-3 col-form-label">负责人</label>
+			<!--input文本类使用col-sm-6-->
+			<div class="col-sm-6">
+				<div class="input-group">
+					<input class="form-control" type="text" id="manager" name="manager" placeholder="姓名" value="${cmanager.manager ! ''}"/>
+					<input class="form-control" type="text" id="phone"  name="phone" placeholder="电话号码" value="${cmanager.phone ! ''}"/>
+				<!-- 	<span class="input-group-btn">
+						<button type="button" class="btn btn-secondary"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+					</span> -->
+				</div>
+			</div>
+		</div>
+		<!--固定字段结束-->
+		<!--循环开始-->
+		<!-- <div id="fz_div">
+		@for(cm in cmanagerList ! []){
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label"></label>
+				<div class="col-sm-6">
+					<div class="input-group">
+						<input class="form-control" type="text" name="manager" placeholder="姓名" value="${cm.manager ! ''}"/>
+						<input class="form-control" type="text" name="phone" placeholder="电话号码" value="${cm.phone ! ''}"/>
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-danger" onClick="delOption(this)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+						</span>
+					</div>
+				</div>
+			</div>
+		@}
+		</div> -->
+		<!-- <div class="form-group row" id="fz_div">
+			<label for="" class="col-sm-3 col-form-label"></label>
+			input文本类使用col-sm-6
+			<div class="col-sm-6">
+				<div class="input-group">
+					<input class="form-control" type="text" value="" placeholder="姓名"/>
+					<input class="form-control" type="text" value="" placeholder="电话号码"/>
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+					</span>
+				</div>
+			</div>
+		</div> -->
+		<!--循环结束-->
+		<div class="form-group row">
+			<label for="" class="col-sm-3 col-form-label">社区描述</label>
+			<!--input文本类使用col-sm-6-->
+			<div class="col-sm-8">
+				<textarea class="form-control" name="description" rows="6">${community.description ! ''}</textarea>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-3"></div>
+			<div class="col-sm-9">
+				<button type="button" id="saveBtn" class="btn btn-primary"><i class="fa fa-save"></i> 保 存</button>
+				<button type="button" class="btn btn-outline-primary" id="cancleBtn"><i class="fa fa-reply"></i> 取 消</button>
+			</div>
+		</div>
+		<input type="hidden" name="id" value="${community.id ! ''}" />
+		<input type="hidden" name="managers" id="managers" />
+		<input type="hidden" name="phones" id="phones" />
+	</form>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/public.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/sqgl/addEdit.js"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+<meta charset="UTF-8">
+<title>签到详情列表</title>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css"	/>
+<style type="text/css">
+
+.text-overflow{
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	overflow:hidden;
+}
+</style>
+
+</head>
+<body>
+	<!-- <div class="function-box">
+		<div class="query-criteria">
+				<form class="form-inline" action="" method="post" style="margin: 10px;">
+					<div class="form-group">
+						<div class='input-group date form_datetime' id='start'>
+							<input type="text" class="form-control" id="rxrq1" placeholder="签到月份" value="${months !''}"  readonly="readonly">
+							<span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+				                <span class="fa fa-calendar" aria-hidden="true"></span>
+				            </span>
+			            </div>
+		            </div>
+					<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+		</div>
+	</div> -->
+	<div id="table-container" class="warpper">
+			@#ajax table:{
+			<div class="table-box">
+					<!-- <div class="form-group" style="margin-right: 10px;">
+						&nbsp;&nbsp;&nbsp;&nbsp;应签到次数:<span style="color: blue;">${rTimes}</span>&nbsp;&nbsp;&nbsp;&nbsp;实际签到次数:<span style="color: #FFB90F">${yTimes}</span>
+					</div> -->
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+						<tr class="table-secondary">
+							<th class="text-center">签到人姓名</th>
+							<th width="" class="text-center">上午签到时间</th>
+							<th width="" class="text-center">下午签到时间</th>
+						</tr>
+						</thead>
+						<tbody  id="dqIds">
+					@for(wgry in pagenate.list ! []){
+						<tr>
+					        <td class="text-center text-overflow" title="${wgry.addName}">${wgry.addName ! ''}</td>
+					        <td class="text-center text-overflow">
+					        @if(wgry.FmtTimeAm != null){
+					        	${wgry.FmtTimeAm}
+					        @}else{
+					        <span style="color: red;">未签到</span>
+					        @}
+					        </td>
+					        <td class="text-center text-overflow">
+					        @if(wgry.FmtTimePm != null){
+					        	${wgry.FmtTimePm}
+					        @}else{
+					        <span style="color: red;">未签到</span>
+					        @}
+					        </td>
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="3" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+						</tbody>
+					</table>
+					</div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+	</div>
+	<input type="hidden" id="months" value="${months !''}" />
+	<input type="hidden" id="accCode" value="${accCode !''}" />
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<!-- 日期控件JS -->
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js" ></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js" ></script>
+	
+	<script src="${ctxPath}/assets/scripts/shgl/signIn_index_xq.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

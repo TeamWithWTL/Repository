@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>社情民意详情页面</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+</head>
+<body>
+	<header id="header" class="mui-bar mui-bar-nav">
+			<a class=" icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">调查详情</h1>
+	</header>
+	<div class="mask-backdrop"></div>
+	<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<div class="article-content">
+					<div class="article-header">
+						<h4 class="article-header-title">${dcInfo.title}</h4>
+						<p>
+						   <span>创建时间：${dcInfo.createDateFom}</span>
+						</p>
+					</div>
+					<div class="article-body">
+						<p>${dcInfo.content}</p>
+					</div>
+				</div>
+			  @if(isNotEmpty(dcInfo.attrList)){
+				<div class="article-content">
+					<div class="block-title">附件下载</div>
+					<div class="article-array" id="article-container">
+						@for(attr in dcInfo.attrList  ! []){
+						<div>
+							@if(attr.file_type == 'img'){
+							<li style="margin-top:5px">
+								<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/showPic?fileName=${attr.new_filename}" class="adaption"/></dt>${attr.old_filename}</a>
+								<a href="javascript:;" class="downarray icon ion-archive outside" name="${path}${attr.new_filename}"></a>
+							</li>
+							@}else if(attr.file_type == 'word'){
+							<li  style="margin-top:5px">
+								<a href="javascript:;" name="${path}${attr.new_filename}">
+									<dt>
+										<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> 
+									</dt>${attr.old_filename}
+								 </a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+							@}else if(attr.file_type == 'txt'){
+							<li  style="margin-top:5px">
+								<a href="javascript:;" name="${path}${attr.new_filename}">
+									<dt>
+										 <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>
+									</dt>${attr.old_filename}
+								</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+							@}else if(attr.file_type == 'exl'){
+							<li  style="margin-top:5px">
+								<a href="javascript:;" name="${path}${attr.new_filename}">
+									<dt>
+										<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>
+									</dt>${attr.old_filename}
+								</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+							@}else if(attr.file_type == 'video'){
+							<li  style="margin-top:5px">
+								<a href="javascript:;" name="${path}${attr.new_filename}">
+									<dt>
+										<img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>
+									</dt>${attr.old_filename}
+								</a><a href="javascript:;" class="downarray icon ion-archive" name="${path}${attr.new_filename}"></a></li>
+							@}else{
+							<li  style="margin-top:5px">
+								<a href="javascript:;" name="${path}${attr.new_filename}"><dt><img src="${ctxPath}/assets/images/default-file.png" class="adaption"/></dt>${attr.old_filename}</a>
+								<a href="javascript:;" class="downarray icon ion-archive outside" name="${path}${attr.new_filename}"></a>
+							</li>
+							@}
+						</div>	
+						@}
+					</div>
+				</div>
+			   @}
+			</div>
+		</div>
+	
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+				<input type="hidden" id="sqmyWgyId" value="${dcInfo.sqmyWgyId}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script type="text/javascript">
+		
+		mui.init();
+		mui('.mui-scroll-wrapper').scroll({
+			indicators: false, //是否显示滚动条
+			startX: 0, //初始化时滚动至x
+			deceleration: 0.0004, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+			bounce: true //是否启用回弹
+		});  
+		
+		//下载
+		mui("#article-container").on('tap','a',function(){
+			var path = this.getAttribute("name");
+			downloadFile(path);
+		});
+		
+		//返回界面
+		mui("#header").on('tap','a',function(){
+			  var sqmyWgyId =$("#sqmyWgyId").val();
+			  window.location.href =$("#basePath").val()+ '/app/shgl/sqmy/wgyDcList.do?sqmyWgyId='+sqmyWgyId;
+		});
+		
+		//手机键返回
+		function anGoBack(){
+			 var sqmyWgyId =$("#sqmyWgyId").val();
+			  window.location.href =$("#basePath").val()+ '/app/shgl/sqmy/wgyDcList.do?sqmyWgyId='+sqmyWgyId;
+	    }
+		
+		/* function anGoBack(){
+			  window.location.href = basePath + "/app/shgl/sqmy/index.do";
+			  return;
+		} */
+		
+		</script>
+</body>
+
+</html>

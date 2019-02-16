@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class=" icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title" id="title">事件总览</h1>
+			<button id="OpenQuery"
+			class="mui-btn mui-btn-link icon ion-ios-search-strong mui-pull-right"></button>
+		</header>
+		
+			<div class="inquery">
+		<form class="mui-input-group">
+			<div class="mui-input-row">
+				<label>标题/上报人</label> <input type="text" id="searchTitle" class="mui-input-picker" placeholder="标题/上报人" />
+			</div>
+			<div class="mui-button-row">
+			<button class="mui-btn mui-btn-block mui-btn-primary" type="button" onclick="initDate()">
+			<i class="icon ion-ios-search-strong"></i>点击查询</button>
+			</div>
+		</form>
+	</div>
+		<div class="mask-backdrop"></div>
+
+		
+		<div class="mui-content mui-scroll-wrapper" id="refreshContainer">
+			<div class="mui-scroll">
+				<div id="table-container" class="listview-block">
+			@#ajax table:{
+				@for(event in pagenate.list ! []){
+					<div class="mui-card" id="${event.id}">
+						<!--页眉，放置标题-->
+						<div class="mui-card-header">
+							<div class="mui-checkbox">
+								<input name="checkbox1" value="Item 1" type="checkbox">
+							</div>
+							${event.title}
+						</div>
+						<!--内容区-->
+						<div class="mui-card-content">
+							<div class="mui-card-content-inner">
+								<p class="mui-ellipsis-2" style="color:#666;">${event.content}</p>
+<!-- 								<p>社区: ${event.commName}</p> -->
+<!-- 								<p>服务站: ${event.ssName}</p> -->
+								<p>${event.applyTimeFrm}</p>
+							</div>
+						</div>
+						<!--页脚，放置补充信息或支持的操作-->
+						<div class="mui-card-footer">
+							<a href="javascript:void(0)" id="${event.id}"><i class="icon ion-android-list"></i> 详情</a>
+						</div>
+					</div>
+					@}
+					<input type="hidden" id="pageCnts" value="${pageCnts}" />
+					<input type="hidden" id="pageSize" value="${pageSize}" />
+				@}
+				</div>
+			</div>
+		</div>
+		
+		
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/vendor/popper.min.js"></script>
+		<script src="${ctxPath}/assets/vendor/bootstrap.min.js"></script>
+		<script src="${ctxPath}/assets/scripts/public.js"></script>
+		<script src="${ctxPath}/assets/scripts/shgl/sjgl/app/app_sjgl_allevent.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script type="text/javascript">
+		
+		//手机键返回
+		function anGoBack(){
+			  window.location.href = $("#basePath").val() + "/app/sjgl/eventfunList.do";
+			  return;
+	    }
+		
+		</script>
+	</body>
+
+</html>

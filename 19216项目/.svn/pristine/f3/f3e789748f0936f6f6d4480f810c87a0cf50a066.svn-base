@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/iconfont.css" />
+	<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/Linearicons/css/Linearicons.css" />
+</head>
+
+<body>
+	<header id="header" class="mui-bar mui-bar-nav">
+		<h1 class="mui-title" id="title">首页</h1>
+		<a class="icon ion-android-person mui-pull-right" id="userInfoId"></a>
+	</header>
+	
+	<div class="mui-content mui-scroll-wrapper" id="refreshContainer">
+		<div class="mui-scroll">
+			<div id="slideBox" class="slideBox">
+				<div class="bd">
+					<ul id="rdxwLiLB">
+					@for(rd in rdxwList ![]){
+						<li>
+							<a class="pic" href="#" name = "${rd.id}"><img src="${ctxPath}/showPic?fileName=${rd.picPath}" /></a>
+							<a class="tit" href="#" name = "${rd.id}">${rd.title}</a>
+						</li>
+					@}
+					</ul>
+				</div>
+				<div class="hd">
+					<ul></ul>
+				</div>
+			</div>
+			@if(gw == '1' || hy == '1'){
+			<div class="content-block">
+				<span class="notice">消息</span>
+				<div class="notes-inner-block" id="ScrollBox">
+					@if(gw == '1' && hy == '1'){
+					<ul id="ScrollText">
+						@}else{
+						<ul>
+							@} 
+							@if(gw == '1'){
+							<li><a href="javascript:void(0);">尊敬的用户，您有公文需处理</a></li> @}
+							@if(hy == '1'){
+							<li><a href="javascript:void(0);">尊敬的用户，您有会议需参加</a></li> @}
+						</ul>
+				</div>
+			</div>
+			@}
+			<div class="mui-slider bc-silder">
+				<div id="module" class="mui-slider-group">
+					<!--第一个内容区容器-->
+					<div class="mui-slider-item">
+						<ul id="firstItem" class="mui-table-view mui-grid-view mui-grid-9">
+
+						</ul>
+					</div>
+				</div>
+				<div id="indicator" class="mui-slider-indicator">
+					<div class="mui-indicator mui-active"></div>
+				</div>
+			</div>
+			@if(nordxwList != []){
+			<div class="content-block">
+				<h4 class="content-title">热点新闻</h4>
+				<a class="content-more" href="javascript:void(0)" id="gotoRdxw">更多..</a>
+			</div>
+			@}
+			<div class="content-block padding-0">
+				<ul class="mui-table-view" id="rdxwLi">
+					@for(rdxw2 in nordxwList ![]){
+					<li class="mui-table-view-cell mui-media"><a href="#" id="${rdxw2.id}">
+								@if(rdxw2.picPath != null){ 
+								<dt class="mui-pull-right">
+									<img src="${ctxPath}/showPic?fileName=${rdxw2.picPath}"> 
+								</dt>
+								@}
+							<div class="mui-media-body">
+								<span>${rdxw2.title}</span>
+								<dt>${rdxw2.createDateFrm}</dt>
+							</div>
+					</a></li> @}
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="lon" value=""/>
+	<input type="hidden" id="lat" value=""/>
+	<input type="hidden" id="roleCode" value="${session.sysAccCount.role_code}" />
+    <input type="hidden" id="phone" value="${phone}" />
+
+	
+	<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+
+	<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+	<script src="${ctxPath}/assets/app/js/TouchSlide.1.1.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+	
+	<script src="${ctxPath}/assets/scripts/app/pub/param.js"></script>
+	<script src="${ctxPath}/assets/scripts/app/home/app_module.js"></script>
+	<script src="${ctxPath}/assets/scripts/app/home/home.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+	
+	<!-- 百度地图 -->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PEDYmms2gstug9jGEBphIGFPVxGHyhpB"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/library/AreaRestriction/1.2/src/AreaRestriction_min.js"></script>
+	
+	<script type="text/javascript">
+			mui.init({
+				pullRefresh: {
+					container: "#refreshContainer", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+					up: {
+						height:50,//可选.默认50.触发上拉加载拖动距离
+						range:'50px', //可选 默认100px,控件可下拉拖拽的范围
+						contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
+						contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
+						callback: pullupRefresh
+					}
+				}
+			});
+			function pullupRefresh() {
+				mui('#refreshContainer').pullRefresh().endPullupToRefresh(true); 
+			}
+			
+			$(document).ready(function() {
+				setInterval('AutoScroll("#ScrollBox")', 3000);
+			});
+			
+			TouchSlide({
+				slideCell: "#slideBox",
+				titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+				mainCell: ".bd ul",
+				effect: "leftLoop",
+				autoPage: true, //自动分页
+				autoPlay: true //自动播放
+			});
+
+			function AutoScroll(obj) {
+				$(obj).find("#ScrollText:first").animate({
+					marginTop: "-22px"
+				}, 500, function() {
+					$(this).css({
+						marginTop: "0px"
+					}).find("li:first").appendTo(this);
+				});
+			};
+			
+			//普通用户一键拨打举报投诉电话
+		/*    document.getElementById("telephone").addEventListener('tap',function(){
+	            var btnArray=['拨打','取消'];
+	            var phone = $("#phone").val();
+	            mui.confirm('是否拨打'+phone,'提示',btnArray,function(e){
+	                if(e.index == 0){
+	                	Telphone(phone);
+	                }
+	            });
+	        }); */
+	        
+	        $(document).ready(function(){
+				jsCleanFJ();
+			});
+			
+			var map = new BMap.Map("allmap");
+			var myGeo = new BMap.Geocoder();
+			// 获取网格员地理位置坐标
+			$(function(){
+				try{
+		   			setTimeout(function(){
+					initMap();
+	   			}, 1000);
+				}catch(e){
+					console.error("app_sjgl_addreport_error1"+e);
+				}
+				jsCleanFJ();
+			});
+
+			function initMap(){
+				var lonLat = getLonLat();
+				var arr = "";
+				if(lonLat!=null&&lonLat!=""){
+					arr = lonLat.split(',');
+				}
+				var lon =arr[1];
+				var lat = arr[0];
+				$("#lon").val(lon);
+				$("#lat").val(lat);
+				var u = navigator.userAgent;
+				var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+				var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+				var point = new BMap.Point(lon,lat);
+				 buildmapInfo(point);
+			}
+			
+			// 转换坐标回调函数
+			function translateCallback(data){
+				buildmapInfo(data.points[0]);
+			}
+			
+			function buildmapInfo(point){
+				try{
+				//百度地图
+				 var address = "";
+				 map.centerAndZoom(point, 16);
+				 var marker = new BMap.Marker(point);  // 创建标注
+				 map.addOverlay(marker);               // 将标注添加到地图中
+				 map.disableDragging();     //禁止拖拽
+				 var pt = point;
+				 myGeo.getLocation(pt, function(rs){
+					var addComp = rs.addressComponents;
+					address = addComp.province  + addComp.city + addComp.district  + addComp.street + addComp.streetNumber;
+				 });
+				}catch (e) {
+					console.error("app_sjgl_addreport_error2"+e);
+				}
+			}
+	        
+			//首页返回1
+			function anGoBack(){
+				return 1;
+			}
+		</script>
+</body>
+</html>

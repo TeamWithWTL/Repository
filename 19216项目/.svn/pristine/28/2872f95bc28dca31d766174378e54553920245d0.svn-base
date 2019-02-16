@@ -1,0 +1,108 @@
+/*project*/
+.project {
+	height: 50px;
+	background: #3eafe0;
+	border-radius: 3px;
+	behavior: url(/Scripts/pie.htc);
+	margin-bottom: 15px;
+}
+
+.project li {
+	float: left;
+	font-size: 15px;
+	text-align: center;
+	color: #000;
+	line-height: 50px;
+	background: url(../img/bz00.jpg) no-repeat right;
+	height: 50px;
+	position: relative;
+	min-width: 120px;
+	cursor: pointer;
+}
+
+.project li i {
+	width: 17px;
+	padding-left: 8px;
+	position: absolute;
+	height: 50px;
+	right: 0;
+	top: 0;
+}
+
+.project li span {
+	width: 17px;
+	position: absolute;
+	height: 50px;
+	left: 0;
+}
+
+.prover i {
+	background: none !important;
+}
+
+.profinish {
+	color: #000 !important;
+}
+
+.profinish i {
+	background: url(../img/bz02.jpg) no-repeat right;
+	height: 50px;
+	line-height: 50px;
+}
+
+.start {
+	background: #67d100 !important;
+	color: #fff !important;
+}
+
+.start i {
+	background: url(../img/bz01.jpg) no-repeat right;
+}
+
+.proleft {
+	font-size: 16px;
+	line-height: 50px;
+	background: #d4e7f0;
+	width: 112px;
+	float: left;
+	text-align: center;
+	behavior: url(/Scripts/pie.htc);
+}
+
+.prosearch {
+	margin-top: 20px;
+	clear: both;
+	padding-left: 3px;
+	margin-bottom: 8px;
+	overflow: hidden;
+	height: 35px;
+}
+
+.prosearch li {
+	float: left;
+	margin-right: 30px;
+	height: 35px;
+	line-height: 35px;
+}
+
+.prosearch label {
+	font-weight: bold;
+	font-size: 14px;
+	height: 32px;
+	line-height: 32px;
+	float: left;
+}
+
+.prosearch li i {
+	display: block;
+	float: left;
+	line-height: 32px;
+	font-style: normal;
+	padding-right: 10px;
+}
+
+.prosearch li a {
+	display: block;
+	float: left;
+	padding-right: 20px;
+}

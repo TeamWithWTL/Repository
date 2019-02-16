@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+
+	<head>
+		<title></title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/mui.picker.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/ionicons.min.css" />
+		<link rel="stylesheet" href="${ctxPath}/assets/app/css/style.css" />
+		<style type="text/css">
+			.mui-toast-container {bottom: 50% !important;}
+		</style>
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back icon ion-android-arrow-back mui-pull-left"></a>
+			<h1 class="mui-title">下发反馈</h1>
+		</header>
+		<nav class="mui-bar mui-bar-tab mui-bar-cogs">
+			<a class="mui-tab-item  mui-active"   id="saveBtn">
+				<span class="icon ion-share"></span>
+				<span class="mui-tab-label" >下发</span>
+			</a>
+		</nav>
+		<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<form action="" method="post">
+					<!-- <div class="mui-input-row">
+						<textarea id="content" name="" rows="8" cols="" placeholder="请输入下发建议（可不写）。。。"></textarea>
+					</div> -->
+					<div class="delimiter"></div>
+					<div class="mui-input-group">
+						<div class="mui-input-row">
+							<label>选择人员</label>
+							<button type="button" class="mui-btn btn-input" id="Add_User">选择 <i class="icon ion-android-person-add"></i></button>
+						</div>
+						<div class="mui-input-row col-list"  id="person">
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="popup">
+			<div class="popup-header">
+				<h4 class="popup-header-title">人员选择</h4>
+				<span id="closed-popup" class="icon ion-ios-close-empty"></span>
+			</div>
+			<div class="popup-body">
+			@for(map in mapSysRole ! []){
+				<!--start checkbox list-->
+				
+				
+				<div class="checkbox-list">
+					<div class="checkbox-list-title">
+						<div class="mui-input-row mui-radio">
+							<label>${map.key.roleName}</label>
+						</div>
+					</div>
+					<ul class="mui-input-group">
+					@for(person in map.value ![]){
+						<div class="mui-input-row mui-checkbox">
+							<label>${person.name}</label>
+							<input type="checkbox"  name="radio"  class="person" roleCode="${map.key.roleCode}"  nam = "${person.name}" namid = "${person.accCode}">
+						</div>
+					
+					@}
+					</ul>
+				</div>
+				@}elsefor{
+				<div class="checkbox-list">
+					<div class="checkbox-list-title">
+						<div class="mui-input-row mui-radio">
+							<label>亲！你没有权限。</label>
+						</div>
+					</div>
+				</div>
+				@}
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-block" id="submit">确定</button>
+				</div>
+			</div>
+		</div>
+		<div class="full-mask-backdrop"></div>
+		<input type="hidden" id="rwglId" value="${rwglId}">
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+		<script src="${ctxPath}/assets/app/js/jquery-1.12.4.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+		<script src="${ctxPath}/assets/app/js/mui.min.js"></script>
+		<script type="text/javascript" src="${ctxPath}/assets/scripts/app/pub/pubApp.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui('.mui-scroll-wrapper').scroll({
+				indicators: false, //是否显示滚动条
+				startX: 0, //初始化时滚动至x
+				deceleration: 0.0004, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+				bounce: true //是否启用回弹
+			});
+			$("#Add_User").click(function(){
+				$(".popup").css("top", "1rem");
+				$(".full-mask-backdrop").fadeIn(200);
+			});
+			$("#closed-popup, #submit").click(function(){
+				$(".popup").removeAttr("style");
+				$(".full-mask-backdrop").fadeOut(200);
+			});
+			
+			var basePath=$("#basePath").val();
+			
+			$("#submit").click(function(){
+				var persons=$(".person");
+				var ryCode='';
+				var ryName='';
+				$("#person").html("");
+				$.each(persons, function(index, person) {
+					if ($(person).is(":checked")) {
+						ryName = $(person).attr("nam");
+						ryCode = $(person).attr("namid");
+						roleCode=$(person).attr("roleCode");
+						if (ryName!='') {
+							$("#person").append('<li roleCode="'+roleCode+'"  personId="'+ryCode+'">'+ryName+'<a href="javascript:void(0)" class="icon ion-android-cancel" personCode="'+ryCode+'" id="personId"></a></li>');
+						}
+					}
+				});
+			});
+			
+			mui(".col-list").on('tap','.ion-android-cancel',function(){
+				var ryCode = '';
+				var aa = this.getAttribute("personCode");
+				$(this).parent().remove();
+				var persons=$(".person");
+				$.each(persons, function(index, person) {
+					if ($(person).is(":checked")) {
+					    ryCode = $(person).attr("namid");
+						if(aa == ryCode){
+							mui("input[namid='"+ryCode+"']").each(function(){ 
+		                        this.checked=false; 
+		                    }); 
+						}
+					}
+				});
+			});
+			
+			//$("#saveBtn").click(function(){
+			mui(".mui-bar-cogs").on('tap','a',function(){ 
+				var per=$("#person").html();
+				if ($( "#person:has(li)" ).length==0) {
+					/* top.layer.confirm("请选择下发人",{ icon:0, title:"提示"}); */
+					mui.toast('请选择下发人',{ duration:'long', type:'div' });
+					return false;
+				}
+				var persons=$("#person").find("li");
+				var personId='';
+				var personIds='';
+				var curRoleId='';//当前处理角色id
+				$.each(persons, function(index, person) {
+						personId = $(person).attr("personId");
+						personIds += personId+";";
+						curRoleId=$(person).attr("roleCode");
+				});
+				var content=$("#content").val();//下发内容
+				var rwglId=$("#rwglId").val();//要下发的任务id
+				msgIndex1 = top.layer.msg('数据保存中...', {			icon : 16,			shade : [ 0.5, '#999999' ]});
+				$.ajax({
+					type : "POST",
+					url : basePath+"/app/shgl/appRwgl/issue.do",
+					data : {
+							'content':content,
+							'personIds':personIds,
+							'curRoleId':curRoleId,
+							'rwglId':rwglId
+							},
+					error : function(request) {
+						top.layer.close(msgIndex1);
+						top.layer.msg('下发失败，请联系管理员', {shade : [ 0.5, '#999999' ]});
+					},
+			
+					success : function(data) {
+						top.layer.close(msgIndex1);
+						if(data== "success") {
+							top.layer.msg('下发成功',{icon : 6,time : 2000,shade : [0.5,'#999999' ]},function(){
+								top.layer.close(top.layer.getFrameIndex(window.name));
+								mui.back();
+								});
+						}else{
+							top.layer.msg('下发失败，请联系管理员', {shade : [ 0.5, '#999999' ]});
+						}
+					},
+					error : function(req) {
+					}
+				});
+			});
+			
+			//手机按键返回
+			function anGoBack(){
+				mui.back();
+				return;
+			}
+			
+		</script>
+	</body>
+
+</html>

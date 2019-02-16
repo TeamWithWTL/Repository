@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>组织活动反馈</title>
+	<meta charset="UTF-8">
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+</head>
+
+<body>
+	<div class="article-body">
+		<div class="row">
+			<div class="col col-12">
+				<div class="page-title">反馈详情</div>
+				<div class="page-body">
+					<table class="table table-lg table-striped table-event">
+						<tr>
+							<th>内容</th>
+							<td>${fk.content}</td>
+						</tr>
+						<tr>
+							<th>附件列表</th>
+							<td>
+								<div class="form-arraylist" style="width:400px">
+								 @if(isNotEmpty(fk.fkAttrList)){
+										@for(attr in fk.fkAttrList  ! []){	
+											@if(attr.fileType == 'img'){
+											<li class="col-12">
+												<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/showPic?fileName=${attr.newFilename}"/>${attr.oldFilename}</a>
+											    <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else if(attr.fileType == 'pdf'){
+											<li class="col-12">
+												<a href="javascript:void(0)" onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/>${attr.oldFilename}</a>
+											    <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else if(attr.fileType == 'word'){
+											<li class="col-12">
+												<a href="javascript:void(0)" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.oldFilename}</a>
+												< <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else if(attr.fileType == 'txt'){
+											<li  class="col-12">
+												<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.oldFilename}</a>
+												 <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else if(attr.fileType == 'exl'){
+											<li  class="col-12">
+												<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.oldFilename}</a>
+												 <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else if(attr.fileType == 'video'){
+											<li  class="col-12">
+												<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.oldFilename}</a>
+												 <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+											</li>
+											@}else{
+											  <li class="col-12">
+											   <a href="javascript:void(0)"  title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+										       <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+										     </li>
+											@}
+										@}
+								    @}else{
+								     	无
+								    @}
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/scripts/shzz/hdtj/view.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

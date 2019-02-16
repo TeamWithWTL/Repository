@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>数据中心 -- 事件状态统计</title>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css"	/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+</head>
+<body>
+<div class="content-block no-padding" style="height: 100%;">
+<div class="block-content">
+	<div class="row">
+		<div class="col-12">
+			<div class="content-padding-md pb-0">
+				<div class="function-box">
+					<div class="query-criteria" style="margin: 0;">
+						<form class="form-inline" action="" method="post">
+						    <div class='input-group date form_datetime' id='start'>
+								<input type="text" class="form-control" id="startTime" placeholder="开始时间" readonly="readonly" value="${startTime ! firstday}">
+								 <span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+					                <span class="fa fa-calendar" aria-hidden="true"></span>
+					             </span>
+					        </div>
+					        <div class='input-group date form_datetime' id='end'>
+								<input type="text" class="form-control" id="endTime" placeholder="结束时间" readonly="readonly" value="${endTime ! lastday}">
+								 <span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+					                <span class="fa fa-calendar" aria-hidden="true"></span>
+					             </span>
+					        </div>
+					        @if(roleCode == '05' || roleCode == '99'){
+					        	<div style="display: inline;">
+								<select id="commId" name="commId" class="form-control" onchange="showSs(this,'ssId','1')">
+								    <option value="">-- 所属社区--</option>
+										@if(isNotEmpty(comList)){
+											@for(com in comList){
+												<option value="${com.id}" ${commId != null && com.id == commId ? 'selected' : ''}>${com.name}</option>
+											@}
+										@}
+							    </select>
+							    </div>
+							    <div style="display: inline;">
+								    <select class="form-control" name="ssId" id="ssId">
+										<option value="">-- 所属服务站--</option>
+									</select>
+								</div>
+					        @}else if(roleCode == '03'){
+					            <div style="display: inline;">
+								 <select id="ssId" name="ssId" class="form-control">
+								    <option value="">-- 所属服务站--</option>
+										@if(isNotEmpty(ssList)){
+											 @for(ss in ssList){
+												<option value="${ss.id}">${ss.name}</option>
+											 @}
+										@}
+							     </select>
+						       </div>
+					        @}
+							<button type="button" class="btn btn-primary" onClick="initData(1,null);"><i class="fa fa-search"></i> 查询</button>
+						</form>
+					</div>
+				</div>
+			</div>
+			<br/>
+			<div class="section-block">
+				<div class="section-block-title">
+					<ul class="nav nav-tabs" role="tablist">
+					  <li role="presentation" class="active">
+					  	<a href="#special1" data-toggle="tab" onclick="initData('1','table1')">未处理</a>
+					  <li role="presentation">
+					  	<a href="#special2" data-toggle="tab" onclick="initData('1','table2')">已处理</a>
+					  </li>
+					</ul>
+				</div>
+				<div class="section-body">
+				 	<div class="tab-content special-tab">
+				 	  @if(cmd == 'table1'){
+				 	     <div role="tabpanel" class="tab-pane active" id="special1" style="overflow-x: hidden; overflow-y: auto; height: 300px; width: 1100px; text-align: center;">
+							<div id="table-container" class="table-box">
+							@#ajax table1:{
+									<table class="table table-bordered table-striped" cellspacing="" cellpadding="" style="overflow-x: hidden;height:100%; width: 1000px;">
+										<thead>			
+										 <tr class="table-secondary">
+							                  <th width="30%" class="text-center">事件标题</th>
+							                  <th width="15%" class="text-center">上报人</th>
+							                  <th width="20%" class="text-center">上报日期</th>
+							                  <th width="20%" class="text-center">上报位置</th>
+						                 </tr>  
+										</thead>
+									  <tbody>	
+										@for(sjgl in pagenate.list ! []){
+										  <tr>
+									        <td class="text-center" title="${sjgl.title}">
+							                    <div class="name">
+							                       ${sjgl.title}
+							                    </div>
+						                    </td>
+						                    <td class="text-center">${sjgl.applyName}</td>
+						                    <td class="text-center">${sjgl.applyTimeFrm}</td>
+						                    <td class="text-center">${sjgl.applyAddr}</td>
+										   </tr>
+										@}elsefor{
+										<tr>
+									        <td colspan="6" class="text-center">
+									        	没有找到要查询的数据
+									        </td>
+								    	</tr>
+										@}
+										</tbody>
+									</table>
+									<input type="hidden" id="cmd" value="${cmd}" />
+								<!-- 自定义分页标签 -->
+								<#pagenate func="initData" page="${pagenate}" />
+								@}
+						 </div>		
+					   </div>
+				 	  @}else if(cmd == 'table2'){
+				 	    <div role="tabpanel" class="tab-pane" id="special2" style="overflow-x: hidden; overflow-y: auto; height: 300px; width: 1100px;text-align: center;"">
+					    <div id="table-container" class="table-box">
+							@#ajax table2:{
+								<table class="table table-bordered table-striped" cellspacing="" cellpadding="" style="overflow-x: hidden;height:100%; width: 1000px;">
+									<thead>			
+									 <tr class="table-secondary">
+						                  <th width="30%" class="text-center">事件标题</th>
+						                  <th width="15%" class="text-center">上报人</th>
+						                  <th width="20%" class="text-center">上报日期</th>
+						                  <th width="20%" class="text-center">上报位置</th>
+					                 </tr>  
+									</thead>
+								  <tbody>	
+									@for(sjgl in pagenate.list ! []){
+										<tr>
+									        <td class="text-center" title="${sjgl.title}">
+							                    <div class="name">
+							                       ${sjgl.title}
+							                    </div>
+						                    </td>
+						                    <td class="text-center">${sjgl.applyName}</td>
+						                    <td class="text-center">${sjgl.applyTimeFrm}</td>
+						                    <td class="text-center">${sjgl.applyAddr}</td>
+										</tr>
+									@}elsefor{
+									<tr>
+								        <td colspan="6" class="text-center">
+								        	没有找到要查询的数据
+								        </td>
+							    	</tr>
+									@}
+									</tbody>
+								</table>
+								<input type="hidden" id="cmd" value="${cmd}" />
+							<!-- 自定义分页标签 -->
+							<#pagenate func="initData" page="${pagenate}" />
+							@}
+						</div>	
+					  </div>
+				 	@}
+				</div>   
+			</div>
+		</div>
+	</div>
+   </div>
+</div>
+</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+    <!-- 日期控件JS -->
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js" ></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js" ></script>
+    <script src="${ctxPath}/assets/scripts/sjzx/sjtj/sjzttjindex.js"></script>
+</body>
+</html>

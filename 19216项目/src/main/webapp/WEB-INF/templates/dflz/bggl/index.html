@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>党风廉政-曝光台-首页</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<link rel="stylesheet" type="text/css"
+	href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" />
+	<style type="text/css">
+      .wrap{
+		white-space: nowrap;  
+		text-overflow: ellipsis; 
+		overflow: hidden; 
+      }
+    </style>
+</head>
+
+<body>
+	<div class="function-box">
+		 	<div class="query-criteria">
+				<form class="form-inline" action="" method="post">
+					<div class='input-group date form_datetime' id='datetimepicker'>
+					<input readonly="readonly"  type="text" class="form-control" id="apply_time" placeholder="发布日期">
+					 <span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+		                <span class="fa fa-calendar" aria-hidden="true"></span>
+		                </span>
+		                </div>
+					
+					
+					<input type="text" class="form-control" id="title" placeholder="标题/发布人" value="${title ! ''}">
+					<button type="button" class="btn btn-primary" onclick="initData(1)"><i class="fa fa-search"></i> 查询</button>
+				</form>
+			</div>
+			
+			<div class="function-btn">
+				<#roleBtn btnId="bgglAdd" roleCode="${roleCode}">
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goAdd('添加')"><i class="fa fa-plus"></i> 添加</button>
+				</#roleBtn>
+				<#roleBtn btnId="bgglUpdate" roleCode="${roleCode}">
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goUpdate('修改')"><i class="fa fa-pencil"></i> 修改</button>
+				</#roleBtn>
+				<#roleBtn btnId="bgglDel" roleCode="${roleCode}">
+					<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="goDel()"><i class="fa fa-trash"></i> 删除</button>
+				</#roleBtn>
+			</div>
+			
+		</div>
+		<div id="table-container"  class="warpper">
+			@#ajax table:{
+			<div class="table-box">
+				<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+					<thead>
+					<tr class="table-secondary">
+						<th width="5%" class="text-center">
+							<input type="checkbox" class="i-checks" id="checkAll" onclick="selectAll(this)"/>
+				        </th>
+						<th width="" class="text-center">标题</th>
+							<th width="15%" class="text-center">发布人</th>
+							<th width="15%" class="text-center">发布时间</th>
+							<th width="10%" class="text-center">审核状态</th>
+							
+							<th width="20%" class="text-center">操作</th>
+					</tr>
+					</thead>
+					<tbody id="dqIds">
+					@for(yw in pagenate.list ! []){
+					<tr>
+						<td class="text-center">
+				        	<input type="checkbox" class="i-checks" name="icheck" value="${yw.id}*${yw.sh_status}" />
+				        </td>
+				        <td class="text-left text-overflow" title="${yw.title ! ''}">
+				        	<div class="wrap">
+					        		${yw.title ! ''}
+				        	</div>
+				        </td>
+				        <td class="text-center text-overflow">
+				        	${yw.user_name !}
+				        </td>
+				        <td class="text-center text-overflow">${yw.fmtCreate_time!}</td>
+				        @if(yw.sh_status=='0'){
+				        <td style="color: #ffa81f">待审核</td>
+				        @}else if(yw.sh_status=='1'){
+				        <td style="color: #7ebc1d">通过</td>
+				        @}else if(yw.sh_status=='2'){
+				        <td style="color: #fd5c1d">未通过</td>
+				        @}
+				      
+				        @if(yw.sh_status=='0'){
+				        <td>
+				        <#roleBtn btnId="bgglUpdate" roleCode="${roleCode}">
+				        	<a href="javascript:void(0);" onclick="update('${yw.id !}')">修改</a>
+				        </#roleBtn>
+				        <#roleBtn btnId="bgglAudit" roleCode="${roleCode}">
+				        	<a href="javascript:void(0);" onclick="goAudit('${yw.id !}',1)">审核</a>
+				        </#roleBtn>
+				        <a href="javascript:void(0);" onclick="goView('${yw.id !}')">查看</a>
+				        </td>
+				        @}else if(yw.sh_status=='1'){
+				        <td>
+				          <#roleBtn btnId="bgglAudit" roleCode="${roleCode}">
+				        	<a href="javascript:void(0);" onclick="goAudit('${yw.id !}',2)">审核</a>
+				          </#roleBtn>
+				      	  <a href="javascript:void(0);" onclick="goView('${yw.id !}')">查看</a>
+				        </td>
+				        @}else if(yw.sh_status=='2'){
+				        <td>
+				        <#roleBtn btnId="bgglUpdate" roleCode="${roleCode}">
+				        	<a href="javascript:void(0);" onclick="update('${yw.id !}')">修改</a>
+				        </#roleBtn>
+				        <#roleBtn btnId="bgglAudit" roleCode="${roleCode}">
+				        	<a href="javascript:void(0);" onclick="goAudit('${yw.id !}',1)">审核</a>
+				        </#roleBtn>
+				        <a href="javascript:void(0);" onclick="goView('${yw.id !}')">查看</a>
+				        </td>
+					    @}
+					</tr>
+					@}elsefor{
+					<tr>
+				        <td colspan="6">
+				        	没有找到要查询的数据
+				        </td>
+			    	</tr>
+					@}
+				   </tbody>
+				</table>
+			</div>
+			<!-- 自定义分页标签 -->
+			<#pagenate func="initData" page="${pagenate}" />
+		@}
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	
+	<!-- 日期控件JS -->
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript"
+		src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="${ctxPath}/assets/scripts/dflz/bggl/index.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

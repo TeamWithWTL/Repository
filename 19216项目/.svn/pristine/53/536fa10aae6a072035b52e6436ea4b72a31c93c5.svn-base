@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${@com.jcwx.utils.ProjectUtils.getSysCfg("projectName")}</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+</head>
+
+<body>
+	
+	<div class="content-block">
+		<div class="container-fluid warpper">
+			<!-- <div class="row"> -->
+				<div class="col col-12">
+					<!--特殊人口统计-->
+					<div class="section-block" >
+							
+						<div class="section-body" id="content-Tsrk">
+							<div id="charts-tsrktjBar" class="charts-block" style="height:380px;"></div>
+						</div>
+					</div>
+				</div>
+			<!-- </div> -->
+		</div>
+	</div>
+	<input type="hidden" id="all" value="${all}">
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	<input type="hidden" id="roleCode" value="${session.sysAccCount.role_code}" />
+
+	<script src="${ctxPath}/assets/vendor/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/popper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://echarts.baidu.com/dist/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+<!-- 	<script type="text/javascript" src="${ctxPath}/assets/scripts/home/home.js"></script> -->
+	<script type="text/javascript">
+	var basePath = $("#basePath").val();
+	var roleCode = $("#roleCode").val();
+	
+	$(document).ready(function(){
+		// 文字滚动
+//		setInterval('AutoScroll("#ScrollBox")', 4000);
+		// 异步加载
+		$.ajaxSetup ({ 
+			cache: false 
+			});
+		
+		
+		initTsrk($("#all").val());//特殊人口统计
+	});
+	
+	//社区名称 服务站名称
+	function initTsrk(all) {
+		/*var commId = $("#commId option:selected").val();	//社区ID
+		var ssId = $("#ssId option:selected").val();	//服务站ID
+	*/	var msgIndex = top.layer.msg('数据加载中', {icon:16, shade:[ 0.5, '#999999' ], time:0});
+
+		$.ajax({
+			type: "POST",
+			url: basePath + "/home/initTsrkBar.do?all="+all,
+			/*data: {'commId': commId,'ssId':ssId},*/
+			dataType: 'json',
+			error: function(request) {
+				layer.msg('程序出错，请联系管理员', {shade : [ 0.5, '#999999' ]});
+			},
+			success : function(data) {
+				top.layer.close(msgIndex);
+				if(JSON.stringify(data) != "{}" && data.code == 200){
+					initTsrkBarZ(data.result);
+					//initBingB(data.result);
+				}
+			}
+		});
+	}
+	/*******************统计图**********************/	
+
+	function initTsrkBarZ(data) {
+		var dataX = [];
+		var dataValue = [];
+		var zdyDate = [];
+		for(var i = 0; i<data.length; i++){
+			dataX[i] = data[i].name;
+			dataValue[i] = data[i].count;
+			zdyDate[i] = data[i].id;
+		}
+	// 初始化图表数据
+		/*var listJson = data[0].listAllRK;
+		var cntListJson = data[0].listAllCnt;*/
+		// 基于准备好的dom，初始化echarts实例
+		var myChart = echarts.init(document.getElementById('charts-tsrktjBar'));
+		window.onresize = myChart.resize;
+		/*  var ecConfig = require('echarts/config');  
+        myChart.on(ecConfig.EVENT.CLICK, eConsole);   */
+		// 指定图表的配置项和数据
+		option = {
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'shadow'
+					}
+				},
+				grid: {
+					top: '8%',
+					left: '3%',
+					right: '3%',
+					bottom: '5%',
+					containLabel: true,
+				},
+				xAxis: {
+					axisLine: {
+						show: false
+					},
+					splitLine: {
+						show: false
+					},
+					axisTick:{
+						show:false
+					},
+					type: 'value',
+					boundaryGap: [0, 0.01]
+				},
+				yAxis: {
+					axisLine: {
+						show: false
+					},
+					splitLine: {
+						show: false
+					},
+					splitArea: {
+						show: true
+					}, //保留网格区域
+					axisTick:{
+						show:false
+					},
+					type: 'category',
+					data: dataX,
+				},
+				series: [{
+					//name: '2017年',
+					/* <span style="color:#ff0000;"><strong> clickable : true,</strong></span> */
+					clickable : true,
+					type: 'bar',
+					barWidth: '60%', //柱图宽度
+					data: dataValue,
+					barMinHeight:10,
+					zdyDate:zdyDate,
+					itemStyle: {
+						normal: {
+							color: '#aacf79',	//柱状图颜色
+							barBorderRadius: [10, 10, 10, 10],
+						}
+					},
+					label: {
+						normal: {
+							show: true,
+							position: 'right',
+						}
+					},
+				}]
+			};
+		// 使用刚指定的配置项和数据显示图表。
+		myChart.setOption(option);
+		myChart.on("click", eConsole);
+		function eConsole(param){
+			// 跳转到事件列表
+			//alert(param.value);
+			var tsName = zdyDate[param.dataIndex];
+		//	alert(param.data);
+			tsrkDetail(tsName);
+		//	alert(sjName);
+			//alert(sjName);
+		}
+	}
+	//分类清单表格
+	function tsrkDetail(tsName){
+/* 		var id='';
+		$.ajax({
+			url : basePath + '/home/findClassifyByName.do',
+			type : 'POST',
+			//dataTypae:'json',
+			data : {'tsName':tsName},
+			success : function(data){
+				id=data; */
+				top.layer.open({
+					type : 2,
+					title : "<div class='layerTitleDiv'></div><span class='layerTitleSpan'>特殊人口列表</span>",
+					fix : false,
+					// shadeClose: true,
+					area : ['80%', '80%'],
+					content : basePath + "/home/tsrkList.do?tsId="+tsName,
+				})
+	/* 		}
+		}); */
+	}
+	/* //分类清单表格
+	function tsrkDetail(sjName){
+		top.layer.open({
+			type : 2,
+			title : "<div class='layerTitleDiv'></div><span class='layerTitleSpan'>人口类别</span>",
+			fix : false,
+			// shadeClose: true,
+			area : ['80%', '80%'],
+			content : basePath + "/home/tsrkList.do?tsName="+sjName,
+		})
+	} */
+	</script>
+</body>
+</html>

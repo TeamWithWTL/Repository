@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>部门管理-部门结构调整</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css"/>
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+</head>
+
+<body>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="page-block">
+				<div class="page-head">
+					<div class="page-function">
+						<div class="btn-group" id="partyFunc">
+							<button type="button" class="btn btn-default" id="addNode"><i class="fa fa-plus"></i> 添加</button>
+							<button type="button" class="btn btn-default" id="renameNode"><i class="fa fa-pencil"></i> 重命名</button>
+							<button type="button" class="btn btn-default" id="removeNode"><i class="fa fa-trash"></i> 删除</button>
+							<button type="button" class="btn btn-default" id="saveTree"><i class="fa fa-check"></i> 保存</button>
+						</div>
+					</div>
+				</div>
+				<iframe id="treeFrame" name="treeFrame" src="${ctxPath}/pub/deptTree/showDeptTree.do" style="width:100%; height:800px; overflow:auto;" frameBorder=0></iframe>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/public.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/xtgl/dept/editDept.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html class="main">
+<head>
+	<title>楼宇管理-首页</title>
+	<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/main.css" />
+	<style type="text/css">
+    .accCode{
+      white-space: nowrap;  
+      text-overflow: ellipsis; 
+      overflow: hidden; 
+    }
+    .name{
+      width: 180px; 
+      white-space: nowrap;  
+      text-overflow: ellipsis; 
+      overflow: hidden; 
+    }
+   </style>
+</head>
+
+<body style="margin: 25px;margin-right: 20px; width: 96%">
+
+			<div class="function-btn">
+				<button type="button" class="btn btn-light" href="javascript:void(0);" onclick="choose()"><i class="fa fa-plus"></i> 保存</button>
+			</div>
+		<div id="table-container" class="warpper">
+			@#ajax table:{
+			<div class="table-box">
+					<table class="table table-bordered table-striped" cellspacing="" cellpadding="">
+						<thead>
+						<tr class="table-secondary">
+							<th width="5%" class="text-center">
+								<!-- <input type="radio" class="i-checks" id="checkAll" onclick="selectAll(this)"/> -->
+					        </th>
+					        <th>楼宇名称</th>
+							<th>单元数/层数</th>
+							<th>楼宇类型</th>
+							<th>所属社区</th>
+							<th>所属服务站</th>
+							<th>所属网格</th>
+					        <th>所属小区</th>
+
+						</tr>
+						</thead>
+						<tbody id="dqIds">
+						@for(build in pagenate.list ! []){
+						<tr>
+							<td class="text-center">
+					        	<input type="radio" class="i-checks" name="icheck" value="${build.id}*${build.name}" />
+					        </td>
+					        <td title="${build.name}">
+					          <div class="accCode">${build.name}</div>
+					        </td>
+					        <td>${build.unit_cnt}单元/${build.floor_cnt}层</td>
+					        <td>${build.building_type == '1'?'住宅':'商铺'}</td>
+					        <td title="${build.village.serviceStation.community.name}"><div class="accCode">${build.village.serviceStation.community.name}</div></td>
+					        <td title="${build.village.serviceStation.name}"><div class="accCode">${build.village.serviceStation.name}</div></td>
+					        <td title="${build.grid.name !''}"><div class="accCode">${build.grid.name !''}</div></td>
+					        <td title="${build.village.name}"><div class="accCode">${build.village.name}</div></td>
+
+						</tr>
+						@}elsefor{
+						<tr>
+					        <td colspan="8" class="text-center">
+					        	没有找到要查询的数据
+					        </td>
+				    	</tr>
+						@}
+						</tbody>
+					</table>
+				</div>
+				<!-- 自定义分页标签 -->
+				<#pagenate func="initData" page="${pagenate}" />
+				@}
+		</div>
+	<input type="hidden" id="ssId" value="${ssId}" />
+	<input type="hidden" id="commId" value="${commId}" />
+	<input type="hidden" id="gridId" value="${gridId}" />
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<!-- END MAIN CONTENT -->
+	<script src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="${ctxPath}/assets/vendor/holder.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<script src="${ctxPath}/assets/scripts/shgl/jmxx/chooseBuild.js"></script>
+	<script src="${ctxPath}/assets/scripts/public.js"></script>
+</body>
+</html>

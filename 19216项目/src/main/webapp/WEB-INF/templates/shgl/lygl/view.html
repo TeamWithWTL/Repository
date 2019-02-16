@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>居民信息详情</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/media.css" />
+	<style>
+		.control-label{
+			font-size:14px;
+		}
+		.normal{
+			font-weight:normal;
+		}
+		.content-tab {
+		    z-index: 3;
+		    left: 15px;
+		    right: 15px;
+		    height: 41px;
+		    background: #fff;
+		    border-bottom: 1px solid #e2e2e5;
+		}
+		.content-tab-ul-wrap {
+		    position: relative;
+		    top: 0px;
+		    left: 0px;
+		}
+		.content-tab ul {
+		    position: absolute;
+		    left: 0;
+		    top: 10px;
+		}
+		.content-tab ul li {
+		    position: relative;
+		    display: block;
+		    float: left;
+		    margin-right: -1px;
+		}
+		.content-tab ul li a.selected {
+		    color: #222;
+		    background: #fff;
+		    height: 31px;
+		}
+		.content-tab ul li a {
+		    float: left;
+		    padding: 0 25px;
+		    border-top: 1px solid #e1e1e1;
+		    border-right: 1px solid #e1e1e1;
+		    border-left: 1px solid #e1e1e1;
+		    height: 30px;
+		    line-height: 31px;
+		    font-size: 12px;
+		    color: #333;
+		    text-align: center;
+		    background: #f9f9f9;
+		}
+		a:link, a:visited {
+		    text-decoration: none;
+		}
+		.tab-content {
+		    font-size: 12px;
+		    color: #666;
+		    border: 1px solid #e1e1e1;
+		    border-top: none;
+		}
+	</style>
+</head>
+	<body>
+	<div class="container-fluid">
+		
+		<div class="content-tab-wrap">
+            <div id="floatHead" class="content-tab">
+                <div class="content-tab-ul-wrap">
+                    <ul>
+                    	<!-- <li class="nav-item">
+							<a class="nav-link active" id="home-tab" data-toggle="tab" href="javascript:;" onclick="tabs('pInfo','otherP,home',this);" >基本信息</a>
+						</li> -->
+						<!-- <li class="nav-item">
+							<a class="nav-link" id="profile-tab" data-toggle="tab" href="javascript:;" onclick="tabs('otherP','pInfo,home',this);" >特殊人员信息</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="contact-tab" data-toggle="tab" href="javascript:;" onclick="tabs('home','otherP,pInfo',this);" >房屋信息</a>
+						</li> -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- 	基本信息开始 -->
+        <div class="tab-content" style="display: block;" id="pInfo">
+        	<form id="addForm" class="form-horizontal">
+				<div class="form-group">
+					<div class="col-md-4">
+						<label class="col-sm-4 control-label">楼栋号：</label>
+						<label class="control-label normal">${buildingEntity.name ! ''}</label>
+					</div>
+					<div class="col-md-4">
+						<label class="col-sm-4 control-label">单元数：</label>
+						<label class="control-label normal">${buildingEntity.unit_cnt  ! ''}</label>
+					</div>
+					<div class="col-md-4">
+						<label class="col-sm-4 control-label">楼层数：</label>
+						<label class="control-label normal">${buildingEntity.floor_cnt ! ''}</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-4">
+						<label class="col-sm-4 control-label">每层户数：</label>
+						<label class="control-label normal">${buildingEntity.family_cnt ! ''}</label>
+					</div>
+					<div class="col-md-4">
+						<label class="col-sm-4 control-label">楼宇类型：</label>
+						<label class="control-label normal">
+							@if(buildingEntity.building_type=='1'){
+								住宅
+							@}
+							@if(buildingEntity.building_type=='2'){
+								商铺
+							@}
+						</label>
+					</div>
+					<div class="col-md-4">
+						<label class="col-sm-4 control-label">所属社区：</label>
+						<label class="control-label normal">${commName ! ''}</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-4">
+						<label class="col-sm-4 control-label">所属服务站：</label>
+						<label class="control-label normal">${buildingEntity.village.serviceStation.name ! ''}</label>
+					</div>
+					<div class="col-md-4">
+						<label class="col-sm-4 control-label">所属网格：</label>
+						<label class="control-label normal">
+							${buildingEntity.grid.name ! ''}
+						</label>
+					</div>
+					<div class="col-md-4">
+						<label class="col-sm-4 control-label">所属小区：</label>
+						<label class="control-label normal">${buildingEntity.village.name ! ''}</label>
+					</div>
+				</div>
+				<div class="form-group">
+				<!-- <div class="text-center">
+					<a href="javascript:void(0);" title="查看位置" onclick="housePoint('${buildingEntity.lon}','${buildingEntity.lat}');">
+	                    <i class="fa fa-dot-circle-o" style="color: #188BFF; font-size: 16px;"></i>
+                    </a>
+                  </div> -->
+	                  <div class="col-md-12" >
+						<!-- <div id="allmap" style="width: 100%;height: 290px;background: #ddd;">
+						<div id="map" style="height:100%;-webkit-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;"></div> -->
+							<div class="col-md-6" style="height:260px; width: 100%;">
+								<iframe  id="mapFrame"  name="mapFrame"  src="${ctxPath}/assets/template/areadrawsite4.html"  style="width:100%; height:100%"  frameBorder=0 scrolling=no></iframe>
+							</div>
+						</div>
+					 </div>
+				</div>
+			</form>
+		</div>
+	<!-- 	基本信息结束 -->
+	
+		
+		
+		<br/>
+	</div>
+	<input type="hidden" id="lon" value="${buildingEntity.lon}"/>
+	<input type="hidden" id="lat" value="${buildingEntity.lat}"/>
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script>
+		var aa1 = $('#lon').val();
+	    var aa2 = $("#lat").val();
+	 	//debugger;
+		//百度地图
+		/* map = new BMap.Map("allmap");
+		var point = new BMap.Point(aa1,aa2);
+		map.centerAndZoom(point, 16);
+		var marker = new BMap.Marker(point);  // 创建标注
+		map.addOverlay(marker);               // 将标注添加到地图中
+ */
+ 		window.onload=function(){
+			if(aa1 != "0" && aa2 != "0"){
+				var obj = new Object();
+				obj.Lon = aa1;
+				obj.Lat = aa2;
+				window.frames["mapFrame"].init(obj);
+				//mapFrame.window.init(obj);
+			};
+		};
+			
+	/* 	if(aa1 != "0" && aa2 != "0"){
+			var obj = new Object();
+			obj.Lon = aa1;
+			obj.Lat = aa2;
+			window.frames["map"].init(obj);
+			//mapFrame.window.init(obj);
+		}; */
+		
+	</script>
+</body>
+</html>

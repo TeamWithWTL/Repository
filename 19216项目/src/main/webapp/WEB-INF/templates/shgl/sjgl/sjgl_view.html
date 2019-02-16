@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>事件管理-查看</title>
+	<meta charset="UTF-8">
+	<!-- 第三方 CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+</head>
+
+<body>
+		<div class="article-body">
+			<div class="row">
+				<div class="col col-6">
+					<div class="page-title">基本资料</div>
+					<div class="page-body">
+						<table class="table table-lg table-striped table-event">
+							<tr>
+								<th>标题</th>
+								<td>${event.title}</td>
+							</tr>
+							<tr>
+								<th>事件类型</th>
+								<td>${eventTypeMap[event.type]}</td>
+							</tr>
+							<tr>
+								<th>上报人</th>
+								<td>${event.applyName}</td>
+							</tr>
+							<tr>
+								<th>上报日期</th>
+								<td>${event.applyTimeFrm}</td>
+							</tr>
+							<tr>
+								<th>上报位置</th>
+								<td>${event.applyAddr}</td>
+							</tr>
+							<tr>
+								<th>内容</th>
+								<td>${event.content}</td>
+							</tr>
+					
+							<tr>
+								<th>事件状态</th>
+								<td>
+								@if(event.isOver =='1'){
+       		                		已结束
+       		                	@}else if(event.isOver =='2'){
+       		                		进行中
+       		                	@}
+								</td>
+							</tr>
+							@if(event.isOver =='1'){
+							<tr>
+								<th>是否公开</th>
+								<td>
+								@if(event.isPub =='1'){
+       		                		是
+       		                	@}else if(event.isPub =='2'){
+       		                		否
+       		                	@}
+       		                	</td>
+							</tr>
+							@}
+							<tr>
+								<th>附件列表</th>
+								<td>
+									<div class="form-arraylist" style="width:400px">
+									 @if(isNotEmpty(event.eventAttrs)){
+												@for(attr in event.eventAttrs  ! []){	
+													@if(attr.fileType == 'img'){
+													<li class="col-6">
+														<a href="javascript:showBigPic('${ctxPath}/showPic?fileName=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/showPic?fileName=${attr.newFilename}"/>${attr.oldFilename}</a>
+													    <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+													</li>
+													@}else if(attr.fileType == 'pdf'){
+													<li class="col-6">
+														<a href="javascript:void(0)" onclick="goPdf('${ctxPath}/pub/goPdf.do?url=${attr.newFilename}')" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/>${attr.oldFilename}</a>
+													    <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+													</li>
+													@}else if(attr.fileType == 'word'){
+													<li class="col-6">
+														<a href="javascript:void(0)" title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/word.svg"/> ${attr.oldFilename}</a>
+														< <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+													</li>
+													@}else if(attr.fileType == 'txt'){
+													<li  class="col-6">
+														<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/txt.svg"/>${attr.oldFilename}</a>
+														 <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+													</li>
+													@}else if(attr.fileType == 'exl'){
+													<li  class="col-6">
+														<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/excel.svg"/>${attr.oldFilename}</a>
+														 <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+													</li>
+													@}else if(attr.fileType == 'video'){
+													<li  class="col-6">
+														<a href="javascript:void(0)" title="${attr.oldFilename}"> <img src="${ctxPath}/assets/images/icon_xt5nm097d1ymygb9/video.svg"/>${attr.oldFilename}</a>
+														 <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+													</li>
+													@}else{
+													  <li class="col-6">
+													   <a href="javascript:void(0)"  title="${attr.oldFilename}"><img src="${ctxPath}/assets/images/default-file.png"/> ${attr.oldFilename}</a>
+												       <span title="下载" onclick="download('${attr.newFilename}', '${attr.oldFilename}')" class="download"></span>
+												     </li>
+													@}
+												@}
+										    @}else{
+										     	无
+										    @}
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="col col-6">
+					<div class="page-title">位置</div>
+					<div class="page-body">
+				 	<div id="map" style="width: 100%;height: 290px;background: #ddd;">
+						<iframe id="mapFrame" name="mapFrame" src="${ctxPath}/assets/template/areadrawsite4.html" style="width:100%; height:100%" frameBorder=0 scrolling=no></iframe>
+						</div> 
+<!-- 					<div id="allmap" style="width: 100%;height: 290px;background: #ddd;"> -->
+<!-- 					<div id="map" style="height:100%;-webkit-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;"></div> -->
+<!-- 				</div> -->
+						
+					</div>
+					<div class="page-title">处理意见</div>
+					<div class="page-body">
+						<div class="timesline">
+						@for(deal in event.eventDeals ! []){
+						@if(deal.dealStatus =='1' && deal.curRoleId =='12'){
+						<li>
+							<dt>${deal.dealDateFrm}</dt>
+							<ul><b>${deal.clrName} 【转发意见】 </b>${deal.content}</ul>
+						</li>
+						@}else if(deal.dealStatus =='1'){
+						<li>
+							<dt>${deal.dealDateFrm}</dt>
+							<ul><b>${deal.clrName} 【上报意见】 </b>${deal.content}</ul>
+						</li>
+						@}else if(deal.dealStatus =='2'){
+						<li >
+							<dt >${deal.dealDateFrm}</dt>
+							<ul><b>${deal.clrName} 【处理意见】 </b>${deal.content}</ul>
+						</li>
+						@}else if(deal.dealStatus =='5'){
+						<li>
+							<dt>${deal.dealDateFrm}</dt>
+							<ul><b>${deal.clrName} 【下发意见】 </b>${deal.content}</ul>
+						</li>
+						@}
+						@}
+						@if(event.isOver=='1'){
+							<li class="the-end">
+							<dt></dt>
+							<ul>结束</ul>
+						</li>
+						@}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	 <input type="hidden" id="id" value="${event.id}"/>
+	<input type="hidden" id="lon" value="${event.applyLon}"/>
+	<input type="hidden" id="lat" value="${event.applyLat}"/>
+	<input type="hidden" id="name" value="${event.applyAddr}"/>
+	<input type="hidden" id="type" value="sj" />
+	
+		<input type="hidden" id="basePath" value="${ctxPath}" />
+	
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/public.js"></script>
+	
+	<!-- 百度地图 -->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PEDYmms2gstug9jGEBphIGFPVxGHyhpB"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/library/AreaRestriction/1.2/src/AreaRestriction_min.js"></script>
+		
+		
+	<script>
+	
+	function getLon(){
+		var obj = new Object();
+		var ID =$("#id").val();
+		var name = $("#name").val();
+		var lon =$("#lon").val();
+		var lat = $("#lat").val();
+		obj.ID = ID;
+		obj.Name = name;
+		if(lon != "0"){
+			obj.Lon = lon;
+		}
+		if(lat != "0"){
+			obj.Lat = lat;
+		}
+		return obj;
+	}
+	
+// 	var aa1 = $('#lon').val();
+//    var aa2 = $("#lat").val();
+ 
+// // 	百度地图
+// 	map = new BMap.Map("allmap");
+// 	var point = new BMap.Point(aa1,aa2);
+// 	map.centerAndZoom(point, 16);
+// 	var marker = new BMap.Marker(point);  // 创建标注
+// 	map.addOverlay(marker);               // 将标注添加到地图中
+var basePath = $("#basePath").val();
+//附件下载
+function download(newFilename, oldFilename){
+	window.location.href = basePath + '/pub/downloadbystream.do?fileName=' + newFilename + '&oldFileName=' + oldFilename;
+}
+	</script>
+</body>
+</html>

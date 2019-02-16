@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html class="layerpage">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="${ctxPath}/assets/vendor/layer/skin/default/layer.css">
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/normalize.css"/>
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap/css/bootstrap.min.4.0.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/webuploader/webuploader.css" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" />
+	</head>
+	<body>
+		<form id="addForm" action="" method="post">
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">标题</label>
+				<!--input文本类使用col-sm-6-->
+				<div class="col-sm-6">
+					<input type="text" class="form-control" id="title" name="title" placeholder="标题">
+				</div>
+			</div>
+				<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">文号</label>
+				<!--input文本类使用col-sm-6-->
+				<div class="col-sm-6">
+					<input type="text" class="form-control" id="num" name="num" placeholder="文号">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">密级</label>
+				<!--input文本类使用col-sm-6-->
+				<div class="col-sm-6">
+					<input type="text" class="form-control" id="level" name="level" placeholder="密级">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">来文单位</label>
+				<!--input文本类使用col-sm-6-->
+				<div class="col-sm-6">
+					<input type="text" class="form-control" id="dept" name="dept" placeholder="来文单位">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">紧急程度</label>
+				<div class="col-sm-6">
+					<div class="select-after">
+						<select class="form-control" name="jkStatus" id="jkStatus">
+							<option value="1">普通</option>
+							<option value="2">加急</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+					<label for="" class="col-sm-3 col-form-label">完成时间</label>
+					<!--select、date使用col-sm-4-->
+					<div class="col-sm-6">
+						<!--日期时间选择器使用DateTime Picker插件，具体请百度搜索api文档-->
+						<div id='datetimepicker' class='input-group date form_datetime' >
+							<input type="text" class="form-control" id="endDate" name="endDate"  readonly="readonly"  placeholder="完成时间">
+							 <span class="input-group-addon" style="margin-left: -10px;margin-right: 10px">
+			                <span class="fa fa-calendar" aria-hidden="true"></span>
+			                </span>
+		                </div>
+					</div>
+				</div>
+				<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">拟办意见</label>
+				<!--input文本类使用col-sm-6-->
+				<div class="col-sm-8">
+					<textarea class="form-control" rows="6" id="nwrSuggest" name="nwrSuggest"></textarea>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label">附件</label>
+				<div class="col-sm-6">
+				<div id="picker"><button class="btn btn-outline-secondary" ><i class="fa fa-upload"></i> 上传附件</button></div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="" class="col-sm-3 col-form-label"></label>
+				<div class="col-sm-9">
+				<div class="form-arraylist"  id ="attrlist">
+						
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label  class="col-sm-3 col-form-label">处理人</label>
+				<div class="col-sm-9">
+					<button type="button" class="btn btn-outline-secondary" onclick="showTree()"><i class="fa fa-user-plus"></i> 选择人员</button>
+				</div>
+				<div class="form-user-group" id="personlist">
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-3"></div>
+				<div class="col-sm-8 text-right">
+					<button type="button" class="btn btn-primary"  id="saveBtn" onclick="save()"><i class="fa fa-save"></i>提交</button>
+					<button type="button" class="btn btn-outline-primary" id="cancleBtn"><i class="fa fa-reply"></i>取消</button>
+				</div>
+			</div>
+			
+		<input type="hidden" id="fName" name="fName" />
+		</form>
+
+	<input type="hidden" id="personlistValue" value="" />
+	<input type="hidden" id="basePath" value="${ctxPath}" />
+
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/jquery-1.12.4.min.js"  charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap/js/bootstrap.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/holder.min.js"  charset="utf-8"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/layer/layer.js"></script>
+	<!-- 日期控件JS -->
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+	
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/public.js"></script>
+	
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/webuploader/webuploader.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/subFromWithAttrs.js"></script>
+	<script type="text/javascript" src="${ctxPath}/assets/vendor/bootstrapValidator/bootstrapValidator.js"></script>
+	
+	<script type="text/javascript" src="${ctxPath}/assets/scripts/xtbg/gwcl/gwcl_add_sw.js"></script>
+	
+	</body>
+
+</html>
